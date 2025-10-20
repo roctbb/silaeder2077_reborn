@@ -1,5 +1,10 @@
+from telebot import types
+
+
 def user_enters_location(bot, user, location, all_users):
-    bot.send_message(user['id'], 'Вы во дворе')
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    keyboard.add(types.KeyboardButton(text="Отдохнуть на лавочке"))
+    bot.send_message(user['id'], 'Вы во дворе', reply_markup=keyboard)
 
 
 def user_leaves_location(bot, user, location, all_users):
