@@ -8,7 +8,7 @@ def user_enters_location(bot, user, location, all_users):
 
 
 def user_leaves_location(bot, user, location, all_users):
-    bot.send_message(user['id'], 'Вы покидаете двор')
+    bot.send_message(user['id'], 'Вы спорт зал Дениса')
 
 
 def user_message(bot, message, user, location, all_users):
@@ -17,3 +17,4 @@ def user_message(bot, message, user, location, all_users):
         bot.send_message(user['id'], f'Вы передохнули на лавочке, пару минут. Теперь у вас {user["energy"]} энергии.')
     else:
         bot.send_message(user['id'], 'Я вас не понял')
+
