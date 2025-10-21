@@ -17,10 +17,16 @@ locations = [
         "id": "gym",
         "name": 'спортзал',
         "inventory": []
+    },
+    {
+        "id": "Hall",
+        "name": 'холл',
+        "inventory": []
     }
 ]
 
 modules = {
     'yard': yard,
     'gym': gym,
+    'Hall': Hall
 }
