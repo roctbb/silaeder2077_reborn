@@ -28,4 +28,4 @@ def user_message(bot, message, user, location, all_users):
                                          f'И отвели в 105...')
 
     else:
-        bot.send_message(user['id'], 'Я вас не понял :(')
+        bot.send_message(user['id'], 'Я вас не понял :_(')

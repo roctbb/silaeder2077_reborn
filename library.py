@@ -3,6 +3,7 @@ import telebot
 import locations.yard as yard
 import locations.gym as gym
 import locations.hall as hall
+import locations.room_116 as room_116
 bot = telebot.TeleBot(TOKEN)
 
 users = []
@@ -24,7 +25,7 @@ locations = [
         "inventory": []
     },
     {
-        "id": "116",
+        "id": "room_116",
         "name": 'каб. 116',
         "inventory": []
     }
@@ -33,5 +34,6 @@ locations = [
 modules = {
     'yard': yard,
     'gym': gym,
-    'hall': hall
+    'hall': hall,
+    'room_116' : room_116
 }
