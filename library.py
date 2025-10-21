@@ -2,7 +2,7 @@ from config import TOKEN
 import telebot
 import locations.yard as yard
 import locations.gym as gym
-
+import locations.hall as hall
 bot = telebot.TeleBot(TOKEN)
 
 users = []
@@ -19,7 +19,7 @@ locations = [
         "inventory": []
     },
     {
-        "id": "Hall",
+        "id": "hall",
         "name": 'холл',
         "inventory": []
     }
@@ -28,5 +28,5 @@ locations = [
 modules = {
     'yard': yard,
     'gym': gym,
-    'Hall': Hall
+    'hall': hall
 }
