@@ -1,5 +1,4 @@
 from telebot import types
-
 def user_enters_location(bot, user, location, all_users):
     if 'card' in user['inventory']:
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -15,8 +14,6 @@ def user_enters_location(bot, user, location, all_users):
         bot.send_message(user['id'], 'У вас нет карточки по этому вы подходите к охранникам и записываетесь, что вы будете делать?', reply_markup=keyboard)
 def user_leaves_location(bot, user, location, all_users):
     bot.send_message(user['id'], 'Вы уходите из холла')
-
-
 def user_message(bot, message, user, location, all_users):
     global users
     if message == 'Пойти в потеряшки, может найду что нибудь интересное.':
