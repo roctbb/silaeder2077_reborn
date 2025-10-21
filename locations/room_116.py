@@ -17,12 +17,18 @@ def user_message(bot, message, user, location, all_users):
     if message == 'Поиграть на пианино':
         user['energy'] = min(100, user['energy'] - 5)
         user['experience'] = min(100, user['experience'] + 5)
-        bot.send_message(user['id'], f'Вы поиграли на пианино'
-                                     f'Теперь у вас {user['experience']} опыта и {user['energy']} энергии')
+        if user['energy'] <= 0:
+            bot.send_message(user['id'], "ВЫ УМЕРЛИ!!!")
+        else:
+            bot.send_message(user['id'], f'Вы поиграли на пианино\n'
+                                         f'Теперь у вас {user['experience']} опыта и {user['energy']} энергии')
     elif message == 'Потыкать по доске':
         user['energy'] = min(100, user['energy'] - 5)
-        bot.send_message(user['id'], f'Вы поиграли на пианино'
-                                     f'У вас теперь {user['energy']} энергии, но у вас поднялосб настроение')
+        if user['energy'] <= 0:
+            bot.send_message(user['id'], "ВЫ УМЕРЛИ!!!")
+        else:
+            bot.send_message(user['id'], f'Вы поиграли на пианино\n'
+                                     f'У вас теперь {user['energy']} энергии, но у вас поднялось настроение')
         if random.randint(0, 3) == 1:
             bot.send_message(user['id'], f'Вас спалил учитель!!!'
                                          f'И отвели в 105...')
