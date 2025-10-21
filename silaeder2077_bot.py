@@ -1,5 +1,5 @@
 import telebot
-from library import *
+from library import users, locations, bot, modules
 from methods import *
 from telebot import types
 from config import TOKEN

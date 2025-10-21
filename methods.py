@@ -1,10 +1,12 @@
-from library import *
+from library import users, locations, bot, modules
+import random
 
 def send_welcome(user):
     bot.send_message(user['id'], 'Добро пожаловать в игру!')
 
 
 def get_user(message):
+    global users
     for user in users:
         if user['id'] == message.chat.id:
             return user
@@ -49,7 +51,9 @@ def get_location_users(location_id):
 def transfer_user(user, to_location_id):
     from_location_id = user['location']
     new_location = get_location_by_id(to_location_id)
-
+    if random.randint(1, 10) == 1:
+        new_location = get_location_by_id('UnderTheCarpet')
+        to_location_id = 'UnderTheCarpet'
     user['location'] = to_location_id
 
     if from_location_id:
