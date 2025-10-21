@@ -22,6 +22,11 @@ locations = [
         "id": "hall",
         "name": 'холл',
         "inventory": []
+    },
+    {
+        "id": "116",
+        "name": 'каб. 116',
+        "inventory": []
     }
 ]
 
