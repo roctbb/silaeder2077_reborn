@@ -1,22 +1,18 @@
 from telebot import types
-
 def user_enters_location(bot, user, location, all_users):
     if 'card' in user['inventory']:
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.add(types.KeyboardButton(text="Пойти в потеряшки, может найду что нибудь интересное."))
-        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.add(types.KeyboardButton(text="Накричать на охранника."))
         bot.send_message(user['id'], 'Вы входите в холл, что вы будете делать?', reply_markup=keyboard)
     else:
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.add(types.KeyboardButton(text="Попробовать убежать."))
-        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.add(types.KeyboardButton(text="Пойти в 105 взять карточку."))
         bot.send_message(user['id'], 'У вас нет карточки по этому вы подходите к охранникам и записываетесь, что вы будете делать?', reply_markup=keyboard)
+
 def user_leaves_location(bot, user, location, all_users):
     bot.send_message(user['id'], 'Вы уходите из холла')
-
-
 def user_message(bot, message, user, location, all_users):
     global users
     if message == 'Пойти в потеряшки, может найду что нибудь интересное.':
