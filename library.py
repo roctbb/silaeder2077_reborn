@@ -2,9 +2,9 @@ from config import TOKEN
 import telebot
 import locations.yard as yard
 import locations.gym as gym
-import locations.Hall as Hall
 import locations.UnderTheCarpet as UnderTheCarpet
-
+import locations.hall as hall
+import locations.room_116 as room_116
 bot = telebot.TeleBot(TOKEN)
 
 users = []
@@ -21,13 +21,17 @@ locations = [
         "inventory": []
     },
     {
-        "id": "Hall",
+        "id": "hall",
         "name": 'холл',
         "inventory": []
     }, 
     {
         "id": "UnderTheCarpet",
         "name": 'комната под ковром',
+    },
+    {
+        "id": "room_116",
+        "name": 'каб. 116',
         "inventory": []
     }
 ]
@@ -41,6 +45,7 @@ def getLocList():
 modules = {
     'yard': yard,
     'gym': gym,
-    'Hall': Hall, 
-    'UnderTheCarpet': UnderTheCarpet
+    'UnderTheCarpet': UnderTheCarpet, 
+    'hall': hall,
+    'room_116' : room_116
 }
