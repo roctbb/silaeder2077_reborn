@@ -1,6 +1,7 @@
 import telebot
 from library import *
 from methods import *
+from telebot import types
 from config import TOKEN
 
 
