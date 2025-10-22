@@ -50,6 +50,11 @@ locations = [
         "id": "dining_room",
         "name": 'столовая',
         "inventory": []
+    },
+    {
+        "id": "back_yard",
+        "name": 'задний_двор',
+        "inventory": []
     }
 ]
 
