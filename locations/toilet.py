@@ -17,11 +17,9 @@ def user_message(bot, message, user, location, all_users):
     if message == 'Бросить туалетную бумагу':
         if user['energy'] > 15:
             user['energy'] = min(100, user['energy'] - 15)
-            bot.send_message(user['id'], f'Вы бросили туалетную бумагу, вам бросили её в ответ. Так вы кидались нессколько минут. '
-                                         f'Теперь у вас {user['energy']} энергии.')
+            bot.send_message(user['id'], f'Вы бросили туалетную бумагу, вам бросили её в ответ. Так вы кидались нессколько минут. \nТеперь у вас {user['energy']} энергии.')
         else:
-            bot.send_message(user['id'], f'У вас недостаточно энергии, чтобы сделать это. '
-                                         f'У вас {user['energy']} энергии.')
+            bot.send_message(user['id'], f'У вас недостаточно энергии, чтобы сделать это. \nУ вас {user['energy']} энергии.')
     elif message == 'Взять туалетную бумагу':
         bot.send_message(user['id'], f'Вы украли туалетную бумагу, ведь вам нужнее')
         user['inventory'].append('toilet_paper')
