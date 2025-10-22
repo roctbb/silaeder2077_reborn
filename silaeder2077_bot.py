@@ -31,5 +31,5 @@ def process_text(message):
                 modules[user['location']].user_message(bot, message_text, user, location, neighbours)
             except Exception as e:
                 print(e)
-
+    print(user)
 bot.polling(none_stop=True)
