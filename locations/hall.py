@@ -40,7 +40,7 @@ def user_message(bot, message, user, location, all_users):
         bot.send_message(user['id'], 'Слава богу в этот раз ты идешь в 105 просто за карточкой, а не за объяснительной.')
         # добавить отправление в 105 когда будет 105
         user['inventory'].append('card')
-    elif message == "Поросто пойти дальше.":
+    elif message == "Просто пойти дальше.":
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.add(types.KeyboardButton(text='Перейти в каб. 116'))
         keyboard.add(types.KeyboardButton(text="Перейти в 105"))
