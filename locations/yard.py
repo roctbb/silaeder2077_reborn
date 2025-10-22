@@ -6,13 +6,13 @@ def user_enters_location(bot, user, location, all_users):
     keyboard.add(types.KeyboardButton(text="Отдохнуть на лавочке"))
     keyboard.add(types.KeyboardButton(text="Перейти в спортзал"))
     keyboard.add(types.KeyboardButton(text="каб. 116"))
+    keyboard.add(types.KeyboardButton(text="Перейти в холл"))
     keyboard.add(types.KeyboardButton(text="Перейти в туалет"))
     bot.send_message(user['id'], 'Вы во дворе', reply_markup=keyboard)
 
 
 def user_leaves_location(bot, user, location, all_users):
     bot.send_message(user['id'], 'Вы покидаете двор')
-
 
 def user_message(bot, message, user, location, all_users):
     if message == 'Отдохнуть на лавочке':
