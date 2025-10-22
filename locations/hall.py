@@ -20,7 +20,15 @@ def user_message(bot, message, user, location, all_users):
     if message == 'Пойти в потеряшки, может найду что нибудь интересное.':
         user['energy'] = max(0, user['energy'] - 5)
         bot.send_message(user['id'], f'Вы покопались в потеряшках, Теперь у вас {user["energy"]} энергии.')
-        #добавить сюда лут (сделать функцию в мэйне)
+        user['inventory'].append('кусок ковра')
+        bot.send_message(user['id'], 'Вы нашли кусок ковра и взяли себе, но вы услышали шаги разгневанной Инги Александровны и решили сбежать')
+        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        keyboard.add(types.KeyboardButton(text='Перейти в каб. 116'))
+        keyboard.add(types.KeyboardButton(text="Перейти в 105"))
+        keyboard.add(types.KeyboardButton(text="Перейти в спортзал"))
+        keyboard.add(types.KeyboardButton(text="Перейти в столовая"))
+        keyboard.add(types.KeyboardButton(text="Перейти в туалет"))
+        bot.send_message(user['id'], 'Куда вы убежите!',reply_markup=keyboard)
     elif message == 'Попробовать убежать.':
         if random.randint(1,10)>5:
             bot.send_message(user['id'], 'Вас хватают и уводят в 105')
