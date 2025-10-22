@@ -24,12 +24,12 @@ def process_text(message):
         elif message_text.startswith('Перейти во '):
             location = get_location_by_name(message_text.replace('Перейти во ', ''))
             transfer_user(user, location['id'])
+        else:
             location = get_location_by_id(user['location'])
             neighbours = get_location_users(user['location'])
             try:
                 modules[user['location']].user_message(bot, message_text, user, location, neighbours)
             except Exception as e:
                 print(e)
-    print(user)
 
 bot.polling(none_stop=True)
