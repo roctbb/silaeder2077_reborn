@@ -7,7 +7,7 @@ from config import TOKEN
 @bot.message_handler(content_types=['text'])
 def process_text(message):
     user = get_user(message)
-    print(user)
+
 
     if not user:
         user = register_user(message)
@@ -15,6 +15,7 @@ def process_text(message):
         transfer_user(user, 'yard')
 
     else:
+
         message_text = message.text
 
         if message_text.startswith('Перейти в '):
@@ -23,13 +24,12 @@ def process_text(message):
         elif message_text.startswith('Перейти во '):
             location = get_location_by_name(message_text.replace('Перейти во ', ''))
             transfer_user(user, location['id'])
-        else:
             location = get_location_by_id(user['location'])
             neighbours = get_location_users(user['location'])
             try:
                 modules[user['location']].user_message(bot, message_text, user, location, neighbours)
             except Exception as e:
                 print(e)
-
+    print(user)
 
 bot.polling(none_stop=True)

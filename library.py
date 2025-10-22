@@ -16,7 +16,6 @@ locations = [
     {
         "id": "yard",
         "name": 'двор',
-        "inventory": []
     },
     {
         "id": "gym",
