@@ -7,7 +7,7 @@ while True:
         users = get_location_users(location['id'])
 
         try:
-            modules[location['id']].run_events(bot, users)
+            modules[location['id']].run_events(bot, location, users)
         except Exception as e:
             print(e)
 
