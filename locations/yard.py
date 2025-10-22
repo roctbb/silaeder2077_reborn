@@ -1,5 +1,3 @@
-import random
-
 from telebot import types
 
 
@@ -8,12 +6,13 @@ def user_enters_location(bot, user, location, all_users):
     keyboard.add(types.KeyboardButton(text="Отдохнуть на лавочке"))
     keyboard.add(types.KeyboardButton(text="Перейти в спортзал"))
     keyboard.add(types.KeyboardButton(text="Перейти в каб. 116"))
+    keyboard.add(types.KeyboardButton(text="Перейти в холл"))
+    keyboard.add(types.KeyboardButton(text="Перейти в туалет"))
     bot.send_message(user['id'], 'Вы во дворе', reply_markup=keyboard)
 
 
 def user_leaves_location(bot, user, location, all_users):
     bot.send_message(user['id'], 'Вы покидаете двор')
-
 
 def user_message(bot, message, user, location, all_users):
     if message == 'Отдохнуть на лавочке':
@@ -21,10 +20,3 @@ def user_message(bot, message, user, location, all_users):
         bot.send_message(user['id'], f'Вы передохнули на лавочке, пару минут. Теперь у вас {user["energy"]}% энергии.')
     else:
         bot.send_message(user['id'], 'Я вас не понял')
-
-def run_events(bot, location, all_users):
-    if random.randint(1, 20) == 1:
-        for user in all_users:
-            bot.send_message(user['id'], "Пошел дождь, вы промокли.")
-
-            user['energy'] = min(100, user['energy'] - 5)

@@ -33,16 +33,15 @@ def user_message(bot, message, user, location, all_users):
 
     if message == 'Покушать пельмешки' and c == True:
         user['food'] = min(100, user['food'] + 15)
+        user['water'] = min(100, user['water'] + 15)
         bot.send_message(user['id'], f'Вы перекусили пельменями. '
                                      f'Теперь у вас {user["food"]} сытости.')
     elif message == 'Покушать пельмешки' and c == True and n == 1:
-        user['food'] = min(100, user['food'] - 15)
+        user['food'] = max(0, user['food'] - 15)
+        user['water'] = max(0, user['water'] - 15)
         bot.send_message(user['id'], f'Вы перекусили пельменями с закончившимся сроком годности '
                                      f'Теперь у вас {user["food"]} сытости.')
-    elif message == 'Покушать пельмешки' and c != False:
+    elif message == 'Покушать пельмешки' and c == False:
         bot.send_message(user['id'], 'Вас выпинали из столовой')
-
-    elif message == 'Посмотреть время':
-        return
     else:
         bot.send_message(user['id'], 'Я вас не понял')
