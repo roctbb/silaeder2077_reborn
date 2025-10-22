@@ -1,4 +1,4 @@
-from library import users, locations, bot, modules
+from library import *
 import random
 
 def send_welcome(user):
@@ -6,7 +6,6 @@ def send_welcome(user):
 
 
 def get_user(message):
-    global users
     for user in users:
         if user['id'] == message.chat.id:
             return user
