@@ -22,7 +22,7 @@ def user_message(bot, message, user, location, all_users):
         bot.send_message(user['id'], f'Вы покопались в потеряшках, Теперь у вас {user["energy"]} энергии.')
         #добавить сюда лут (сделать функцию в мэйне)
     elif message == 'Попробовать убежать.':
-        if random.randint(1,10)>10:
+        if random.randint(1,10)>5:
             bot.send_message(user['id'], 'Вас хватают и уводят в 105')
             #добавить отпровление в 105 когда будет 105
         else:
