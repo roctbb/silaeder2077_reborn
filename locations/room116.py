@@ -41,11 +41,14 @@ def user_message(bot, message, user, location, all_users):
             if random.randint(0, 3) == 1:
                 bot.send_message(user['id'], f'Вас спалил учитель!!!'
                                              f'И отвели в 105...')
-                #bot.send_message(user['id'], f'Перейти в каб. 105')
+                bot.send_message(user['id'], f'Перейти в каб. 105')
     elif message == "Изменить оценки":
-        bot.send_message(user['id'], "Что у вас за мысли?")
+        bot.send_message(user['id'], "Что у вас за мысли?\nВ 105!!!!!!")
+
+        bot.send_message(user['id'], f'Перейти в каб. 105')
     elif message == "Не менять оценки":
-        bot.send_message(user['id'], "ок")
+        bot.send_message(user['id'], "Ок. Вы хороший ученик. Вас не отправят в 105 :)")
+
 
     else:
         bot.send_message(user['id'], 'Я вас не понял :(\nНапишите еще раз')
