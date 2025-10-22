@@ -1,3 +1,5 @@
+import random
+
 from telebot import types
 
 
@@ -19,3 +21,10 @@ def user_message(bot, message, user, location, all_users):
         bot.send_message(user['id'], f'Вы передохнули на лавочке, пару минут. Теперь у вас {user["energy"]}% энергии.')
     else:
         bot.send_message(user['id'], 'Я вас не понял')
+
+def run_events(bot, location, all_users):
+    if random.randint(1, 20) == 1:
+        for user in all_users:
+            bot.send_message(user['id'], "Пошел дождь, вы промокли.")
+
+            user['energy'] = min(100, user['energy'] - 5)

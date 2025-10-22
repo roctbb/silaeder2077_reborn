@@ -4,6 +4,7 @@ from methods import *
 from telebot import types
 from config import TOKEN
 
+
 @bot.message_handler(content_types=['text'])
 def process_text(message):
     user = get_user(message)
@@ -17,13 +18,19 @@ def process_text(message):
     else:
         message_text = message.text
 
-        if message_text.startswith('Перейти в ') or message_text.startswith('Перейти во '):
+        if message_text.startswith('Перейти в '):
             location = get_location_by_name(message_text.replace('Перейти в ', ''))
+            transfer_user(user, location['id'])
+        elif message_text.startswith('Перейти во '):
+            location = get_location_by_name(message_text.replace('Перейти во ', ''))
             transfer_user(user, location['id'])
         else:
             location = get_location_by_id(user['location'])
             neighbours = get_location_users(user['location'])
-            modules[user['location']].user_message(bot, message_text, user, location, neighbours)
+            try:
+                modules[user['location']].user_message(bot, message_text, user, location, neighbours)
+            except Exception as e:
+                print(e)
 
 
 bot.polling(none_stop=True)
