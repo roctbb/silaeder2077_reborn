@@ -16,7 +16,6 @@ def user_enters_location(bot, user, location, all_users):
 def user_leaves_location(bot, user, location, all_users):
     bot.send_message(user['id'], 'Вы уходите из холла')
 def user_message(bot, message, user, location, all_users):
-    global users
     if message == 'Пойти в потеряшки, может найду что нибудь интересное.':
         user['energy'] = max(0, user['energy'] - 5)
         bot.send_message(user['id'], f'Вы покопались в потеряшках, Теперь у вас {user["energy"]} энергии.')
