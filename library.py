@@ -38,7 +38,7 @@ locations = [
     },
     {
         "id": "room105",
-        "name": '105',
+        "name": 'каб. 105',
         "inventory": []
     },
     {
