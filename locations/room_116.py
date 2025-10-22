@@ -6,7 +6,7 @@ def user_enters_location(bot, user, location, all_users):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(types.KeyboardButton(text="Поиграть на пианино"))
     keyboard.add(types.KeyboardButton(text="Потыкать по доске"))
-    keyboard.add(types.KeyboardButton(text="Перейти во двор"))
+    keyboard.add(types.KeyboardButton(text="Перейти в двор"))
     bot.send_message(user['id'], 'Вы в каб. 116', reply_markup=keyboard)
 
 
