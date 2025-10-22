@@ -6,12 +6,12 @@ def user_enters_location(bot, user, location, all_users):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(types.KeyboardButton(text="Отдохнуть"))
     keyboard.add(types.KeyboardButton(text="Поиграть в футбол"))
-    keyboard.add(types.KeyboardButton(text="Уйти"))
-    bot.send_message(user['id'], 'Вы на заднем дворе', reply_markup=keyboard)
+    keyboard.add(types.KeyboardButton(text="Перейти в спортзал"))
+    bot.send_message(user['id'], 'Вы на заднем дворе Мирона', reply_markup=keyboard)
 
 
 def user_leaves_location(bot, user, location, all_users):
-    bot.send_message(user['id'], 'Вы покинули задний двор')
+    bot.send_message(user['id'], 'Вы покинули задний двор Мирона')
 
 
 def user_message(bot, message, user, location, all_users):
@@ -36,8 +36,6 @@ def user_message(bot, message, user, location, all_users):
             keyboard.add(types.KeyboardButton(text="ничего не делать"))
             keyboard.add(types.KeyboardButton(text="Отжиматься"))
             bot.send_message(user['id'], 'Что будете делать?', reply_markup=keyboard)
-
-
             if random.randint(0, 3) == 1:
                 bot.send_message(user['id'], f'Вас спалил учитель!!!'
                                              f'И отвели в 105...')
