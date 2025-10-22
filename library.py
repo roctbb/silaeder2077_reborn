@@ -36,12 +36,6 @@ locations = [
     }
 ]
 
-def getLocList():
-    keys = []
-    for i in locations:
-        keys.append(i['id'])
-    return keys
-
 modules = {
     'yard': yard,
     'gym': gym,
