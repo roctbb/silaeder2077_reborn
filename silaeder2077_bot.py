@@ -17,7 +17,7 @@ def process_text(message):
     else:
         message_text = message.text
 
-        if message_text.startswith('Перейти в '):
+        if message_text.startswith('Перейти в ') or message_text.startswith('Перейти во '):
             location = get_location_by_name(message_text.replace('Перейти в ', ''))
             transfer_user(user, location['id'])
         else:

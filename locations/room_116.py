@@ -21,15 +21,14 @@ def user_message(bot, message, user, location, all_users):
         if user['energy'] <= 0:
             bot.send_message(user['id'], "ВЫ УМЕРЛИ!!!")
         else:
-            bot.send_message(user['id'], f'Вы поиграли на пианино\n'
-                                         f'Теперь у вас {user['experience']} опыта и {user['energy']} энергии')
+            bot.send_message(user['id'], f'Вы поиграли на пианино \n Теперь у вас {user["experience"]} опыта и {user["energy"]} энергии')
     elif message == 'Потыкать по доске':
         user['energy'] = min(100, user['energy'] - 5)
         if user['energy'] <= 0:
             bot.send_message(user['id'], "ВЫ УМЕРЛИ!!!")
         else:
             bot.send_message(user['id'], f'Вы поиграли на пианино\n'
-                                     f'У вас теперь {user['energy']} энергии, но у вас поднялось настроение')
+                                     f'У вас теперь {user["energy"]} энергии, но у вас поднялось настроение')
             if random.randint(0, 3) == 1:
                 bot.send_message(user['id'], f'Вас спалил учитель!!!'
                                              f'И отвели в 105...')

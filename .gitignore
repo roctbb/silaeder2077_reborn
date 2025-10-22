@@ -1,2 +1,125 @@
+# Python and PyCharm .gitignore
+
+# Keep local config out of VCS
 config.py
-.idea
+# Optional: keep example config tracked
+!config.py.example
+
+# JetBrains IDE (PyCharm)
+.idea/
+# Uncomment to keep code styles or inspections if you want them shared
+#.idea/codeStyles/
+#.idea/inspectionProfiles/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# mypy / type checkers
+.mypy_cache/
+.dmypy.json
+.dmypy/
+.pyre/
+.pytype/
+
+# Static analysis
+.bandit
+.bandit*
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# Pyenv
+.python-version
+
+# PDM/Poetry/Pipenv
+.pdm.toml
+.pdm-python
+.pdm-
+.pdm/
+.pipenv
+Pipfile.lock
+poetry.lock
+.poetry-
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# VSCode (in case contributors use it)
+.vscode/
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# SQLite / local databases
+*.sqlite3
+*.db
+*.sqlite
+
+# Local tooling caches
+.pybuilder/
+.pyre/
+
+# Custom project ignores
+# Add any project-specific ignores below
