@@ -39,7 +39,7 @@ def user_message(bot, message, user, location, all_users):
             rndloc = random.choice(getLocList())
         rndloc = get_location_by_id(rndloc)
         
-        bot.send_message(user['id'], f'Вы вылезаете из-под ковра и оказываетесь в {rndloc['name']}, покидая это прекрасное место.\nВы думаете что было бы неплохо вернуться сюда.')
+        bot.send_message(user['id'], f"Вы вылезаете из-под ковра и оказываетесь в {rndloc['name']}, покидая это прекрасное место.\nВы думаете что было бы неплохо вернуться сюда.")
         transfer_user(user, rndloc['id'])
     else:
         bot.send_message(user['id'], 'Комната никак не реагирует на ваши действия.')

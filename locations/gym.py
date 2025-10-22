@@ -1,14 +1,19 @@
 from telebot import types
 import random
 
-
-def user_enters_location(bot, user, location, all_users):
+def make_default_keyboard():
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(types.KeyboardButton(text="Поиграть в волейбол"))
+    keyboard.add(types.KeyboardButton(text="Поискать что-нибудь интересное"))
     keyboard.add(types.KeyboardButton(text="Попинать мячик пока учитель не видет"))
     keyboard.add(types.KeyboardButton(text="Попить водички"))
-    keyboard.add(types.KeyboardButton(text="Перейти в двор"))
-    bot.send_message(user['id'], 'Вы в спортзале', reply_markup=keyboard)
+    keyboard.add(types.KeyboardButton(text="Перейти во двор"))
+
+    return keyboard
+
+def user_enters_location(bot, user, location, all_users):
+
+    bot.send_message(user['id'], 'Вы в спортзале', reply_markup=make_default_keyboard())
 
 
 def user_leaves_location(bot, user, location, all_users):
@@ -49,6 +54,24 @@ def user_message(bot, message, user, location, all_users):
         else:
             user['experience'] = user['experience'] + 1
             bot.send_message(user['id'], f'Похоже тебе повезло и учитель тебя не заметил! Лави опыт! Теперь у тебя {user["experience"]} опыта!')
+    elif message == 'Поискать что-нибудь интересное':
+        x = random.randint(1, 2)
+        if x == 1:
+            bot.send_message(user['id'], 'Вам очень повезло и вы нашли компьютер')
+            keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            keyboard.add(types.KeyboardButton(text="Поиграть в майнкрафт"))
+            keyboard.add(types.KeyboardButton(text="Перейти во двор"))
+            bot.send_message(user['id'], 'Там был запущен майнкрафт что будешь с этим делать?', reply_markup=keyboard)
+        else:
+                bot.send_message(user['id'], 'Вам не повезло и вы не нашли ничего')
+    elif message == 'Поиграть в майнкрафт':
+        x = random.randint(1, 2)
+        if x == 1:
+            bot.send_message(user['id'], 'Вам не повезло и вы идёте писать объяснительную! Потому-что вас застукали учителя!')
+        else:
+            user['experience'] = user['experience'] + 1
+            bot.send_message(user['id'], f'Лови опыт теперь у тебя {user["experience"]} опыта!')
+        bot.send_message(user['id'], 'Вы в спортзале', reply_markup=make_default_keyboard())
     else:
         bot.send_message(user['id'], 'Я вас не понял')
 

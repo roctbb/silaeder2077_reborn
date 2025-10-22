@@ -17,8 +17,7 @@ def user_message(bot, message, user, location, all_users):
     global users
     if message == 'Пойти в потеряшки, может найду что нибудь интересное.':
         user['energy'] = max(0, user['energy'] - 5)
-        bot.send_message(user['id'], f'Вы покопались в потеряшках'
-                                     f'Теперь у вас {user['energy']} энергии.')
+        bot.send_message(user['id'], f'Вы покопались в потеряшках\nТеперь у вас {user["energy"]} энергии.')
         #добавить сюда лут (сделать функцию в мэйне)
     elif message == 'Попробовать убежать.':
         bot.send_message(user['id'], 'Вас хватают и уводят в 105')
