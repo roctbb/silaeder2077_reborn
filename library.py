@@ -12,7 +12,7 @@ users = []
 locations = [
     {
         "id": "yard",
-        "name": 'двор',
+            "name": 'двор',
         "inventory": []
     },
     {
