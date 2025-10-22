@@ -1,3 +1,5 @@
+import time
+
 from methods import *
 
 while True:
@@ -8,3 +10,5 @@ while True:
             modules[location['id']].run_events(bot, users)
         except Exception as e:
             print(e)
+
+    time.sleep(60)
