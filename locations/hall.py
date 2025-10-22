@@ -16,21 +16,28 @@ def user_enters_location(bot, user, location, all_users):
 def user_leaves_location(bot, user, location, all_users):
     bot.send_message(user['id'], 'Вы уходите из холла')
 def user_message(bot, message, user, location, all_users):
-    global users
     if message == 'Пойти в потеряшки, может найду что нибудь интересное.':
         user['energy'] = max(0, user['energy'] - 5)
         bot.send_message(user['id'], f'Вы покопались в потеряшках, Теперь у вас {user["energy"]} энергии.')
-        #добавить сюда лут (сделать функцию в мэйне)
+        user['inventory'].append('кусок ковра')
+        bot.send_message(user['id'], 'Вы нашли кусок ковра и взяли себе, но вы услышали шаги разгневанной Инги Александровны и решили сбежать')
+        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        keyboard.add(types.KeyboardButton(text='Перейти в каб. 116'))
+        keyboard.add(types.KeyboardButton(text="Перейти в каб. 105"))
+        keyboard.add(types.KeyboardButton(text="Перейти в спортзал"))
+        keyboard.add(types.KeyboardButton(text="Перейти в столовая"))
+        keyboard.add(types.KeyboardButton(text="Перейти в туалет"))
+        bot.send_message(user['id'], 'Куда вы убежите!',reply_markup=keyboard)
     elif message == 'Попробовать убежать.':
         if random.randint(1,10)>5:
             bot.send_message(user['id'], 'Вас хватают и уводят в 105')
             keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-            keyboard.add(types.KeyboardButton(text="Перейти в 105"))
+            keyboard.add(types.KeyboardButton(text="Перейти в каб. 105"))
             bot.send_message(user['id'],'Вам прийдется идти в 105',reply_markup=keyboard)
         else:
             keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
             keyboard.add(types.KeyboardButton(text='Перейти в каб. 116'))
-            keyboard.add(types.KeyboardButton(text="Перейти в 105"))
+            keyboard.add(types.KeyboardButton(text="Перейти в каб. 105"))
             keyboard.add(types.KeyboardButton(text="Перейти в спортзал"))
             keyboard.add(types.KeyboardButton(text="Перейти в столовая"))
             keyboard.add(types.KeyboardButton(text="Перейти в туалет"))
@@ -38,18 +45,18 @@ def user_message(bot, message, user, location, all_users):
     elif message == "Накричать на охранника.":
         bot.send_message(user['id'], 'Охранник приходит в бешенство, бежит к тебе и отводит в 105.')
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        keyboard.add(types.KeyboardButton(text="Перейти в 105"))
+        keyboard.add(types.KeyboardButton(text="Перейти в каб. 105"))
         bot.send_message(user['id'], 'Вам прийдется идти в 105', reply_markup=keyboard)
     elif message == "Пойти в 105 взять карточку.":
         bot.send_message(user['id'], 'Слава богу в этот раз ты идешь в 105 просто за карточкой, а не за объяснительной.')
         user['inventory'].append('card')
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        keyboard.add(types.KeyboardButton(text="Перейти в 105"))
+        keyboard.add(types.KeyboardButton(text="Перейти в каб. 105"))
         bot.send_message(user['id'], 'Вам прийдется идти в 105', reply_markup=keyboard)
     elif message == "Просто пойти дальше.":
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.add(types.KeyboardButton(text='Перейти в каб. 116'))
-        keyboard.add(types.KeyboardButton(text="Перейти в 105"))
+        keyboard.add(types.KeyboardButton(text="Перейти в каб. 105"))
         keyboard.add(types.KeyboardButton(text="Перейти в спортзал"))
         keyboard.add(types.KeyboardButton(text="Перейти в столовая"))
         keyboard.add(types.KeyboardButton(text="Перейти в туалет"))
