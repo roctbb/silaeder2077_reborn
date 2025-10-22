@@ -14,7 +14,7 @@ def process_text(message):
         send_welcome(user)
         transfer_user(user, 'yard')
 
-    else:        else:
+    else:
 
         message_text = message.text
 
