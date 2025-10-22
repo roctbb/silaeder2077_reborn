@@ -8,6 +8,8 @@ import locations.room116 as room116
 import locations.room105 as room105
 import locations.dining_room as dining_room
 import locations.toilet as toilet
+from locations import back_yard
+
 bot = telebot.TeleBot(TOKEN)
 
 users = []
@@ -72,5 +74,6 @@ modules = {
     'room116': room116,
     'room105': room105,
     'dining_room': dining_room,
-    'toilet': toilet
+    'toilet': toilet,
+    'back_yard': back_yard
 }
