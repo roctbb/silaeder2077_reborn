@@ -5,6 +5,8 @@ import locations.gym as gym
 import locations.UnderTheCarpet as UnderTheCarpet
 import locations.hall as hall
 import locations.room_116 as room_116
+import locations.dining_room as dining_room
+
 bot = telebot.TeleBot(TOKEN)
 
 users = []
@@ -12,7 +14,7 @@ users = []
 locations = [
     {
         "id": "yard",
-        "name": 'двор',
+            "name": 'двор',
         "inventory": []
     },
     {
@@ -24,7 +26,7 @@ locations = [
         "id": "hall",
         "name": 'холл',
         "inventory": []
-    }, 
+    },
     {
         "id": "UnderTheCarpet",
         "name": 'комната под ковром',
@@ -33,8 +35,14 @@ locations = [
         "id": "room_116",
         "name": 'каб. 116',
         "inventory": []
+    },
+    {
+        "id": "dining_room",
+        "name": 'столовая',
+        "inventory": []
     }
 ]
+
 
 def getLocList():
     keys = []
@@ -42,10 +50,12 @@ def getLocList():
         keys.append(i['id'])
     return keys
 
+
 modules = {
     'yard': yard,
     'gym': gym,
-    'UnderTheCarpet': UnderTheCarpet, 
+    'UnderTheCarpet': UnderTheCarpet,
     'hall': hall,
-    'room_116' : room_116
+    'room_116': room_116,
+    'dining_room': dining_room
 }
