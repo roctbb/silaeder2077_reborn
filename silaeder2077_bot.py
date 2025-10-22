@@ -4,6 +4,7 @@ from methods import *
 from telebot import types
 from config import TOKEN
 
+
 @bot.message_handler(content_types=['text'])
 def process_text(message):
     user = get_user(message)
@@ -23,7 +24,10 @@ def process_text(message):
         else:
             location = get_location_by_id(user['location'])
             neighbours = get_location_users(user['location'])
-            modules[user['location']].user_message(bot, message_text, user, location, neighbours)
+            try:
+                modules[user['location']].user_message(bot, message_text, user, location, neighbours)
+            except Exception as e:
+                print(e)
 
 
 bot.polling(none_stop=True)
