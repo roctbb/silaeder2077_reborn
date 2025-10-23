@@ -26,7 +26,7 @@ def user_message(bot, message, user, location, all_users):
             user['experience'] = min(100, user['experience'] + 1)
         else:
             bot.send_message(user['id'], f'Дастиш вери гуд, что ты пришел. А теперь атеншен на доску. У вас будет не сколько задачек.')
-            keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)#
             keyboard.add(types.KeyboardButton(text="1"))
             keyboard.add(types.KeyboardButton(text="2"))
             keyboard.add(types.KeyboardButton(text="3"))
