@@ -21,13 +21,13 @@ def user_message(bot, message, user, location, all_users):
         if random.randint(1, 10) == 1:
             user['experience'] = min(100, user['experience'])
         if user['energy'] <= 0:
-            bot.send_message(user['id'], "ВЫ УМЕРЛИ!")
+            bot.send_message(user['id'], "у вас слишком мало энергии")
         else:
             bot.send_message(user['id'], f'Вы отдохнули \n Теперь у вас {user["experience"]} опыта и {user["energy"]} энергии')
     elif message == 'Поиграть в футбол':
         user['energy'] = min(100, user['energy'] - 5)
         if user['energy'] <= 0:
-            bot.send_message(user['id'], "ВЫ УМЕРЛИ!")
+            bot.send_message(user['id'], "у вас слишком мало энергии")
         else:
             with open('assets/images/response.jpg', 'rb') as photo:
                 bot.send_photo(user['id'], photo)
