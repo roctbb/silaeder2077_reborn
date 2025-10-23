@@ -40,6 +40,8 @@ def user_message(bot, message, user, location, all_users):
             keyboard.add(types.KeyboardButton(text="Пнуть мяч в окно"))
             keyboard.add(types.KeyboardButton(text="ничего не делать"))
             keyboard.add(types.KeyboardButton(text="Отжиматься"))
+            keyboard.add(types.KeyboardButton(text="Переход: двор"))
+            keyboard.add(types.KeyboardButton(text="Переход: холл"))
             bot.send_message(user['id'], 'Что будете делать?', reply_markup=keyboard)
     elif message == "Пнуть мяч в окно":
         with open('assets/images/мяч_окно.png', 'rb') as photo:
@@ -58,7 +60,7 @@ def user_message(bot, message, user, location, all_users):
         bot.send_message(user['id'], f'Вы отжались \n Теперь у вас {user["experience"]} опыта и {user["energy"]} энергии')
     elif message == "ничего не делать":
         user['energy'] = min(100, user['energy'] + 5)
-        with open('assets/images/бездействие.png', 'rb') as photo:
+        with open('assets/images/бездействие    .png', 'rb') as photo:
             bot.send_photo(user['id'], photo)
         bot.send_message(user['id'], f'Вы отдохнули \n Теперь у вас {user["experience"]} опыта и {user["energy"]} энергии')
     else:
