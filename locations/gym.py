@@ -7,7 +7,7 @@ def make_default_keyboard():
     keyboard.add(types.KeyboardButton(text="Поискать что-нибудь интересное"))
     keyboard.add(types.KeyboardButton(text="Попинать мячик пока учитель не видет"))
     keyboard.add(types.KeyboardButton(text="Попить водички"))
-    keyboard.add(types.KeyboardButton(text="Перейти во двор"))
+    keyboard.add(types.KeyboardButton(text="Переход: двор"))
 
     return keyboard
 
@@ -17,7 +17,7 @@ def user_enters_location(bot, user, location, all_users):
 
 
 def user_leaves_location(bot, user, location, all_users):
-    bot.send_message(user['id'], 'Вы покинули спортзал Дениса')
+    bot.send_message(user['id'], 'Вы покинули спортзал')
 
 
 def user_message(bot, message, user, location, all_users):
@@ -60,7 +60,7 @@ def user_message(bot, message, user, location, all_users):
             bot.send_message(user['id'], 'Вам очень повезло и вы нашли компьютер')
             keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
             keyboard.add(types.KeyboardButton(text="Поиграть в майнкрафт"))
-            keyboard.add(types.KeyboardButton(text="Перейти во двор"))
+            keyboard.add(types.KeyboardButton(text="Переход: двор"))
             bot.send_message(user['id'], 'Там был запущен майнкрафт что будешь с этим делать?', reply_markup=keyboard)
         else:
                 bot.send_message(user['id'], 'Вам не повезло и вы не нашли ничего')

@@ -6,8 +6,8 @@ def user_enters_location(bot, user, location, all_users):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(types.KeyboardButton(text="Отдохнуть"))
     keyboard.add(types.KeyboardButton(text="Поиграть в футбол"))
-    keyboard.add(types.KeyboardButton(text="Перейти в спортзал"))
-    keyboard.add(types.KeyboardButton(text="Перейти в холл"))
+    keyboard.add(types.KeyboardButton(text="Переход: спортзал"))
+    keyboard.add(types.KeyboardButton(text="Переход: холл"))
     bot.send_message(user['id'], 'Вы на заднем дворе', reply_markup=keyboard)
 
 
@@ -33,7 +33,6 @@ def user_message(bot, message, user, location, all_users):
                 bot.send_photo(user['id'], photo)
             bot.send_message(user['id'], f'Вы поиграли в футбол\n'
                                      f'У вас теперь {user["energy"]} энергии, но у вас поднялось настроение')
-
             bot.send_message(user['id'], f"Вы заметили что на улице никого нет")
             keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
             keyboard.add(types.KeyboardButton(text="Пнуть мяч в окно"))
@@ -42,9 +41,9 @@ def user_message(bot, message, user, location, all_users):
             bot.send_message(user['id'], 'Что будете делать?', reply_markup=keyboard)
     elif message == "Пнуть мяч в окно":
         bot.send_message(user['id'], "Что у вас за мысли?\nВ 105!")
+        bot.send_message(user['id'], f'Переход: каб. 105')
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        keyboard.add(types.KeyboardButton(text="Перейти в каб. 105"))
-        bot.send_message(user['id'], f'Перейти в каб. 105',  reply_markup=keyboard)
+        keyboard.add(types.KeyboardButton(text="Переход: каб. 105"))
     elif message == "Отжиматься":
         with open('assets/images/img.png', 'rb') as photo:
             bot.send_photo(user['id'], photo)

@@ -18,12 +18,12 @@ def process_text(message):
 
         message_text = message.text
 
-        if message_text.startswith('Перейти в '):
-            location = get_location_by_name(message_text.replace('Перейти в ', ''))
-            transfer_user(user, location['id'])
-        elif message_text.startswith('Перейти во '):
-            location = get_location_by_name(message_text.replace('Перейти во ', ''))
-            transfer_user(user, location['id'])
+        if message_text.startswith('Переход: '):
+            location = get_location_by_name(message_text.replace('Переход: ', ''))
+            if location:
+                transfer_user(user, location['id'])
+            else:
+                bot.send_message(user['id'], 'Локация не найдена.')
         else:
             location = get_location_by_id(user['location'])
             neighbours = get_location_users(user['location'])
