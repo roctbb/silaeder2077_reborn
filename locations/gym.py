@@ -7,7 +7,7 @@ def make_default_keyboard():
     keyboard.add(types.KeyboardButton(text="Поискать что-нибудь интересное"))
     keyboard.add(types.KeyboardButton(text="Попинать мячик пока учитель не видет"))
     keyboard.add(types.KeyboardButton(text="Попить водички"))
-    keyboard.add(types.KeyboardButton(text="Переход: двор"))
+    keyboard.add(types.KeyboardButton(text="Переход: холл"))
 
     return keyboard
 
@@ -18,7 +18,7 @@ def user_enters_location(bot, user, location, all_users):
         bot.send_photo(user['id'], photo)
 
 def user_leaves_location(bot, user, location, all_users):
-    bot.send_message(user['id'], 'Вы покинули спортзал')
+    bot.send_message(user['id'], 'Вы покинули спортзал Дениса')
 
 
 def user_message(bot, message, user, location, all_users):
@@ -49,7 +49,10 @@ def user_message(bot, message, user, location, all_users):
             bot.send_message(user['id'], f'Вы начали пинать мячик и вас спалил учитель!')
             x2=random.randint(1,2)
             if x2==1:
-                bot.send_message(user['id'], f'Похоже тебе не повезло в двойне и у учителя нет настроения! Так бы он отправил писать объяснительную, но тебе повело и я ещё не написал эту функцию, но вскоре такое не прокатит!!!')
+                bot.send_message(user['id'], f'Похоже тебе не повезло в двойне и у учителя нет настроения! Иди пиши объяснительную!!!')
+                keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                keyboard.add(types.KeyboardButton(text="Переход: каб. 105"))
+                bot.send_message(user['id'], f'Переход: каб. 105', reply_markup=keyboard)
             else:
                 bot.send_message(user['id'], f'Похоже тебе повезло и у учителя хорошее настроение! На этот раз он тебя простил!')
         else:

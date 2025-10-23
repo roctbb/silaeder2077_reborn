@@ -11,7 +11,7 @@ def user_enters_location(bot, user, location, all_users):
 
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(types.KeyboardButton(text="Покушать пельмешки"))
-    keyboard.add(types.KeyboardButton(text="Перейти в холл"))
+    keyboard.add(types.KeyboardButton(text="Переход: холл"))
 
     if c:
         bot.send_message(user['id'], 'Вы в столовой', reply_markup=keyboard)

@@ -123,3 +123,4 @@ Thumbs.db
 
 # Custom project ignores
 # Add any project-specific ignores below
+state.json
