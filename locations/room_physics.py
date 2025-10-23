@@ -13,6 +13,7 @@ def user_enters_location(bot, user, location, all_users):
     keyboard.add(types.KeyboardButton(text="Поговорить с Алексеем Генадьевичем"))
     keyboard.add(types.KeyboardButton(text="Посмотреть на мусор(может это не мусор, я не знаю) в коробке"))
     keyboard.add(types.KeyboardButton(text="Попросить конфетку"))
+    keyboard.add(types.KeyboardButton(text="Переход: холл"))
     bot.send_message(user['id'], 'Вы в каб. Физики', reply_markup=keyboard)
 
 
@@ -25,11 +26,12 @@ def user_message(bot, message, user, location, all_users):
         if random.randint(1, 10) == 1:
             user['experience'] = min(100, user['experience'] + 1)
         else:
-            bot.send_message(user['id'], f'Дастиш вери гуд, что ты пришел. А теперь атеншен на доску. У вас будет не сколько задачек.')
+            bot.send_message(user['id'], f'Дастиш вери гуд, что ты пришел. А теперь атеншен на доску. У вас будет несколько задачек.')
             keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)#
             keyboard.add(types.KeyboardButton(text="1"))
             keyboard.add(types.KeyboardButton(text="2"))
             keyboard.add(types.KeyboardButton(text="3"))
+            keyboard.add(types.KeyboardButton(text="Переход: холл"))
             bot.send_message(user['id'], 'Какую выберете задачу?', reply_markup=keyboard)
     elif message == 'Посмотреть на мусор(может это не мусор, я не знаю) в коробке':
         user['energy'] -= 5
@@ -40,6 +42,8 @@ def user_message(bot, message, user, location, all_users):
     elif message == "Попросить конфетку":
         bot.send_message(user['id'], '0о\n'
                                      ' -')
+    elif message == '1':
+        bot.send_message("")
 
 
     else:
