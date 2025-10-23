@@ -42,7 +42,9 @@ def register_user(message):
         'energy': 100,
         'food': 100,
         'water': 100,
-        'experience': 0
+        'experience': 0,
+        'dop_HP': 0,
+        'оружие': 0
     }
 
     users.append(new_user)

@@ -63,6 +63,11 @@ locations = [
         "id": "home",
         "name": 'дом',
         "inventory": []
+    },
+    {
+        "id": "security",
+        "name": 'комната охраны',
+        "inventory": []
     }
 ]
 
@@ -98,6 +103,7 @@ def load_modules():
     import locations.room_physics as room_physics
     import locations.back_yard as back_yard
     import locations.home as home
+    import locations.security as security
 
     modules.update({
         'yard': yard,
@@ -111,7 +117,8 @@ def load_modules():
         'back_yard': back_yard,
         'math': math,
         'room_physics': room_physics,
-        'home': home
+        'home': home,
+        'security': security
     })
 
 

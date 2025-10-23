@@ -15,6 +15,7 @@ def make_default_keyboard():
     keyboard.add(types.KeyboardButton(text="Переход: каб. Математики"))
     keyboard.add(types.KeyboardButton(text="Переход: задний двор"))
     keyboard.add(types.KeyboardButton(text="Переход: дом"))
+    keyboard.add(types.KeyboardButton(text="Переход: комната охраны"))
 
     return keyboard
 
