@@ -8,7 +8,7 @@ def user_enters_location(bot, user, location, all_users):
     keyboard.add(types.KeyboardButton(text="Перейти в задний двор"))
     keyboard.add(types.KeyboardButton(text="Перейти в каб. 116"))
     keyboard.add(types.KeyboardButton(text="Перейти в холл"))
-    keyboard.add(types.KeyboardButton(text="Перейти в туалет"))
+    keyboard.add(types.KeyboardButton(text="Перейти в математика"))
     bot.send_message(user['id'], 'Вы во дворе', reply_markup=keyboard)
 
 

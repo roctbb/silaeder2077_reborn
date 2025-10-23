@@ -16,8 +16,14 @@ def user_message(bot, message, user, location, all_users):
     if message == 'выпить чай':
         user['energy'] = min(100, user['energy'] + 10)
         user['water'] = min(100, user['water'] + 20)
-        bot.send_message(user['id'], f'Вы выпили чай. Теперь у вас {user["water"]}%жажды и {user["energy"]}%энергии')
+        bot.send_message(user['id'], f'Вы выпили чай. Теперь у вас {user["water"]}% воды и {user["energy"]}% энергии')
     elif message == 'написать объяснительную':
-        bot.send_message(user['id'], f'Вы написали объяснительную')
+        if user['energy'] > 35:
+            bot.send_message(user['id'], f'Вы очень долго писали объяснительную')
+            user["energy"] -= 35
+            bot.send_message(user['id'], f'Вы устали, теперь у вас {user["energy"]}% энергии')
+        else:
+            bot.send_message(user['id'], f'Вы так устали, что не можете даже написать объяснительную')
+            bot.send_message(user['id'], f'У вас {user["energy"]}% энергии')
     else:
         bot.send_message(user['id'], 'Я вас не понял')
