@@ -55,13 +55,13 @@ def user_message(bot, message, user, location, all_users):
         if user['experience'] >= 2:
             x = random.randint(1, 3)
             if x == 1:
-                user['experience'] = user['experience'] + 2
+                user['experience'] = user['experience'] + 4
                 bot.send_message(user['id'],
-                                 f'Вы хорошо объяснили тему! Получили 2 опыта! Теперь у вас {user["experience"]} опыта!')
+                                 f'Вы хорошо объяснили тему! Получили 4 опыта! Теперь у вас {user["experience"]} опыта!')
             elif x == 2:
-                user['energy'] = max(0, user['energy'] - 2)
+                user['energy'] = max(0, user['energy'] - 5)
                 bot.send_message(user['id'],
-                                 f'Сосед не понял объяснение, пришлось потратить больше времени. Потеряли 2% энергии. Теперь у вас {user["energy"]}% энергии.')
+                                 f'Сосед не понял объяснение, пришлось потратить больше времени. Потеряли 5% энергии. Теперь у вас {user["energy"]}% энергии.')
             else:
                 bot.send_message(user['id'], 'Учитель заметил вашу помощь и похвалил!')
         else:
