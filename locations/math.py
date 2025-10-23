@@ -8,13 +8,15 @@ def make_math_keyboard():
     keyboard.add(types.KeyboardButton(text="Помочь соседу по парте"))
     keyboard.add(types.KeyboardButton(text="Списывать с доски"))
     keyboard.add(types.KeyboardButton(text="Сделать вид что решаешь"))
-    keyboard.add(types.KeyboardButton(text="Переход: двор"))
+    keyboard.add(types.KeyboardButton(text="Переход: холл"))
 
     return keyboard
 
 
 def user_enters_location(bot, user, location, all_users):
     bot.send_message(user['id'], 'Вы в кабинете математики', reply_markup=make_math_keyboard())
+    with open('assets/images/math_kab.jpg', 'rb') as photo:
+        bot.send_photo(user['id'], photo)
 
 
 def user_leaves_location(bot, user, location, all_users):
@@ -27,6 +29,8 @@ def user_message(bot, message, user, location, all_users):
         return
 
     if message == 'Решить пример':
+        with open('assets/images/Primer.jpg', 'rb') as photo:
+            bot.send_photo(user['id'], photo)
         if user['energy'] >= 3:
             user['energy'] = user['energy'] - 3
 
@@ -52,23 +56,25 @@ def user_message(bot, message, user, location, all_users):
                              f'У вас не хватает энергии! Сейчас у вас {user["energy"]}% энергии. Нужно 3% энергии!')
 
     elif message == 'Помочь соседу по парте':
+        with open('assets/images/help.jpg', 'rb') as photo:
+            bot.send_photo(user['id'], photo)
         if user['experience'] >= 2:
-            x = random.randint(1, 3)
+            x = random.randint(1, 2)
             if x == 1:
-                user['experience'] = user['experience'] + 4
+                user['experience'] = user['experience'] + 2
                 bot.send_message(user['id'],
                                  f'Вы хорошо объяснили тему! Получили 4 опыта! Теперь у вас {user["experience"]} опыта!')
             elif x == 2:
                 user['energy'] = max(0, user['energy'] - 5)
                 bot.send_message(user['id'],
-                                 f'Сосед не понял объяснение, пришлось потратить больше времени. Потеряли 5% энергии. Теперь у вас {user["energy"]}% энергии.')
-            else:
-                bot.send_message(user['id'], 'Учитель заметил вашу помощь и похвалил!')
+                                 f'Сосед не понял объяснение, пришлось потратить больше времени. Потеряли 5% энергии и 2 опыта. Теперь у вас {user["energy"]}% энергии и {user["experience"]} опыта.')
         else:
             bot.send_message(user['id'],
                              f'У вас недостаточно опыта чтобы помогать другим! Нужно 2 опыта, а у вас {user["experience"]}.')
 
     elif message == 'Списывать с доски':
+        with open('assets/images/doska.jpg', 'rb') as photo:
+            bot.send_photo(user['id'], photo)
         x = random.randint(1, 4)
         if x == 1:
             bot.send_message(user['id'], 'Вас поймали на списывании! Учитель забрал тетрадь.')
@@ -81,6 +87,8 @@ def user_message(bot, message, user, location, all_users):
             bot.send_message(user['id'], 'Вы успешно списали решение!')
 
     elif message == 'Сделать вид что решаешь':
+        with open('assets/images/tipo_reshaet.jpg', 'rb') as photo:
+            bot.send_photo(user['id'], photo)
         x = random.randint(1, 3)
         if x == 1:
             bot.send_message(user['id'], 'Учитель заметил, что вы не решаете, и вызвал к доске!')
