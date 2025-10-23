@@ -28,7 +28,7 @@ def user_message(bot, message, user, location, all_users):
         if user['energy'] <= 0:
             bot.send_message(user['id'], "ВЫ УМЕРЛИ!!!")
         else:
-            bot.send_message(user['id'], f'Вы поиграли в футбод\n'
+            bot.send_message(user['id'], f'Вы поиграли в футбол\n'
                                      f'У вас теперь {user["energy"]} энергии, но у вас поднялось настроение')
             bot.send_message(user['id'], f"Вы заметили что на улице никого нет")
             keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
