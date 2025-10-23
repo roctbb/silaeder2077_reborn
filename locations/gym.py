@@ -17,7 +17,7 @@ def user_enters_location(bot, user, location, all_users):
 
 
 def user_leaves_location(bot, user, location, all_users):
-    bot.send_message(user['id'], 'Вы покинули спортзал Дениса')
+    bot.send_message(user['id'], 'Вы покинули спортзал')
 
 
 def user_message(bot, message, user, location, all_users):
