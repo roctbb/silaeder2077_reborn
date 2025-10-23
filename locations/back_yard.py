@@ -41,9 +41,10 @@ def user_message(bot, message, user, location, all_users):
             bot.send_message(user['id'], 'Что будете делать?', reply_markup=keyboard)
     elif message == "Пнуть мяч в окно":
         bot.send_message(user['id'], "Что у вас за мысли?\nВ 105!")
-        bot.send_message(user['id'], f'Переход: каб. 105')
+
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.add(types.KeyboardButton(text="Переход: каб. 105"))
+        bot.send_message(user['id'], f'Переход: каб. 105', reply_markup=keyboard)
     elif message == "Отжиматься":
         with open('assets/images/img.png', 'rb') as photo:
             bot.send_photo(user['id'], photo)
