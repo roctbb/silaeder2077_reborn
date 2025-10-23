@@ -48,6 +48,11 @@ def user_message(bot, message, user, location, all_users):
         bot.send_message(user['id'], 'Что у вас за мысли?\nВ 105!!!!!!', reply_markup=keyboard)
     elif message == "Не менять оценки":
         bot.send_message(user['id'], "Ок. Вы хороший ученик. Вас не отправят в 105 :)")
+        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        keyboard.add(types.KeyboardButton(text="Поиграть на пианино"))
+        keyboard.add(types.KeyboardButton(text="Потыкать по доске"))
+        keyboard.add(types.KeyboardButton(text="Перейти во холл"))
+        bot.send_message(user['id'], 'Вы в каб. 116', reply_markup=keyboard)
 
 
     else:
