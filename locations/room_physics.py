@@ -42,7 +42,6 @@ def user_message(bot, message, user, location, all_users):
         bot.send_message(user['id'], f'Вы порылись в коробке и нашли несколько интересных вещей\n'
                                  f'У вас теперь {user["energy"]} энергии, но у вас поднялось настроение')
 
-                #bot.send_message(user['id'], f'Перейти в каб. 105')
     elif message == "Попросить конфетку":
         bot.send_message(user['id'], '0о\n'
                                      ' -')
