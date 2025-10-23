@@ -36,16 +36,11 @@ def user_message(bot, message, user, location, all_users):
             keyboard.add(types.KeyboardButton(text="ничего не делать"))
             keyboard.add(types.KeyboardButton(text="Отжиматься"))
             bot.send_message(user['id'], 'Что будете делать?', reply_markup=keyboard)
-            if random.randint(0, 3) == 1:
-                bot.send_message(user['id'], f'Вас спалил учитель!!!'
-                                             f'И отвели в 105...')
-                bot.send_message(user['id'], f'Перейти в каб. 105')
     elif message == "Пнуть мяч в окно":
         bot.send_message(user['id'], "Что у вас за мысли?\nВ 105!")
-
         bot.send_message(user['id'], f'Перейти в каб. 105')
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        keyboard.add(types.KeyboardButton(text="Перейти в 105"))
+        keyboard.add(types.KeyboardButton(text="Перейти в каб. 105"))
     elif message == "Отжиматься":
         bot.send_message(user['id'], "Ок. Вы хороший ученик. Вас не отправят в 105 :)")
 

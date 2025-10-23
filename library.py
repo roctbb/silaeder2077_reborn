@@ -55,7 +55,7 @@ locations = [
     },
     {
         "id": "back_yard",
-        "name": 'задний_двор',
+        "name": 'задний двор',
         "inventory": []
     }
 ]
