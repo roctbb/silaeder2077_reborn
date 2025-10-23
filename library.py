@@ -8,6 +8,7 @@ import locations.room116 as room116
 import locations.room105 as room105
 import locations.dining_room as dining_room
 import locations.toilet as toilet
+import locations.math as math
 bot = telebot.TeleBot(TOKEN)
 
 users = []
@@ -50,6 +51,11 @@ locations = [
         "id": "dining_room",
         "name": 'столовая',
         "inventory": []
+    },
+    {
+        "id": "math",
+        "name": 'математика',
+        "inventory": []
     }
 ]
 
@@ -67,5 +73,6 @@ modules = {
     'room116': room116,
     'room105': room105,
     'dining_room': dining_room,
-    'toilet': toilet
+    'toilet': toilet,
+    'math': math
 }
