@@ -63,6 +63,11 @@ locations = [
         "id": "math",
         "name": 'математика',
         "inventory": []
+    },
+    {
+        "id": "room_physics",
+        "name": 'каб. Физики',
+        "inventory": []
     }
 ]
 
