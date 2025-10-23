@@ -46,17 +46,16 @@ def user_message(bot, message, user, location, all_users):
     elif message == "Попросить конфетку":
         bot.send_message(user['id'], '0о\n'
                                      ' -')
-    elif message == '1' or message == "2" or message == "
+    elif message == '1' or message == "2" or message == "3":
         num_task = int(message)
+        bot.send_message(user['id'], str(list(tasks.items())[num_task-1][0]))
+        #bot.send_message(user['id'])
 
     elif num_task != 0:
-        if num_task == 1:
-            if message == tasks[1]:
-                bot.send_message("Дастиш вери гуд!!!")
-                user['experience']+=5
-            else:
-                bot.send_message("Оууу, оууу. Это фигня какая-то")
-
-
+        if message == tasks[num_task-1]:
+            bot.send_message("Дастиш вери гуд!!!")
+            user['experience']+=5
+        else:
+            bot.send_message("Оууу, оууу. Это фигня какая-то")
     else:
         bot.send_message(user['id'], 'Я вас не понял :(\nНапишите еще раз')
