@@ -32,7 +32,7 @@ def user_message(bot, message, user, location, all_users):
             bot.send_message(user['id'], f'Вы поиграли в футбол\n'
                                      f'У вас теперь {user["energy"]} энергии, но у вас поднялось настроение')
             with open('response.jpg', 'rb') as photo:
-                bot.send_photo(message.chat.id, photo, caption="Вот ваше фото!")
+                bot.send_photo(user['id'], photo, caption="Вот ваше фото!")
             bot.send_message(user['id'], f"Вы заметили что на улице никого нет")
             keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
             keyboard.add(types.KeyboardButton(text="Пнуть мяч в окно"))
