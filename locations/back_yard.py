@@ -21,16 +21,18 @@ def user_message(bot, message, user, location, all_users):
         if random.randint(1, 10) == 1:
             user['experience'] = min(100, user['experience'])
         if user['energy'] <= 0:
-            bot.send_message(user['id'], "ВЫ УМЕРЛИ!!!")
+            bot.send_message(user['id'], "ВЫ УМЕРЛИ!")
         else:
             bot.send_message(user['id'], f'Вы отдохнули \n Теперь у вас {user["experience"]} опыта и {user["energy"]} энергии')
     elif message == 'Поиграть в футбол':
         user['energy'] = min(100, user['energy'] - 5)
         if user['energy'] <= 0:
-            bot.send_message(user['id'], "ВЫ УМЕРЛИ!!!")
+            bot.send_message(user['id'], "ВЫ УМЕРЛИ!")
         else:
             bot.send_message(user['id'], f'Вы поиграли в футбол\n'
                                      f'У вас теперь {user["energy"]} энергии, но у вас поднялось настроение')
+            with open('response.jpg', 'rb') as photo:
+                bot.send_photo(message.chat.id, photo, caption="Вот ваше фото!")
             bot.send_message(user['id'], f"Вы заметили что на улице никого нет")
             keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
             keyboard.add(types.KeyboardButton(text="Пнуть мяч в окно"))
