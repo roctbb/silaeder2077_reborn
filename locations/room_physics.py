@@ -49,7 +49,7 @@ def user_message(bot, message, user, location, all_users):
     elif message == '1' or message == "2" or message == "3":
         num_task = int(message)
         bot.send_message(user['id'], str(list(tasks.items())[num_task-1][0]))
-        #bot.send_message(user['id'])
+        bot.send_message(user['id'], "Напишите ответ на задачу\nПишите нецелые числа через точку")
 
     elif num_task != 0:
         if message == tasks[num_task-1]:
