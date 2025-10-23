@@ -5,6 +5,7 @@ def user_enters_location(bot, user, location, all_users):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(types.KeyboardButton(text="Отдохнуть на лавочке"))
     keyboard.add(types.KeyboardButton(text="Перейти в спортзал"))
+    keyboard.add(types.KeyboardButton(text="Перейти в задний двор"))
     keyboard.add(types.KeyboardButton(text="Перейти в каб. 116"))
     keyboard.add(types.KeyboardButton(text="Перейти в холл"))
     keyboard.add(types.KeyboardButton(text="Перейти в математика"))
