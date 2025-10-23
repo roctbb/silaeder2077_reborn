@@ -33,4 +33,4 @@ def user_message(bot, message, user, location, all_users):
         else:
             bot.send_message(user['id'],f'Я вас не понял')
     else:
-        bot.send_message(user['id'], 'Я вас не понял')
+        bot.send_message(user['id'], 'Я Вас не понял')
