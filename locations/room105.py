@@ -19,10 +19,18 @@ def user_message(bot, message, user, location, all_users):
     elif message == 'написать объяснительную':
         if user['energy'] > 35:
             bot.send_message(user['id'], f'Вы очень долго писали объяснительную')
+            user['experience'] = min(100, user['experience'] - 1)
             user["energy"] -= 35
             bot.send_message(user['id'], f'Вы устали, теперь у вас {user["energy"]}% энергии')
         else:
             bot.send_message(user['id'], f'Вы так устали, что не можете даже написать объяснительную')
             bot.send_message(user['id'], f'У вас {user["energy"]}% энергии')
+        text=message.text
+        if(text!=''):
+            bot.send_message(user['id'], f'Вы написали объяснительную')
+            user['experience'] = min(100, user['experience'] - 1)
+            user["energy"] -=15
+        else:
+            bot.send_message(user['id'],f'Я вас не понял')
     else:
         bot.send_message(user['id'], 'Я вас не понял')

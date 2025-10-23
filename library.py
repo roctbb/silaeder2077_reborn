@@ -61,7 +61,7 @@ locations = [
     },
     {
         "id": "math",
-        "name": 'математика',
+        "name": 'каб. Математики',
         "inventory": []
     },
     {
