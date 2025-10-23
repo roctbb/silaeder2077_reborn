@@ -8,7 +8,7 @@ def make_math_keyboard():
     keyboard.add(types.KeyboardButton(text="Помочь соседу по парте"))
     keyboard.add(types.KeyboardButton(text="Списывать с доски"))
     keyboard.add(types.KeyboardButton(text="Сделать вид что решаешь"))
-    keyboard.add(types.KeyboardButton(text="Перейти во двор"))
+    keyboard.add(types.KeyboardButton(text="Переход: двор"))
 
     return keyboard
 
@@ -22,11 +22,14 @@ def user_leaves_location(bot, user, location, all_users):
 
 
 def user_message(bot, message, user, location, all_users):
+    if user.get('waiting_for_answer', False) and 'current_math_problem' in user:
+        handle_math_answer(bot, user, message)
+        return
+
     if message == 'Решить пример':
         if user['energy'] >= 3:
             user['energy'] = user['energy'] - 3
 
-            # Генерируем примеры для 5-6 класса
             examples = [
                 {"question": "15 × 4 + 23 = ?", "answer": 83},
                 {"question": "72 ÷ 8 × 3 = ?", "answer": 27},
@@ -86,10 +89,8 @@ def user_message(bot, message, user, location, all_users):
             bot.send_message(user['id'],
                              f'Вам удалось отдохнуть! Восстановили 2% энергии. Теперь у вас {user["energy"]}% энергии.')
 
-    elif message == 'Выйти в коридор':
-        # Здесь должна быть логика перехода в другую локацию
-        bot.send_message(user['id'], 'Вы вышли в коридор')
-        # Должен быть вызов функции смены локации
+    elif message == 'Перейти во двор':
+        bot.send_message(user['id'], 'Вы вышли во двор')
     else:
         bot.send_message(user['id'], 'Я вас не понял')
 
@@ -102,14 +103,13 @@ def handle_math_answer(bot, user, user_answer):
             correct_answer = user['current_math_problem']['answer']
 
             if answer == correct_answer:
-                user['experience'] = user['experience'] + 2
+                user['experience'] = user['experience'] + 1
                 user['energy'] = min(100, user['energy'] + 1)
                 bot.send_message(user['id'],
-                                 f'✅ Правильно! Получили 2 опыта и 1% энергии! Теперь у вас {user["experience"]} опыта и {user["energy"]}% энергии!')
+                                 f'✅ Правильно! Получили 1 опыт и 1% энергии! Теперь у вас {user["experience"]} опыта и {user["energy"]}% энергии!')
             else:
                 bot.send_message(user['id'], f'❌ Неправильно! Правильный ответ: {correct_answer}')
 
-            # Сбрасываем состояние
             user.pop('current_math_problem', None)
             user['waiting_for_answer'] = False
 

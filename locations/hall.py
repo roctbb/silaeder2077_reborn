@@ -29,6 +29,7 @@ def user_message(bot, message, user, location, all_users):
         keyboard.add(types.KeyboardButton(text="Переход: туалет"))
         keyboard.add(types.KeyboardButton(text="Переход: двор"))
         keyboard.add(types.KeyboardButton(text="Переход: каб. Физики"))
+        keyboard.add(types.KeyboardButton(text="Переход: каб. Математики"))
         bot.send_message(user['id'], 'Куда вы убежите!',reply_markup=keyboard)
     elif message == 'Попробовать убежать.':
         if random.randint(1,10)>5:
