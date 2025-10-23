@@ -1,8 +1,8 @@
 from config import TOKEN
 import telebot
+import json
 
 modules = {}
-
 users = []
 
 locations = [
@@ -72,6 +72,24 @@ locations = [
 ]
 
 
+def load_state_from_file():
+    with open('state.json', 'r', encoding='utf-8') as file:
+        data = file.read()
+        state = json.loads(data)
+
+    return state['users'], state['locations']
+
+
+def save_state_to_file(users, locations):
+    with open('state.json', 'w', encoding='utf-8') as file:
+        state = json.dumps({
+            'users': users,
+            'locations': locations
+        })
+
+        file.write(state)
+
+
 def load_modules():
     import locations.yard as yard
     import locations.gym as gym
@@ -102,6 +120,18 @@ def load_modules():
         'home': home,
         'security': security
     })
+
+
+def load_state():
+    try:
+        saved_users, saved_locations = load_state_from_file()
+        users.extend(saved_users)
+        locations.clear()
+        locations.extend(saved_locations)
+        print("Loaded state from file: ", users, locations)
+
+    except Exception as e:
+        print(e)
 
 
 bot = telebot.TeleBot(TOKEN)

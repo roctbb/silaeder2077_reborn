@@ -1,5 +1,8 @@
+from sympy.physics.quantum.qubit import measure_all
 from telebot import types
 import random
+
+num_task = 0
 
 tasks = {
     "Велосипедист проехал 36 км за 2 часа. Найдите среднюю скорость велосипедиста.": 18,
@@ -22,6 +25,7 @@ def user_leaves_location(bot, user, location, all_users):
 
 
 def user_message(bot, message, user, location, all_users):
+    global num_task, tasks
     if message == 'Поговорить с Алексеем Генадьевичем':
         if random.randint(1, 10) == 1:
             user['experience'] = min(100, user['experience'] + 1)
@@ -42,9 +46,16 @@ def user_message(bot, message, user, location, all_users):
     elif message == "Попросить конфетку":
         bot.send_message(user['id'], '0о\n'
                                      ' -')
-    elif message == '1':
-        bot.send_message("")
+    elif message == '1' or message == "2" or message == "3":
+        num_task = int(message)
+        bot.send_message(user['id'], str(list(tasks.items())[num_task-1][0]))
+        #bot.send_message(user['id'])
 
-
+    elif num_task != 0:
+        if message == tasks[num_task-1]:
+            bot.send_message("Дастиш вери гуд!!!")
+            user['experience']+=5
+        else:
+            bot.send_message("Оууу, оууу. Это фигня какая-то")
     else:
         bot.send_message(user['id'], 'Я вас не понял :(\nНапишите еще раз')
