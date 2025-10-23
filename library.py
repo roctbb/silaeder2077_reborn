@@ -1,17 +1,7 @@
 from config import TOKEN
 import telebot
-import locations.yard as yard
-import locations.gym as gym
-import locations.UnderTheCarpet as UnderTheCarpet
-import locations.hall as hall
-import locations.room116 as room116
-import locations.room105 as room105
-import locations.dining_room as dining_room
-import locations.toilet as toilet
-import locations.math as math
-from locations import back_yard
 
-bot = telebot.TeleBot(TOKEN)
+modules = {}
 
 users = []
 
@@ -61,31 +51,50 @@ locations = [
     },
     {
         "id": "math",
-        "name": 'математика',
+        "name": 'каб. Математики',
         "inventory": []
     },
     {
         "id": "room_physics",
         "name": 'каб. Физики',
         "inventory": []
+    },
+    {
+        "id": "home",
+        "name": 'дом',
+        "inventory": []
     }
 ]
 
-def getLocList():
-    keys = []
-    for i in locations:
-        keys.append(i['id'])
-    return keys
 
-modules = {
-    'yard': yard,
-    'gym': gym,
-    'UnderTheCarpet': UnderTheCarpet,
-    'hall': hall,
-    'room116': room116,
-    'room105': room105,
-    'dining_room': dining_room,
-    'toilet': toilet,
-    'back_yard': back_yard,
-    'math': math
-}
+def load_modules():
+    import locations.yard as yard
+    import locations.gym as gym
+    import locations.UnderTheCarpet as UnderTheCarpet
+    import locations.hall as hall
+    import locations.room116 as room116
+    import locations.room105 as room105
+    import locations.dining_room as dining_room
+    import locations.toilet as toilet
+    import locations.math as math
+    import locations.room_physics as room_physics
+    import locations.back_yard as back_yard
+    import locations.home as home
+
+    modules.update({
+        'yard': yard,
+        'gym': gym,
+        'UnderTheCarpet': UnderTheCarpet,
+        'hall': hall,
+        'room116': room116,
+        'room105': room105,
+        'dining_room': dining_room,
+        'toilet': toilet,
+        'back_yard': back_yard,
+        'math': math,
+        'room_physics': room_physics,
+        'home': home
+    })
+
+
+bot = telebot.TeleBot(TOKEN)
