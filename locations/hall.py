@@ -42,10 +42,14 @@ def user_leaves_location(bot, user, location, all_users):
 def user_message(bot, message, user, location, all_users):
     if message == 'Пойти в потеряшки, может найду что нибудь интересное.':
         user['energy'] = max(0, user['energy'] - 5)
-        bot.send_message(user['id'], f'Вы покопались в потеряшках, Теперь у вас {user["energy"]} энергии.')
-        user['inventory'].append('кусок ковра')
-        bot.send_message(user['id'],
-                         'Вы нашли кусок ковра и взяли себе, но вы услышали шаги разгневанной Инги Александровны и решили сбежать')
+        if random.randint(1,10) < 5:
+            user['food'] = min(100, user['food'] + random.randint(1, 15))
+            bot.send_message(user['id'], f'Вы покопались в потеряшках, Теперь у вас {user["energy"]} энергии и {user["food"]} еды')
+            bot.send_message(user['id'],'Вы нашли кусок хлеба сьели, но вы услышали шаги разгневанной Инги Александровны и решили сбежать')
+        else:
+            user['water'] = min(100, user['water'] + random.randint(1, 15))
+            bot.send_message(user['id'],f'Вы покопались в потеряшках, Теперь у вас {user["energy"]} энергии и {user["water"]} воды')
+            bot.send_message(user['id'],'Вы нашли бутылку воды и выпили её, но вы услышали шаги разгневанной Инги Александровны и решили сбежать')
         bot.send_message(user['id'], 'Куда вы убежите!', reply_markup=make_default_keyboard())
 
     elif message == 'Попробовать убежать.':
