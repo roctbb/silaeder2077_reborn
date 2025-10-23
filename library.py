@@ -87,5 +87,6 @@ modules = {
     'dining_room': dining_room,
     'toilet': toilet,
     'back_yard': back_yard,
-    'math': math
+    'math': math,
+    'room_physics' : room_physics
 }
