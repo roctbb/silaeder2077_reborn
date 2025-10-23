@@ -2,8 +2,16 @@ from library import *
 import random
 from telebot import types
 
+
 def send_welcome(user):
     bot.send_message(user['id'], 'Добро пожаловать в игру!')
+
+
+def getLocList():
+    keys = []
+    for i in locations:
+        keys.append(i['id'])
+    return keys
 
 
 def get_user(message):
@@ -11,6 +19,7 @@ def get_user(message):
         if user['id'] == message.chat.id:
             return user
     return None
+
 
 def create_keyboard(buttons, rowsWidth=3):
     keyboard = types.ReplyKeyboardMarkup(
@@ -23,6 +32,7 @@ def create_keyboard(buttons, rowsWidth=3):
             keyboard.add(types.KeyboardButton(button))
 
     return keyboard
+
 
 def register_user(message):
     new_user = {
@@ -58,11 +68,13 @@ def get_location_by_name(location_name):
 def get_location_users(location_id):
     return list(filter(lambda user: user['location'] == location_id, users))
 
+
 def get_locations_list():
     keys = []
     for i in locations:
         keys.append(i['id'])
     return keys
+
 
 def transfer_user(user, to_location_id):
     from_location_id = user['location']
@@ -77,4 +89,3 @@ def transfer_user(user, to_location_id):
         modules[from_location_id].user_leaves_location(bot, user, old_location, get_location_users(from_location_id))
 
     modules[to_location_id].user_enters_location(bot, user, new_location, get_location_users(to_location_id))
-

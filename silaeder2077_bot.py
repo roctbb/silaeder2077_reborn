@@ -4,10 +4,10 @@ from methods import *
 from telebot import types
 from config import TOKEN
 
+
 @bot.message_handler(content_types=['text'])
 def process_text(message):
     user = get_user(message)
-
 
     if not user:
         user = register_user(message)
@@ -32,4 +32,8 @@ def process_text(message):
             except Exception as e:
                 print(e)
     print(user)
-bot.polling(none_stop=True)
+
+
+if __name__ == '__main__':
+    load_modules()
+    bot.polling(none_stop=True)
