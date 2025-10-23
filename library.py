@@ -9,6 +9,7 @@ import locations.room105 as room105
 import locations.dining_room as dining_room
 import locations.toilet as toilet
 import locations.math as math
+import  locations.room_physics as room_physics
 from locations import back_yard
 
 bot = telebot.TeleBot(TOKEN)
