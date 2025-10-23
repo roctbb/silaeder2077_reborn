@@ -29,6 +29,7 @@ def user_message(bot, message, user, location, all_users):
         if(text!=''):
             bot.send_message(user['id'], f'Вы написали объяснительную')
             user['experience'] = min(100, user['experience'] - 1)
+            user["energy"] -=15
         else:
             bot.send_message(user['id'],f'Я вас не понял')
     else:
