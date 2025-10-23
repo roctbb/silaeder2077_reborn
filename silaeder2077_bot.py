@@ -8,12 +8,11 @@ from config import TOKEN
 @bot.message_handler(content_types=['text'])
 def process_text(message):
     user = get_user(message)
-
+    print(message.text, users)
     if not user:
         user = register_user(message)
         send_welcome(user)
         transfer_user(user, 'yard')
-
     else:
 
         message_text = message.text
@@ -31,9 +30,11 @@ def process_text(message):
                 modules[user['location']].user_message(bot, message_text, user, location, neighbours)
             except Exception as e:
                 print(e)
-    print(user)
+    print(users)
+    save_state_to_file(users, locations)
 
 
 if __name__ == '__main__':
     load_modules()
+    load_state()
     bot.polling(none_stop=True)

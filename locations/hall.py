@@ -1,5 +1,6 @@
 from telebot import types
 import random
+from methods import *
 
 
 def make_default_keyboard():
@@ -12,6 +13,7 @@ def make_default_keyboard():
     keyboard.add(types.KeyboardButton(text="Переход: двор"))
     keyboard.add(types.KeyboardButton(text="Переход: каб. Физики"))
     keyboard.add(types.KeyboardButton(text="Переход: каб. Математики"))
+    keyboard.add(types.KeyboardButton(text="Переход: задний двор"))
     keyboard.add(types.KeyboardButton(text="Переход: дом"))
 
     return keyboard
@@ -49,24 +51,18 @@ def user_message(bot, message, user, location, all_users):
     elif message == 'Попробовать убежать.':
         if random.randint(1, 10) > 5:
             bot.send_message(user['id'], 'Вас хватают и уводят в 105')
-            keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-            keyboard.add(types.KeyboardButton(text="Переход: каб. 105"))
-            bot.send_message(user['id'], 'Вам прийдется идти в 105', reply_markup=keyboard)
+            transfer_user(user, 'room105')
         else:
             bot.send_message(user['id'], 'Убегая вы понимаете что нужно спрятаться в одном из кабинетов!',
                              reply_markup=make_default_keyboard())
     elif message == "Накричать на охранника.":
         bot.send_message(user['id'], 'Охранник приходит в бешенство, бежит к тебе и отводит в 105.')
-        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        keyboard.add(types.KeyboardButton(text="Переход: каб. 105"))
-        bot.send_message(user['id'], 'Вам прийдется идти в 105', reply_markup=keyboard)
+        transfer_user(user, 'room105')
     elif message == "Пойти в 105 взять карточку.":
         bot.send_message(user['id'],
                          'Слава богу в этот раз ты идешь в 105 просто за карточкой, а не за объяснительной.')
         user['inventory'].append('card')
-        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        keyboard.add(types.KeyboardButton(text="Переход: каб. 105"))
-        bot.send_message(user['id'], 'Вам прийдется идти в 105', reply_markup=keyboard)
+        transfer_user(user, 'room105')
     elif message == "Просто пойти дальше.":
         bot.send_message(user['id'], 'Куда вы пойдете.', reply_markup=make_default_keyboard())
     else:
