@@ -44,6 +44,7 @@ def user_message(bot, message, user, location, all_users):
             keyboard.add(types.KeyboardButton(text="Переход: столовая"))
             keyboard.add(types.KeyboardButton(text="Переход: туалет"))
             keyboard.add(types.KeyboardButton(text="Переход: двор"))
+            keyboard.add(types.KeyboardButton(text="Переход: каб. Физики"))
             bot.send_message(user['id'],'Убегая вы понимаете что нужно спрятаться в одном из кабинетов!',reply_markup=keyboard)
     elif message == "Накричать на охранника.":
         bot.send_message(user['id'], 'Охранник приходит в бешенство, бежит к тебе и отводит в 105.')
@@ -64,6 +65,7 @@ def user_message(bot, message, user, location, all_users):
         keyboard.add(types.KeyboardButton(text="Переход: столовая"))
         keyboard.add(types.KeyboardButton(text="Переход: туалет"))
         keyboard.add(types.KeyboardButton(text="Переход: двор"))
+        keyboard.add(types.KeyboardButton(text="Переход: каб. Физики"))
         bot.send_message(user['id'], 'Куда вы пойдете.', reply_markup=keyboard)
     else:
         bot.send_message(user['id'], 'Я вас не понял')
