@@ -6,7 +6,7 @@ def user_enters_location(bot, user, location, all_users):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(types.KeyboardButton(text="Отдохнуть"))
     keyboard.add(types.KeyboardButton(text="Поиграть в футбол"))
-    keyboard.add(types.KeyboardButton(text="Перейти в спортзал"))
+    keyboard.add(types.KeyboardButton(text="Переход: спортзал"))
     bot.send_message(user['id'], 'Вы на заднем дворе', reply_markup=keyboard)
 
 
@@ -38,9 +38,9 @@ def user_message(bot, message, user, location, all_users):
             bot.send_message(user['id'], 'Что будете делать?', reply_markup=keyboard)
     elif message == "Пнуть мяч в окно":
         bot.send_message(user['id'], "Что у вас за мысли?\nВ 105!")
-        bot.send_message(user['id'], f'Перейти в каб. 105')
+        bot.send_message(user['id'], f'Переход: каб. 105')
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        keyboard.add(types.KeyboardButton(text="Перейти в каб. 105"))
+        keyboard.add(types.KeyboardButton(text="Переход: каб. 105"))
     elif message == "Отжиматься":
         user['experience'] = min(100, user['experience'] + 1)
         user['energy'] = min(100, user['energy'] - 5)

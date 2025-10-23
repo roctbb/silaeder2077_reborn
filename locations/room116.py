@@ -6,7 +6,7 @@ def user_enters_location(bot, user, location, all_users):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(types.KeyboardButton(text="Поиграть на пианино"))
     keyboard.add(types.KeyboardButton(text="Потыкать по доске"))
-    keyboard.add(types.KeyboardButton(text="Перейти во холл"))
+    keyboard.add(types.KeyboardButton(text="Переход: холл"))
     bot.send_message(user['id'], 'Вы в каб. 116', reply_markup=keyboard)
 
 
@@ -34,17 +34,17 @@ def user_message(bot, message, user, location, all_users):
             keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
             keyboard.add(types.KeyboardButton(text="Изменить оценки"))
             keyboard.add(types.KeyboardButton(text="Не менять оценки"))
-            keyboard.add(types.KeyboardButton(text="Перейти во холл"))
+            keyboard.add(types.KeyboardButton(text="Переход: холл"))
             bot.send_message(user['id'], 'Что будете делать?', reply_markup=keyboard)
 
 
             if random.randint(0, 3) == 1:
                 bot.send_message(user['id'], f'Вас спалил учитель!!!'
                                              f'И отвели в 105...')
-                #bot.send_message(user['id'], f'Перейти в каб. 105')
+                #bot.send_message(user['id'], f'Переход: каб. 105')
     elif message == "Изменить оценки":
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        keyboard.add(types.KeyboardButton(text="Перейти в каб. 105"))
+        keyboard.add(types.KeyboardButton(text="Переход: каб. 105"))
         bot.send_message(user['id'], 'Что у вас за мысли?\nВ 105!!!!!!', reply_markup=keyboard)
     elif message == "Не менять оценки":
         bot.send_message(user['id'], "Ок. Вы хороший ученик. Вас не отправят в 105 :)")
