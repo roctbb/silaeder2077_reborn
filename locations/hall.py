@@ -46,7 +46,7 @@ def user_message(bot, message, user, location, all_users):
         if random.randint(1,10) < 5:
             user['food'] = min(100, user['food'] + random.randint(1, 15))
             bot.send_message(user['id'], f'Вы покопались в потеряшках, Теперь у вас {user["energy"]} энергии и {user["food"]} еды')
-            bot.send_message(user['id'],'Вы нашли кусок хлеба сьели, но вы услышали шаги разгневанной Инги Александровны и решили сбежать')
+            bot.send_message(user['id'],'Вы нашли кусок хлеба и сьели его, но вы услышали шаги разгневанной Инги Александровны и решили сбежать')
         else:
             user['water'] = min(100, user['water'] + random.randint(1, 15))
             bot.send_message(user['id'],f'Вы покопались в потеряшках, Теперь у вас {user["energy"]} энергии и {user["water"]} воды')
