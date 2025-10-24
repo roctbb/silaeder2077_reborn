@@ -7,7 +7,6 @@ def make_default_keyboard():
     keyboard.add(types.KeyboardButton(text="Поиграть на пианино"))
     keyboard.add(types.KeyboardButton(text="Потыкать по доске"))
     keyboard.add(types.KeyboardButton(text="Переход: холл"))
-
     return keyboard
 
 
