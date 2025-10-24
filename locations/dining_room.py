@@ -24,7 +24,7 @@ def user_enters_location(bot, user, location, all_users):
         bot.send_message(user['id'], 'Вас выгнали, ведь сейчас не время кушать', reply_markup=keyboard)
         with open('assets/images/stolovka.jpg', 'rb') as photo:
             bot.send_photo(user['id'], photo)
-        transfer_user(user, 'холл')
+        transfer_user(user, 'hall')
 
 
 def user_leaves_location(bot, user, location, all_users):
@@ -52,7 +52,7 @@ def user_message(bot, message, user, location, all_users):
                                              f'Теперь у вас {user["food"]} сытости.')
         else:
             bot.send_message(user['id'], 'Вас выгнали из столовой, ведь сейчас не время кушать')
-            transfer_user(user, 'холл')
+            transfer_user(user, 'hall')
 
     elif message == 'Попить чай':
         if c:
@@ -61,7 +61,7 @@ def user_message(bot, message, user, location, all_users):
                                          f'Теперь у вас {user["water"]} очков жажды.')
         else:
             bot.send_message(user['id'], 'Вас выгнали из столовой, ведь сейчас не время кушать')
-            transfer_user(user, 'холл')
+            transfer_user(user, 'hall')
 
     elif message == 'Украсть ложку':
         if c:
@@ -70,10 +70,10 @@ def user_message(bot, message, user, location, all_users):
                 user['inventory'].append('spoon')
             else:
                 bot.send_message(user['id'], 'Повариха заметила пропажу ложки и вас отправили в 105 кабинет')
-                transfer_user(user, 'каб. 105')
+                transfer_user(user, 'room105')
         else:
             bot.send_message(user['id'], 'Вас выгнали из столовой, ведь сейчас не время кушать')
-            transfer_user(user, 'холл')
+            transfer_user(user, 'hall')
     else:
         bot.send_message(user['id'], 'Я вас не понял')
 
