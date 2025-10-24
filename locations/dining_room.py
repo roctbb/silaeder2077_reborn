@@ -1,7 +1,7 @@
 from telebot import types
 from datetime import datetime
 import random
-
+from methods import *
 
 def user_enters_location(bot, user, location, all_users):
     c_time = datetime.now()
@@ -18,8 +18,12 @@ def user_enters_location(bot, user, location, all_users):
 
     if c:
         bot.send_message(user['id'], 'Вы в столовой', reply_markup=keyboard)
+        with open('assets/images/stolovka.jpg', 'rb') as photo:
+            bot.send_photo(user['id'], photo)
     else:
         bot.send_message(user['id'], 'Вас выгнали, ведь сейчас не время кушать', reply_markup=keyboard)
+        with open('assets/images/stolovka.jpg', 'rb') as photo:
+            bot.send_photo(user['id'], photo)
         transfer_user_to_location(bot, user, 'холл')
 
 
@@ -70,28 +74,7 @@ def user_message(bot, message, user, location, all_users):
         else:
             bot.send_message(user['id'], 'Вас выгнали из столовой, ведь сейчас не время кушать')
             transfer_user_to_location(bot, user, 'холл')
-
-    elif message == 'Переход: холл':
-        transfer_user_to_location(bot, user, 'холл')
-
-    elif message == 'Переход: каб. 105':
-        transfer_user_to_location(bot, user, 'каб. 105')
-
     else:
         bot.send_message(user['id'], 'Я вас не понял')
 
 
-def transfer_user_to_location(bot, user, location_name):
-    from methods import transfer_user
-    from library import locations
-
-    target_location = None
-    for location in locations:
-        if location['name'] == location_name:
-            target_location = location
-            break
-
-    if target_location:
-        transfer_user(user, target_location['id'])
-    else:
-        bot.send_message(user['id'], f'Не удалось перейти в {location_name}')
