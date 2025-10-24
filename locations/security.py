@@ -14,10 +14,10 @@ def user_leaves_location(bot, user, location, all_users):
     bot.send_message(user['id'], 'Вы покинули комнату охраны')
 
 
-def user_message(bot, message, user, location, all_users):
+def user_message(bot, message, user, location, all_users, keyboard):
     if message == 'Постучать и убежать':
         bot.send_message(user['id'], f'Вы постучали, но из-за двери выходит охраник и забирает в свою подсобку')
-        users.remove(user)
+        user.remove(user)
         bot.send_message(user['id'], f'Вы умерли.')
         return
     elif message == 'Зайти и что нибудь сделать':
