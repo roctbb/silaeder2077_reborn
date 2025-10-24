@@ -12,6 +12,8 @@ tasks = {
 
 
 def user_enters_location(bot, user, location, all_users):
+    with open('assets/images/физика.jpg', 'rb') as photo:
+        bot.send_photo(user['id'], photo)
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(types.KeyboardButton(text="Поговорить с Алексеем Генадьевичем"))
     keyboard.add(types.KeyboardButton(text="Посмотреть на мусор(может это не мусор, я не знаю) в коробке"))
@@ -42,6 +44,8 @@ def user_message(bot, message, user, location, all_users):
             bot.send_message(user['id'], 'Какую выберете задачу?', reply_markup=keyboard)
 
     elif message == 'Посмотреть на мусор(может это не мусор, я не знаю) в коробке':
+        with open('assets/images/коробка.jpg', 'rb') as photo:
+            bot.send_photo(user['id'], photo)
         user['energy'] -= 5
         bot.send_message(user['id'], f'Вы порылись в коробке и нашли несколько интересных вещей\n'
                                      f'У вас теперь {user["energy"]} энергии, но у вас поднялось настроение')
