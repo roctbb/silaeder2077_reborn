@@ -1,4 +1,3 @@
-from sympy.physics.quantum.qubit import measure_all
 from telebot import types
 import random
 
