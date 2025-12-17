@@ -33,6 +33,8 @@ def create_keyboard(buttons, rowsWidth=3):
     return keyboard
 
 
+# methods.py (дополняем функцию register_user)
+
 def register_user(message):
     new_user = {
         'id': message.chat.id,
@@ -44,7 +46,14 @@ def register_user(message):
         'water': 100,
         'experience': 0,
         'dop_HP': 0,
-        'оружие': 0
+        'оружие': 0,
+        'ochota': 1,  # Добавляем цель по умолчанию
+        'obiyasnitelinee': 0,
+        'obiyasnitelnay': [],
+        'HP': 100,  # Добавляем HP
+        'silаedry': 0,  # Добавляем валюту Силаэдры
+        'unconscious_until': None,  # Время до выхода из бессознательного состояния
+        'last_activity': datetime.now().isoformat()  # Время последней активности
     }
 
     users.append(new_user)
@@ -75,7 +84,12 @@ def get_locations_list():
     for i in locations:
         keys.append(i['id'])
     return keys
-
+def force_explanation(user, reason="нарушение правил"):
+    """Принудительно отправляет игрока писать объяснительную"""
+    user['ochota'] = 3  # Принудительная объяснительная
+    user['explanation_reason'] = reason
+    transfer_user_with_goal(user, 'room105', 'force')
+    return f"Вы отправлены в 105 за {reason}!"
 
 def transfer_user(user, to_location_id):
     from_location_id = user['location']
@@ -90,3 +104,36 @@ def transfer_user(user, to_location_id):
         modules[from_location_id].user_leaves_location(bot, user, old_location, get_location_users(from_location_id))
 
     modules[to_location_id].user_enters_location(bot, user, new_location, get_location_users(to_location_id))
+
+
+# В methods.py добавляем:
+
+def transfer_silaedry(bot, from_user, to_user_id, amount):
+    """Перевод Силаэдров между игроками"""
+    # Находим получателя
+    to_user = None
+    for user in users:
+        if user['id'] == to_user_id:
+            to_user = user
+            break
+
+    if not to_user:
+        return False, "Получатель не найден"
+
+    # Проверяем баланс
+    from_balance = from_user.get('silаedry', 0)
+    if from_balance < amount:
+        return False, "Недостаточно Силаэдров"
+
+    if amount <= 0:
+        return False, "Неверная сумма"
+
+    # Выполняем перевод
+    from_user['silаedry'] = from_balance - amount
+    to_user['silаedry'] = to_user.get('silаedry', 0) + amount
+
+    # Уведомляем игроков
+    bot.send_message(from_user['id'], f"✅ Вы перевели {amount} Силаэдров игроку {to_user['name']}")
+    bot.send_message(to_user_id, f"💸 Вы получили {amount} Силаэдров от игрока {from_user['name']}")
+
+    return True, "Перевод выполнен"

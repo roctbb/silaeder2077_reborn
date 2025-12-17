@@ -70,5 +70,27 @@ def user_message(bot, message, user, location, all_users):
         transfer_user(user, 'room105')
     elif message == "Просто пойти дальше.":
         bot.send_message(user['id'], 'Куда вы пойдете.', reply_markup=make_default_keyboard())
+    elif message.startswith('/transfer'):
+        # Формат: /transfer @username 10
+        parts = message.split()
+        if len(parts) == 3:
+            try:
+                target_name = parts[1]
+                amount = int(parts[2])
+
+                # Находим пользователя
+                target_user = None
+                for u in users:
+                    if u['name'] == target_name or f"@{u['name']}" == target_name:
+                        target_user = u
+                        break
+
+                if target_user:
+                    success, msg = transfer_silaedry(bot, user, target_user['id'], amount)
+                    bot.send_message(user['id'], msg)
+                else:
+                    bot.send_message(user['id'], "Игрок не найден")
+            except:
+                bot.send_message(user['id'], "Используйте: /transfer @имя сумма")
     else:
         bot.send_message(user['id'], 'Я вас не понял')

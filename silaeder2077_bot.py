@@ -14,9 +14,7 @@ def process_text(message):
         send_welcome(user)
         transfer_user(user, 'yard')
     else:
-
         message_text = message.text
-
         if message_text.startswith('Переход: '):
             location = get_location_by_name(message_text.replace('Переход: ', ''))
             if location:

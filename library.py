@@ -125,10 +125,29 @@ def load_modules():
 def load_state():
     try:
         saved_users, saved_locations = load_state_from_file()
+
+        # Обновляем пользователей, добавляя недостающие поля
+        for user in saved_users:
+            # Добавляем новые поля если их нет
+            if 'HP' not in user:
+                user['HP'] = 100
+            if 'silаedry' not in user:
+                user['silаedry'] = 0
+            if 'unconscious_until' not in user:
+                user['unconscious_until'] = None
+            if 'last_activity' not in user:
+                user['last_activity'] = datetime.now().isoformat()
+            if 'ochota' not in user:
+                user['ochota'] = 1
+            if 'obiyasnitelinee' not in user:
+                user['obiyasnitelinee'] = 0
+            if 'obiyasnitelnay' not in user:
+                user['obiyasnitelnay'] = []
+
         users.extend(saved_users)
         locations.clear()
         locations.extend(saved_locations)
-        print("Loaded state from file: ", users, locations)
+        print("Loaded state from file")
 
     except Exception as e:
         print(e)
