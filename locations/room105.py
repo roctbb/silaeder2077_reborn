@@ -4,6 +4,53 @@ import random
 import time
 from datetime import datetime, timedelta
 
+
+# В начало файла добавляем:
+def can_throw_paper_at_inga(user):
+    """Проверяет, можно ли кидаться бумагой в Ингу"""
+    # Можно кидаться только если есть бумага и Инга присутствует
+    if 'toilet_paper' not in user.get('inventory', []):
+        return False, "У вас нет туалетной бумаги!"
+
+    from locations.room105 import INGA_PRESENCE
+    if not INGA_PRESENCE:
+        return False, "Инги Александровны нет на месте!"
+
+    return True, ""
+
+
+def throw_paper_at_inga(bot, user):
+    """Кидает бумагой в Ингу"""
+    user['inventory'].remove('toilet_paper')
+
+    # Шансы разных исходов
+    outcome = random.randint(1, 10)
+
+    if outcome <= 2:  # 20% шанс - попадание, но Инга рассмеялась
+        bot.send_message(user['id'],
+                         'Вы кинули туалетную бумагу в Ингу Александровну!\n'
+                         'Инга рассмеялась: "Ох, какой шалун! Ладно, в этот раз прощаю."')
+        return False  # Не отправляет в 105
+
+    elif outcome <= 5:  # 30% шанс - попадание с последствиями
+        bot.send_message(user['id'],
+                         'Вы кинули туалетную бумагу в Ингу Александровну!\n'
+                         'Инга в ярости: "Как ты смеешь! Быстро писать объяснительную!"')
+        return True  # Отправляет в 105
+
+    elif outcome <= 8:  # 30% шанс - промах
+        bot.send_message(user['id'],
+                         'Вы кинули туалетную бумагу, но промахнулись!\n'
+                         'Инга: "Что это было? Всё равно в 105 на объяснительную!"')
+        return True  # Отправляет в 105
+
+    else:  # 20% шанс - критический промах
+        bot.send_message(user['id'],
+                         'Вы кинули туалетную бумагу, но она попала в вентилятор и разлетелась по всему кабинету!\n'
+                         'Инга в бешенстве: "Ты уберёшь это всё! А потом в 105 на двойную объяснительную!"')
+        user['ochota'] = 3  # Принудительная объяснительная
+        return True  # Отправляет в 105
+
 # Глобальные переменные для состояния Инги Александровны
 INGA_PRESENCE = True
 INGA_AWAY_UNTIL = None
@@ -12,119 +59,81 @@ INGA_AWAY_UNTIL = None
 CURRENT_FRIENDSHIP_CODE = None
 CODE_LAST_UPDATED = None
 
-# Банк фраз для кода дружбы
-FRIENDSHIP_PHRASES_POOL = [
-    # Очень добрые (10)
-    "Я вас очень уважаю и ценю",
-    "Вы прекрасный человек, с вами приятно общаться",
-    "Мне так приятно видеть вас здесь",
-    "Я восхищаюсь вашим характером",
-    "Вы всегда так внимательны и добры",
-    "Ваше присутствие скрашивает мой день",
-    "Я всегда рад вас видеть",
-    "Вы заслуживаете только самого лучшего",
-    "Мне очень повезло знать вас",
-    "Вы вдохновляете меня на хорошие поступки",
+# Словарь для перевода эмоций
+EMOTION_TRANSLATIONS = {
+    "очень добро": "очень доброе",
+    "добро": "доброе",
+    "нейтрально": "нейтральное",
+    "зло": "злое",
+    "очень зло": "очень злое"
+}
 
-    # Добрые (15)
-    "Спасибо за вашу помощь",
-    "Вы хороший человек",
-    "Мне нравится с вами работать",
-    "Вы всегда вежливы и учтивы",
-    "Приятно видеть вас в хорошем настроении",
-    "Вы правильно поступили",
-    "Я ценю ваше мнение",
-    "Вы проявляете заботу о других",
-    "Ваши слова мне приятны",
-    "Вы достойный человек",
-    "Спасибо за понимание",
-    "Вы хорошо справляетесь",
-    "Мне приятно наше общение",
-    "Вы заслуживаете уважения",
-    "Я доволен вашими действиями",
+# Обратный словарь
+REVERSE_EMOTION = {v: k for k, v in EMOTION_TRANSLATIONS.items()}
 
-    # Нейтральные (15)
-    "Всё в порядке, как обычно",
-    "Как ваши дела сегодня?",
-    "Что нового произошло?",
-    "Погода сегодня вполне сносная",
-    "Всё идёт по установленному плану",
-    "Ситуация развивается стандартно",
-    "Ничего особенного не происходит",
-    "Всё как всегда, без изменений",
-    "Рабочий процесс идёт нормально",
-    "Стандартная рутина дня",
-    "Вопрос решается обычным способом",
-    "Никаких эксцессов не наблюдается",
-    "Всё в рамках допустимого",
-    "Процесс протекает типично",
-    "Ситуация под контролем",
-
-    # Злые (15)
-    "Вы меня разочаровали своим поведением",
-    "Я недоволен вашими действиями",
-    "Такое поведение неприемлемо",
-    "Вы совершили серьёзную ошибку",
-    "Меня это искренне злит",
-    "Вы поступили неправильно",
-    "Я ожидал от вас большего",
-    "Это возмутительно с вашей стороны",
-    "Вы нарушили правила",
-    "Меня не устраивает ваша позиция",
-    "Вы проявили неуважение",
-    "Это недопустимо в нашей ситуации",
-    "Вы подвели мои ожидания",
-    "Ваши слова меня огорчили",
-    "Вы поступили необдуманно",
-
-    # Очень злые (10)
-    "Я вас искренне ненавижу!",
-    "Убирайтесь отсюда немедленно!",
-    "Вы ужасный человек!",
-    "Больше никогда так не делайте!",
-    "Мне противно с вами общаться!",
-    "Вы безнадёжны в своих поступках!",
-    "Я не хочу вас больше видеть!",
-    "Вы вызываете у меня отвращение!",
-    "Проваливайте и не возвращайтесь!",
-    "Вы самый неприятный человек из всех, кого я знаю!"
-]
-
-# Эмоциональные категории для каждой фразы
-PHRASE_EMOTIONS = {}
-for i, phrase in enumerate(FRIENDSHIP_PHRASES_POOL):
-    if i < 10:
-        PHRASE_EMOTIONS[phrase] = "очень добро"
-    elif i < 25:
-        PHRASE_EMOTIONS[phrase] = "добро"
-    elif i < 40:
-        PHRASE_EMOTIONS[phrase] = "нейтрально"
-    elif i < 55:
-        PHRASE_EMOTIONS[phrase] = "зло"
-    else:
-        PHRASE_EMOTIONS[phrase] = "очень зло"
-
-
-# Загрузка текстов объяснительных
-def load_explanation_texts():
-    texts = {}
-    emotion_types = ['very_good', 'good', 'neutral', 'bad', 'very_bad']
-
-    for emotion in emotion_types:
-        texts[emotion] = {}
-        for i in range(1, 5):
-            filename = f'texts/explanation/{emotion}_{i}.txt'
-            try:
-                with open(filename, 'r', encoding='utf-8') as f:
-                    lines = [line.strip() for line in f.readlines() if line.strip()]
-                    texts[emotion][i] = lines
-            except:
-                texts[emotion][i] = [f"{emotion} предложение {j}" for j in range(1, 51)]
-
-    return texts
-
-
-EXPLANATION_TEXTS = load_explanation_texts()
+# Банк предложений для объяснительной (сгруппированные по тональности)
+EXPLANATION_PHRASES = {
+    "очень добро": [
+        "Я искренне сожалею о своём поведении и обещаю исправиться",
+        "Приношу свои глубочайшие извинения за допущенную ошибку",
+        "Я осознал свою неправоту и обещаю больше так не поступать",
+        "Прошу прощения за своё безответственное поведение",
+        "Я полностью признаю свою вину и готов исправиться",
+        "Сожалею о содеянном и обещаю впредь быть более ответственным",
+        "Признаю свою ошибку и прошу дать шанс её исправить",
+        "Я осознал, что был не прав, и обещаю измениться",
+        "Прошу прощения за причинённые неудобства",
+        "Я глубоко раскаиваюсь в своих действиях"
+    ],
+    "добро": [
+        "Прошу прощения за своё поведение",
+        "Я был не прав и обещаю исправиться",
+        "Сожалею о случившемся",
+        "Признаю свою ошибку",
+        "Постараюсь больше так не делать",
+        "Извините за мои действия",
+        "Я неправильно поступил",
+        "Обещаю быть внимательнее",
+        "Приму меры, чтобы это не повторилось",
+        "Я осознал свою неправоту"
+    ],
+    "нейтрально": [
+        "Я был в кабинете и выполнил задание",
+        "Ситуация произошла по техническим причинам",
+        "Обстоятельства сложились таким образом",
+        "Я действовал согласно инструкциям",
+        "Это произошло в рабочем порядке",
+        "Я находился на своём месте",
+        "Всё происходило в рамках правил",
+        "Я следовал установленному порядку",
+        "Ситуация развивалась стандартно",
+        "Я выполнял свои обязанности"
+    ],
+    "зло": [
+        "Я не считаю себя виноватым",
+        "Это была вынужденная мера",
+        "Меня спровоцировали на это",
+        "Я действовал в рамках самообороны",
+        "Ситуация была не под моим контролем",
+        "Меня неправильно поняли",
+        "Это была ошибка системы",
+        "Я не нарушал правила намеренно",
+        "Обстоятельства вынудили меня так поступить",
+        "Мою позицию неправильно интерпретировали"
+    ],
+    "очень зло": [
+        "Я не собираюсь извиняться!",
+        "Это ваша проблема, а не моя!",
+        "Я сделал то, что считал нужным!",
+        "Не вижу причин для объяснений!",
+        "Мне всё равно на ваше мнение!",
+        "Делайте что хотите!",
+        "Я не признаю свою вину!",
+        "Это абсурдные обвинения!",
+        "Я не буду этого терпеть!",
+        "У меня нет к вам претензий!"
+    ]
+}
 
 
 def check_inga_status():
@@ -158,49 +167,15 @@ def generate_friendship_code():
     emotions = ["очень добро", "добро", "нейтрально", "зло", "очень зло"]
     code = []
 
-    # Генерируем 4 случайные эмоции
-    for _ in range(4):
+    # Генерируем 5 случайных эмоций (код дружбы)
+    for _ in range(5):
         emotion = random.choice(emotions)
-
-        # Выбираем случайную фразу с нужной эмоцией
-        possible_phrases = [p for p, e in PHRASE_EMOTIONS.items() if e == emotion]
-        if not possible_phrases:
-            possible_phrases = ["Нет подходящей фразы"]
-
-        phrase = random.choice(possible_phrases)
-
-        # Генерируем варианты: 1 правильный + 4 неправильных
-        options = generate_options(phrase, emotion)
-
-        code.append({
-            "emotion": emotion,
-            "phrase": phrase,
-            "options": options
-        })
+        code.append(emotion)
 
     CURRENT_FRIENDSHIP_CODE = code
     CODE_LAST_UPDATED = datetime.now().date()
+
     return code
-
-
-def generate_options(correct_phrase, correct_emotion):
-    """Генерирует 5 вариантов фраз (1 правильная + 4 случайных)"""
-    all_phrases = list(FRIENDSHIP_PHRASES_POOL)
-
-    # Убираем правильную фразу из списка
-    if correct_phrase in all_phrases:
-        all_phrases.remove(correct_phrase)
-
-    # Выбираем 4 случайные неправильные фразы
-    selected_wrong = random.sample(all_phrases, 4)
-
-    # Собираем все варианты
-    all_options = [correct_phrase] + selected_wrong
-
-    # Перемешиваем
-    random.shuffle(all_options)
-
-    return all_options
 
 
 def get_current_friendship_code():
@@ -213,6 +188,219 @@ def get_current_friendship_code():
         generate_friendship_code()
 
     return CURRENT_FRIENDSHIP_CODE
+
+
+def announce_friendship_code(bot, user):
+    """Объявляет код дружбы на сегодня (только когда спрашивают отдельно)"""
+    code = get_current_friendship_code()
+
+    # Преобразуем эмоции в читаемый формат
+    readable_code = [EMOTION_TRANSLATIONS.get(emotion, emotion) for emotion in code]
+
+    code_text = ", ".join(readable_code)
+
+    bot.send_message(user['id'],
+                     f'Инга Александровна: "Я бы хотела бы сегодня увидеть в объяснительных: {code_text}"\n\n'
+                     f'Запомни эту последовательность из 5 эмоций!')
+
+    # После объявления возвращаемся в главное меню
+    reset_to_main_menu(bot, user)
+
+
+def start_explanation(bot, user):
+    """Начинает процесс написания объяснительной"""
+    user['explanation_step'] = 1
+    user['explanation_selected_emotions'] = []
+    user['explanation_selected_phrases'] = []
+
+    # Показываем первое предложение
+    show_explanation_step(bot, user)
+
+
+def show_explanation_step(bot, user):
+    """Показывает текущий шаг написания объяснительной"""
+    step = user.get('explanation_step', 1)
+
+    if step > 5:
+        # Завершили написание объяснительной
+        finish_explanation(bot, user)
+        return
+
+    # Генерируем варианты для текущего шага
+    # 5 случайных предложений разных тональностей
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+
+    # Собираем по одному предложению из каждой тональности
+    emotions = ["очень добро", "добро", "нейтрально", "зло", "очень зло"]
+    selected_phrases = []
+
+    for emotion in emotions:
+        phrases = EXPLANATION_PHRASES[emotion]
+        selected_phrase = random.choice(phrases)
+        selected_phrases.append({
+            'text': selected_phrase,
+            'emotion': emotion
+        })
+
+    # Перемешиваем варианты
+    random.shuffle(selected_phrases)
+
+    # Сохраняем варианты для этого шага
+    user[f'step_{step}_options'] = selected_phrases
+
+    # Добавляем кнопки
+    for i, phrase_data in enumerate(selected_phrases):
+        # Обрезаем длинные фразы для кнопки
+        button_text = phrase_data['text']
+        if len(button_text) > 40:
+            button_text = button_text[:37] + "..."
+        keyboard.add(types.KeyboardButton(button_text))
+
+    bot.send_message(user['id'],
+                     f'Шаг {step} из 5:\n'
+                     f'Выберите предложение #{step} для объяснительной:',
+                     reply_markup=keyboard)
+
+
+def process_explanation_choice(bot, user, selected_text):
+    """Обрабатывает выбор предложения для объяснительной"""
+    step = user.get('explanation_step', 1)
+
+    if step > 5:
+        return
+
+    # Находим выбранное предложение среди вариантов
+    selected_option = None
+    options = user.get(f'step_{step}_options', [])
+
+    for option in options:
+        # Сравниваем начало текста, так как на кнопке он мог быть обрезан
+        if option['text'].startswith(selected_text[:30]):
+            selected_option = option
+            break
+
+    if not selected_option:
+        # Если точного совпадения нет, ищем по подстроке
+        for option in options:
+            if selected_text in option['text'] or option['text'] in selected_text:
+                selected_option = option
+                break
+
+    if not selected_option:
+        bot.send_message(user['id'], 'Не удалось распознать выбранное предложение. Попробуйте снова.')
+        show_explanation_step(bot, user)
+        return
+
+    # Сохраняем выбор
+    user['explanation_selected_emotions'].append(selected_option['emotion'])
+    user['explanation_selected_phrases'].append(selected_option['text'])
+
+    # Удаляем временные данные шага
+    if f'step_{step}_options' in user:
+        del user[f'step_{step}_options']
+
+    # Переходим к следующему шагу
+    user['explanation_step'] = step + 1
+
+    if user['explanation_step'] > 5:
+        finish_explanation(bot, user)
+    else:
+        show_explanation_step(bot, user)
+
+
+def finish_explanation(bot, user):
+    """Завершает написание объяснительной и проверяет код дружбы"""
+    selected_emotions = user.get('explanation_selected_emotions', [])
+    selected_phrases = user.get('explanation_selected_phrases', [])
+
+    if len(selected_emotions) != 5 or len(selected_phrases) != 5:
+        bot.send_message(user['id'], 'Ошибка: объяснительная неполная')
+        reset_to_main_menu(bot, user)
+        return
+
+    # Получаем код дружбы на сегодня
+    friendship_code = get_current_friendship_code()
+
+    # Сравниваем эмоции выбранных предложений с кодом дружбы
+    matches = 0
+    result_text = "Ваша объяснительная:\n\n"
+
+    for i in range(5):
+        user_emotion = selected_emotions[i]
+        correct_emotion = friendship_code[i]
+        is_match = user_emotion == correct_emotion
+
+        result_text += f"{i + 1}. {selected_phrases[i]}\n"
+        result_text += f"   (Тональность: {EMOTION_TRANSLATIONS.get(user_emotion, user_emotion)})\n"
+
+        if is_match:
+            matches += 1
+            result_text += "   ✅ Совпадает с кодом дружбы!\n"
+        else:
+            result_text += f"   ❌ Должно быть: {EMOTION_TRANSLATIONS.get(correct_emotion, correct_emotion)}\n"
+
+        result_text += "\n"
+
+    # Проверяем, полностью ли совпал код
+    if matches == 5:
+        # Полностью угадали код - объяснительная не засчитывается
+        result_text += "\n🎉 Инга Александровна: 'Поздравляю! Ты полностью угадал мой код дружбы! Объяснительная не нужна!'"
+
+        # Награда за угаданный код
+        user['silаedry'] = user.get('silаedry', 0) + 20
+        user['experience'] = user.get('experience', 0) + 10
+
+        # Обновляем статистику кодов дружбы
+        update_friendship_stats(user, True, True)
+
+        # Очищаем цель объяснительной
+        user['ochota'] = 1
+
+        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        keyboard.add(types.KeyboardButton(text="Выйти"))
+
+        bot.send_message(user['id'], result_text, reply_markup=keyboard)
+
+        # Очищаем состояние
+        cleanup_explanation_state(user)
+    else:
+        # Не угадали код - объяснительная засчитывается
+        result_text += f"\nВы угадали {matches}/5 тональностей.\n"
+        result_text += "Инга Александровна: 'Объяснительная принята.'"
+
+        # Сохраняем объяснительную
+        save_explanation(user, selected_phrases, selected_emotions)
+
+        # Обновляем статистику кодов дружбы
+        update_friendship_stats(user, False, True)
+
+        # Очищаем цель объяснительной
+        user['ochota'] = 1
+
+        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        keyboard.add(types.KeyboardButton(text="Выйти"))
+
+        bot.send_message(user['id'], result_text, reply_markup=keyboard)
+
+        # Очищаем состояние
+        cleanup_explanation_state(user)
+
+
+def save_explanation(user, phrases, emotions):
+    """Сохраняет объяснительную в профиль пользователя"""
+    full_text = " ".join(phrases)
+
+    if 'obiyasnitelnay' not in user:
+        user['obiyasnitelnay'] = []
+
+    explanation_data = {
+        'text': full_text,
+        'emotions': emotions,
+        'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+
+    user['obiyasnitelnay'].append(explanation_data)
+    user['obiyasnitelinee'] = user.get('obiyasnitelinee', 0) + 1
 
 
 def update_friendship_stats(user, is_correct, during_explanation=False):
@@ -244,7 +432,8 @@ def update_friendship_stats(user, is_correct, during_explanation=False):
                 if 'ingas_favorite' not in user['inventory']:
                     user['inventory'].append('ingas_favorite')
                     user['became_favorite_date'] = datetime.now().strftime("%Y-%m-%d")
-                    return True  # Стал любимчиком
+                    bot.send_message(user['id'],
+                                     "\n\n🎉 Инга Александровна: 'Ты три раза подряд угадал код во время объяснительной! Ты теперь мой любимчик!'")
     else:
         stats['consecutive_wrong'] += 1
         stats['consecutive_correct'] = 0
@@ -260,172 +449,35 @@ def update_friendship_stats(user, is_correct, during_explanation=False):
                     # Сбрасываем счетчики
                     stats['during_explanation_correct'] = 0
                     stats['during_explanation_wrong'] = 0
-                    return False  # Потерял статус
-
-    return None  # Ничего не изменилось
-
-
-def start_friendship_code(bot, user, during_explanation=False):
-    """Начинает ввод кода дружбы"""
-    code = get_current_friendship_code()
-
-    user['friendship_step'] = 0
-    user['friendship_input'] = []
-    user['friendship_during_explanation'] = during_explanation
-
-    # Показываем первый шаг
-    show_friendship_step(bot, user, code)
+                    bot.send_message(user['id'],
+                                     "\n\n😞 Инга Александровна: 'Ты два раза подряд не угадал код... Ты больше не мой любимчик.'")
 
 
-def show_friendship_step(bot, user, code):
-    """Показывает текущий шаг кода дружбы"""
-    step = user['friendship_step']
+def cleanup_explanation_state(user):
+    """Очищает состояние написания объяснительной"""
+    keys_to_remove = []
+    for key in user.keys():
+        if key.startswith('explanation_') or key.startswith('step_'):
+            keys_to_remove.append(key)
 
-    if step >= 4:
-        # Завершили ввод
-        check_friendship_code(bot, user, code)
-        return
-
-    current_step = code[step]
-
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-
-    # Добавляем варианты ответов (5 фраз)
-    for option in current_step['options']:
-        keyboard.add(types.KeyboardButton(option))
-
-    context = ""
-    if user.get('friendship_during_explanation'):
-        context = "\n\nИнга Александровна: 'Я добавлю это в твою объяснительную...'"
-
-    bot.send_message(user['id'],
-                     f'Шаг {step + 1} из 4:\n\n'
-                     f'"{current_step["phrase"]}"\n\n'
-                     f'Какая это фраза? Выберите идентичную фразу из вариантов:{context}',
-                     reply_markup=keyboard)
+    for key in keys_to_remove:
+        del user[key]
 
 
-def process_friendship_input(bot, user, selected_phrase):
-    """Обрабатывает выбор игрока в коде дружбы"""
-    if 'friendship_step' not in user:
-        return
-
-    code = get_current_friendship_code()
-    step = user['friendship_step']
-
-    if step >= 4:
-        return
-
-    current_step = code[step]
-
-    # Проверяем, правильно ли выбрана фраза
-    is_correct = selected_phrase == current_step['phrase']
-
-    user['friendship_input'].append({
-        'phrase': selected_phrase,
-        'correct_phrase': current_step['phrase'],
-        'emotion': PHRASE_EMOTIONS.get(selected_phrase, "неизвестно"),
-        'correct_emotion': current_step['emotion'],
-        'is_correct': is_correct
-    })
-    user['friendship_step'] += 1
-
-    # Показываем следующий шаг или проверяем результат
-    show_friendship_step(bot, user, code)
-
-
-def check_friendship_code(bot, user, code):
-    """Проверяет весь введенный код"""
-    correct_count = 0
-    results = []
-
-    for i, user_input in enumerate(user['friendship_input']):
-        if user_input['is_correct']:
-            correct_count += 1
-
-        results.append({
-            'step': i + 1,
-            'phrase': code[i]['phrase'],
-            'user_choice': user_input['phrase'],
-            'is_correct': user_input['is_correct']
-        })
-
-    during_explanation = user.get('friendship_during_explanation', False)
-
-    # Обновляем статистику
-    status_change = update_friendship_stats(user, correct_count == 4, during_explanation)
-
-    # Формируем результат
-    if during_explanation:
-        if correct_count == 4:
-            result_message = "✅ Инга Александровна: 'Правильно! Это пойдет в твою пользу.'\n"
-        else:
-            result_message = f"❌ Инга Александровна: 'Неправильно! {correct_count}/4. Это ухудшит твое положение.'\n"
-    else:
-        if correct_count == 4:
-            result_message = "✅ Инга Александровна: 'Поздравляю! Ты угадал код!'"
-        else:
-            result_message = f"❌ Инга Александровна: 'Не угадал... {correct_count}/4. Попробуй завтра снова!'"
-
-    # Показываем детали
-    result_message += f"\n\nРезультат: {correct_count}/4 правильных"
-
-    for result in results:
-        status = "✅" if result['is_correct'] else "❌"
-        result_message += f"\n{status} Шаг {result['step']}: "
-        if not result['is_correct']:
-            result_message += f"\n   Правильно: '{result['phrase']}'"
-            result_message += f"\n   Вы выбрали: '{result['user_choice']}'"
-
-    # Обработка изменения статуса любимчика
-    if status_change is True:
-        result_message += "\n\n🎉 Инга Александровна: 'Ты три раза подряд угадал код во время объяснительной! Ты теперь мой любимчик!'"
-
-        # Награда за статус любимчика
-        user['experience'] = user.get('experience', 0) + 50
-        user['energy'] = min(100, user.get('energy', 0) + 30)
-
-        # Показываем меню любимчика
-        show_inga_favorite_menu(bot, user)
-    elif status_change is False:
-        result_message += "\n\n😞 Инга Александровна: 'Ты два раза подряд не угадал код... Ты больше не мой любимчик.'"
-
-        # Штраф за потерю статуса
-        user['energy'] = max(0, user.get('energy', 0) - 20)
-
-        # Возвращаем к обычному меню
-        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        if during_explanation:
-            keyboard.add(types.KeyboardButton("Продолжить объяснительную"))
-        else:
-            keyboard.add(types.KeyboardButton("📋 Общее меню"))
-        bot.send_message(user['id'], result_message, reply_markup=keyboard)
-    else:
-        # Ничего не изменилось
-        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        if during_explanation:
-            keyboard.add(types.KeyboardButton("Продолжить объяснительную"))
-        else:
-            keyboard.add(types.KeyboardButton("📋 Общее меню"))
-        bot.send_message(user['id'], result_message, reply_markup=keyboard)
-
-    # Очищаем данные кода
-    if 'friendship_step' in user:
-        del user['friendship_step']
-    if 'friendship_input' in user:
-        del user['friendship_input']
-    if 'friendship_during_explanation' in user:
-        del user['friendship_during_explanation']
+def reset_to_main_menu(bot, user):
+    """Сбрасывает состояние и возвращает к главному меню"""
+    cleanup_explanation_state(user)
+    user_enters_location(bot, user, None, [])
 
 
 def show_inga_favorite_menu(bot, user):
     """Показывает меню для любимчика Инги"""
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    keyboard.add(types.KeyboardButton("Особый чай от Инги"))
-    keyboard.add(types.KeyboardButton("Лучшие сушки"))
-    keyboard.add(types.KeyboardButton("Избавить от объяснительной"))
-    keyboard.add(types.KeyboardButton("Помочь с документами"))
-    keyboard.add(types.KeyboardButton("Выйти"))
+    keyboard.add(types.KeyboardButton(text="Особый чай от Инги"))
+    keyboard.add(types.KeyboardButton(text="Лучшие сушки"))
+    keyboard.add(types.KeyboardButton(text="Избавить от объяснительной"))
+    keyboard.add(types.KeyboardButton(text="Помочь с документами"))
+    keyboard.add(types.KeyboardButton(text="Выйти"))
 
     bot.send_message(user['id'],
                      'Инга Александровна: "Что нужно, мой любимчик?"',
@@ -448,11 +500,14 @@ def handle_inga_favorite_choice(bot, user, message):
 
     elif message == "Избавить от объяснительной":
         # Сбрасываем цель объяснительной
-        if user.get('ochota') == 2 or user.get('ochota') == 3:
+        if user.get('ochota') in [2, 3]:
             user['ochota'] = 1
-            user['experience'] = max(0, user.get('experience', 0) - 5)  # Небольшой штраф
+            user['experience'] = max(0, user.get('experience', 0) - 5)
             bot.send_message(user['id'],
                              'Инга порвала вашу объяснительную: "Для любимчика делаю исключение!"\n-5 опыта')
+            keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            keyboard.add(types.KeyboardButton(text="Выйти"))
+            bot.send_message(user['id'], 'Вы можете идти.', reply_markup=keyboard)
 
     elif message == "Помочь с документами":
         user['experience'] = user.get('experience', 0) + 15
@@ -460,226 +515,21 @@ def handle_inga_favorite_choice(bot, user, message):
                          'Вы помогли Инге разобрать документы. +15 опыта!')
 
     elif message == "Выйти":
-        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        keyboard.add(types.KeyboardButton("Переход: холл"))
-        bot.send_message(user['id'], 'Вы вышли из кабинета.', reply_markup=keyboard)
-
-
-def start_explanation(bot, user):
-    """Начинает процесс написания объяснительной"""
-    user['explanation_step'] = 1
-    user['explanation_text'] = []
-    user['explanation_emotion'] = None
-
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    keyboard.add(types.KeyboardButton(text="Очень добрый тон"))
-    keyboard.add(types.KeyboardButton(text="Добрый тон"))
-    keyboard.add(types.KeyboardButton(text="Нейтральный тон"))
-    keyboard.add(types.KeyboardButton(text="Злой тон"))
-    keyboard.add(types.KeyboardButton(text="Очень злой тон"))
-
-    bot.send_message(user['id'],
-                     'Выберите эмоциональный тон для начала объяснительной:',
-                     reply_markup=keyboard)
-
-
-def start_explanation_with_friendship(bot, user):
-    """Начинает объяснительную с возможностью ввода кода дружбы"""
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    keyboard.add(types.KeyboardButton(text="Начать писать объяснительную"))
-    keyboard.add(types.KeyboardButton(text="Попробовать код дружбы"))
-
-    bot.send_message(user['id'],
-                     'Инга Александровна: "Ты здесь за объяснительной. Можешь начать писать или...\n'
-                     'Попробуешь угадать мой код дружбы? Если угадаешь - учту это в твою пользу."',
-                     reply_markup=keyboard)
-
-
-def continue_explanation(bot, user, emotion_choice):
-    """Продолжает написание объяснительной"""
-    emotion_map = {
-        "Очень добрый тон": "very_good",
-        "Добрый тон": "good",
-        "Нейтральный тон": "neutral",
-        "Злой тон": "bad",
-        "Очень злой тон": "very_bad"
-    }
-
-    emotion = emotion_map.get(emotion_choice, "neutral")
-    user['explanation_emotion'] = emotion
-
-    # Выбираем случайное предложение для текущего шага
-    step = user['explanation_step']
-    if step <= 4:
-        options = EXPLANATION_TEXTS[emotion][step]
-        selected = random.choice(options)
-        user['explanation_text'].append(selected)
-
-        bot.send_message(user['id'], f'Предложение {step}: {selected}')
-
-        if step == 4:
-            # Завершаем объяснительную
-            complete_explanation(bot, user)
-        else:
-            user['explanation_step'] += 1
-
-            # Предлагаем варианты для следующего предложения
-            keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-            for emotion_opt in emotion_map.keys():
-                keyboard.add(types.KeyboardButton(text=emotion_opt))
-
-            bot.send_message(user['id'],
-                             f'Выберите тон для предложения {step + 1}:',
-                             reply_markup=keyboard)
-
-
-def continue_explanation_after_friendship(bot, user):
-    """Продолжает объяснительную после попытки кода дружбы"""
-    start_explanation(bot, user)
-
-
-def complete_explanation(bot, user):
-    """Завершает написание объяснительной"""
-    full_text = " ".join(user['explanation_text'])
-
-    # Сохраняем объяснительную
-    if 'obiyasnitelnay' not in user:
-        user['obiyasnitelnay'] = []
-
-    explanation_data = {
-        'text': full_text,
-        'emotion': user['explanation_emotion'],
-        'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    }
-
-    user['obiyasnitelnay'].append(explanation_data)
-    user['obiyasnitelinee'] = user.get('obiyasnitelinee', 0) + 1
-
-    # Очищаем временные данные
-    if 'explanation_step' in user:
-        del user['explanation_step']
-    if 'explanation_text' in user:
-        del user['explanation_text']
-    if 'explanation_emotion' in user:
-        del user['explanation_emotion']
-
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    keyboard.add(types.KeyboardButton(text="Переход: холл"))
-
-    bot.send_message(user['id'],
-                     f'Объяснительная написана и сохранена!\n\n{full_text}\n\nВсего объяснительных: {user["obiyasnitelinee"]}',
-                     reply_markup=keyboard)
-
-
-def show_general_menu(bot, user, all_users):
-    """Показывает общее меню"""
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    keyboard.add(types.KeyboardButton(text="👥 Кто в комнате"))
-    keyboard.add(types.KeyboardButton(text="ℹ️ Инфо об игроке"))
-    keyboard.add(types.KeyboardButton(text="📄 Все объяснительные"))
-    keyboard.add(types.KeyboardButton(text="↩️ Назад"))
-
-    bot.send_message(user['id'],
-                     '📋 Общее меню:',
-                     reply_markup=keyboard)
-
-
-def show_room_users(bot, user, all_users):
-    """Показывает всех пользователей в комнате"""
-    if not all_users:
-        bot.send_message(user['id'], 'В комнате никого нет.')
-        return
-
-    users_list = []
-    for u in all_users:
-        if u['id'] != user['id']:
-            users_list.append(f"👤 {u['name']}")
-
-    if users_list:
-        bot.send_message(user['id'], 'В комнате находятся:\n' + '\n'.join(users_list))
-    else:
-        bot.send_message(user['id'], 'В комнате кроме вас никого нет.')
-
-
-def show_player_info(bot, user, target_name):
-    """Показывает информацию об игроке"""
-    from library import users
-
-    target_user = None
-    for u in users:
-        if u['name'].lower() == target_name.lower():
-            target_user = u
-            break
-
-    if not target_user:
-        bot.send_message(user['id'], f'Игрок с именем "{target_name}" не найден.')
-        return
-
-    info = f"""
-📊 Информация об игроке:
-👤 Имя: {target_user['name']}
-🆔 ID: {target_user['id']}
-📍 Локация: {target_user.get('location', 'Неизвестно')}
-
-📈 Статистика:
-⚡ Энергия: {target_user.get('energy', 0)}%
-🍎 Еда: {target_user.get('food', 0)}%
-💧 Вода: {target_user.get('water', 0)}%
-🌟 Опыт: {target_user.get('experience', 0)}
-
-🎒 Инвентарь: {', '.join(target_user.get('inventory', [])) or 'Пусто'}
-🎯 Цель: {target_user.get('ochota', 1)}
-📝 Объяснительных: {target_user.get('obiyasnitelinee', 0)}
-    """
-
-    # Добавляем статистику кода дружбы, если есть
-    if 'friendship_stats' in target_user:
-        stats = target_user['friendship_stats']
-        info += f"""
-🤝 Код дружбы:
-   Всего попыток: {stats['total_attempts']}
-   Правильных: {stats['correct_attempts']}
-   Подряд правильных: {stats['consecutive_correct']}
-   Подряд неправильных: {stats['consecutive_wrong']}
-"""
-
-    if 'ingas_favorite' in target_user.get('inventory', []):
-        info += f"\n❤️ Любимчик Инги (с {target_user.get('became_favorite_date', 'неизвестно')})"
-
-    bot.send_message(user['id'], info)
-
-
-def show_all_explanations(bot, user):
-    """Показывает все объяснительные всех игроков"""
-    from library import users
-
-    all_explanations = []
-
-    for u in users:
-        if 'obiyasnitelnay' in u and u['obiyasnitelnay']:
-            count = len(u['obiyasnitelnay'])
-            explanations = f"👤 {u['name']} - {count} объяснительных:\n"
-
-            for i, exp in enumerate(u['obiyasnitelnay'], 1):
-                preview = exp['text'][:50] + "..." if len(exp['text']) > 50 else exp['text']
-                explanations += f"  {i}. {exp['timestamp']}: {preview}\n"
-
-            all_explanations.append(explanations)
-
-    if all_explanations:
-        message = "📄 Все объяснительные:\n\n" + "\n".join(all_explanations)
-        if len(message) > 4000:
-            for i in range(0, len(message), 4000):
-                bot.send_message(user['id'], message[i:i + 4000])
-        else:
-            bot.send_message(user['id'], message)
-    else:
-        bot.send_message(user['id'], 'Пока никто не написал объяснительных.')
+        transfer_user(user, 'hall')
 
 
 def user_enters_location(bot, user, location, all_users):
     check_inga_status()
+
+    # Очищаем любые временные состояния при входе
+    cleanup_explanation_state(user)
+
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+
+    # Проверяем, любимчик ли Инги
+    if 'ingas_favorite' in user.get('inventory', []):
+        show_inga_favorite_menu(bot, user)
+        return
 
     # Проверяем предметы для использования
     if 'fake_alarm' in user.get('inventory', []):
@@ -688,27 +538,21 @@ def user_enters_location(bot, user, location, all_users):
     if 'explanation_cancel' in user.get('inventory', []):
         keyboard.add(types.KeyboardButton(text="📝 Использовать отмену объяснительной"))
 
-    # Проверяем, любимчик ли Инги
-    if 'ingas_favorite' in user.get('inventory', []):
-        show_inga_favorite_menu(bot, user)
-        return
-
     # Проверяем цель прихода
     ochota = user.get('ochota', 1)
 
     if ochota == 0:
-        # Пришел за карточкой или по делу
         if INGA_PRESENCE:
             keyboard.add(types.KeyboardButton(text="Чайку попить"))
             keyboard.add(types.KeyboardButton(text="Карточку взять"))
             keyboard.add(types.KeyboardButton(text="Сушки попросить"))
             keyboard.add(types.KeyboardButton(text="Ударить Ингу"))
             keyboard.add(types.KeyboardButton(text="Спросить код дружбы"))
+            keyboard.add(types.KeyboardButton(text="Выйти"))
             bot.send_message(user['id'],
                              'Инга Александровна: "Ну что тебе нужно, студент?"',
                              reply_markup=keyboard)
         else:
-            # Инги нет, можно действовать свободно
             keyboard.add(types.KeyboardButton(text="Чайку попить"))
             keyboard.add(types.KeyboardButton(text="Карточку взять"))
             keyboard.add(types.KeyboardButton(text="Сушки взять"))
@@ -719,24 +563,20 @@ def user_enters_location(bot, user, location, all_users):
                              reply_markup=keyboard)
 
     elif ochota == 1:
-        # Просто пришел
         if INGA_PRESENCE:
             if random.randint(1, 2) == 1:
-                # Отправляют писать объяснительную
                 bot.send_message(user['id'],
                                  'Инга Александровна: "Опять ты тут?! Садись писать объяснительную!"')
                 user['ochota'] = 2
-                start_explanation_with_friendship(bot, user)
+                start_explanation(bot, user)
                 return
             else:
-                # Просто выгоняют
                 keyboard.add(types.KeyboardButton(text="Спросить код дружбы"))
-                keyboard.add(types.KeyboardButton(text="Переход: холл"))
+                keyboard.add(types.KeyboardButton(text="Выйти"))
                 bot.send_message(user['id'],
                                  'Инга Александровна: "Уходи отсюда, не мешай работать!"',
                                  reply_markup=keyboard)
         else:
-            # Инги нет, можно отдохнуть
             keyboard.add(types.KeyboardButton(text="Чайку попить"))
             keyboard.add(types.KeyboardButton(text="Сушки взять"))
             keyboard.add(types.KeyboardButton(text="Просто посидеть"))
@@ -747,19 +587,16 @@ def user_enters_location(bot, user, location, all_users):
                              reply_markup=keyboard)
 
     elif ochota == 2:
-        # Пришел писать объяснительную
-        start_explanation_with_friendship(bot, user)
+        # Прямо начинаем писать объяснительную
+        start_explanation(bot, user)
         return
 
     elif ochota == 3:
-        # Принудительно отправлен писать объяснительную
         bot.send_message(user['id'],
                          'Инга Александровна: "Ты думал, убежишь?! Садись и пиши объяснительную!"')
-        start_explanation_with_friendship(bot, user)
+        start_explanation(bot, user)
         return
 
-    # Общее меню
-    keyboard.add(types.KeyboardButton(text="📋 Общее меню"))
     bot.send_message(user['id'], 'Что выберете?', reply_markup=keyboard)
 
 
@@ -767,21 +604,30 @@ def user_leaves_location(bot, user, location, all_users):
     bot.send_message(user['id'], 'Вы покидаете 105')
 
 
-# В функцию user_message добавляем:
-
 def user_message(bot, message, user, location, all_users):
     check_inga_status()
+
+    # Всегда обрабатываем выход первым
+    if message == "Выйти" or message == "Переход: холл":
+        transfer_user(user, 'hall')
+        return
+
+    # Проверяем, является ли пользователь любимчиком Инги
+    if 'ingas_favorite' in user.get('inventory', []):
+        handle_inga_favorite_choice(bot, user, message)
+        return
 
     # Обработка использования предметов
     if message == "🚨 Использовать фейк-сигнализацию":
         if 'fake_alarm' in user.get('inventory', []):
             user['inventory'].remove('fake_alarm')
             # Активируем эффект - Инга уходит на 10 минут
-            from locations.room105 import inga_goes_away
             away_minutes = inga_goes_away()
             bot.send_message(user['id'],
                              f"🚨 Сработала фейк-сигнализация! Инга Александровна вышла на {away_minutes} минут.")
-            user_enters_location(bot, user, location, all_users)
+            reset_to_main_menu(bot, user)
+        else:
+            reset_to_main_menu(bot, user)
         return
 
     elif message == "📝 Использовать отмену объяснительной":
@@ -792,68 +638,28 @@ def user_message(bot, message, user, location, all_users):
                 bot.send_message(user['id'],
                                  "✅ Объяснительная отменена! Инга Александровна: 'Ладно, в этот раз прощаю.'")
                 keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                keyboard.add(types.KeyboardButton(text="Переход: холл"))
+                keyboard.add(types.KeyboardButton(text="Выйти"))
                 bot.send_message(user['id'], 'Вы можете идти.', reply_markup=keyboard)
             else:
                 bot.send_message(user['id'], "У вас нет активной объяснительной для отмены.")
+                reset_to_main_menu(bot, user)
+        else:
+            reset_to_main_menu(bot, user)
         return
 
-
-    # Проверяем, является ли пользователь любимчиком Инги
-    if 'ingas_favorite' in user.get('inventory', []):
-        handle_inga_favorite_choice(bot, user, message)
-        return
-
-    # Проверяем, находится ли пользователь в процессе ввода кода дружбы
-    if user.get('friendship_step') is not None and message in FRIENDSHIP_PHRASES_POOL:
-        process_friendship_input(bot, user, message)
-        return
-
-    # Обработка общего меню
-    if message == "📋 Общее меню":
-        show_general_menu(bot, user, all_users)
-        return
-    elif message == "👥 Кто в комнате":
-        show_room_users(bot, user, all_users)
-        return
-    elif message == "ℹ️ Инфо об игроке":
-        bot.send_message(user['id'], 'Введите имя игрока:')
-        user['awaiting_player_name'] = True
-        return
-    elif message == "📄 Все объяснительные":
-        show_all_explanations(bot, user)
-        return
-    elif message == "↩️ Назад":
-        # Возвращаемся к основному меню
-        user_enters_location(bot, user, location, all_users)
-        return
-
-    # Обработка кода дружбы
+    # Обработка кода дружбы (только когда спрашивают отдельно)
     if message == "Спросить код дружбы":
         if user.get('ochota') in [2, 3]:
             bot.send_message(user['id'], 'Инга Александровна: "Сначала разберись с объяснительной!"')
+            reset_to_main_menu(bot, user)
         else:
-            start_friendship_code(bot, user, during_explanation=False)
+            announce_friendship_code(bot, user)
         return
 
-    # Обработка объяснительной с кодом дружбы
-    if message == "Попробовать код дружбы":
-        if user.get('ochota') in [2, 3]:
-            start_friendship_code(bot, user, during_explanation=True)
-        return
-
-    if message == "Продолжить объяснительную":
-        continue_explanation_after_friendship(bot, user)
-        return
-
-    if message == "Начать писать объяснительную":
-        start_explanation(bot, user)
-        return
-
-    # Обработка ввода имени игрока
-    if user.get('awaiting_player_name'):
-        del user['awaiting_player_name']
-        show_player_info(bot, user, message)
+    # Проверяем, находится ли пользователь в процессе написания объяснительной
+    if user.get('explanation_step') is not None and user.get('explanation_step') <= 5:
+        # Это выбор предложения для объяснительной
+        process_explanation_choice(bot, user, message)
         return
 
     # Проверяем цель прихода
@@ -868,41 +674,44 @@ def user_message(bot, message, user, location, all_users):
                     user['water'] = min(100, user.get('water', 0) + 20)
                     bot.send_message(user['id'],
                                      'Инга Александровна: "На, попей чайку."\nВы попили чай. +10 энергии, +20 воды.')
+                    reset_to_main_menu(bot, user)
                 else:
                     bot.send_message(user['id'],
                                      'Инга Александровна: "Какой еще чай?! Садись писать объяснительную!"')
                     user['ochota'] = 2
-                    start_explanation_with_friendship(bot, user)
-                    return
+                    start_explanation(bot, user)
+                return
 
             elif message == "Карточку взять":
                 if 'card' not in user['inventory']:
                     user['inventory'].append('card')
                 keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
                 keyboard.add(types.KeyboardButton(text="Чайку попить"))
-                keyboard.add(types.KeyboardButton(text="Переход: холл"))
+                keyboard.add(types.KeyboardButton(text="Выйти"))
                 bot.send_message(user['id'],
                                  'Инга Александровна: "На, держи свою карточку."\nКарточка добавлена в инвентарь.',
                                  reply_markup=keyboard)
+                return
 
             elif message == "Сушки попросить":
                 if random.randint(1, 3) == 1:
                     user['food'] = min(100, user.get('food', 0) + 15)
                     bot.send_message(user['id'],
                                      'Инга Александровна: "Возьми сушки."\nВы съели сушки. +15 сытости.')
+                    reset_to_main_menu(bot, user)
                 else:
                     bot.send_message(user['id'],
                                      'Инга Александровна: "Сушки?! Ты еще и есть хочешь?! Объяснительную пиши!"')
                     user['ochota'] = 2
-                    start_explanation_with_friendship(bot, user)
-                    return
+                    start_explanation(bot, user)
+                return
 
             elif message == "Ударить Ингу":
                 bot.send_message(user['id'],
                                  'Вы попытались ударить Ингу Александровну, но она оказалась быстрее!\n'
                                  '"В 105 на объяснительную!"')
                 user['ochota'] = 2
-                start_explanation_with_friendship(bot, user)
+                start_explanation(bot, user)
                 return
 
         else:
@@ -911,69 +720,50 @@ def user_message(bot, message, user, location, all_users):
                 user['energy'] = min(100, user.get('energy', 0) + 10)
                 user['water'] = min(100, user.get('water', 0) + 20)
                 bot.send_message(user['id'], 'Вы попили чай. +10 энергии, +20 воды.')
+                reset_to_main_menu(bot, user)
+                return
 
             elif message == "Карточку взять":
                 if 'card' not in user['inventory']:
                     user['inventory'].append('card')
                 bot.send_message(user['id'], 'Вы взяли карточку со стола.')
+                reset_to_main_menu(bot, user)
+                return
 
             elif message == "Сушки взять":
                 user['food'] = min(100, user.get('food', 0) + 15)
                 bot.send_message(user['id'], 'Вы взяли сушки. +15 сытости.')
-
-            elif message == "Выйти":
-                keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                keyboard.add(types.KeyboardButton(text="Переход: холл"))
-                bot.send_message(user['id'], 'Вы вышли из кабинета.', reply_markup=keyboard)
+                reset_to_main_menu(bot, user)
+                return
 
     # Обработка для ochota = 1 (просто пришел)
     elif ochota == 1:
         if INGA_PRESENCE:
-            # Если Инга на месте, обрабатываем только переход
-            if message.startswith('Переход: '):
-                if message == 'Переход: холл':
-                    transfer_user(user, 'hall')
-                else:
-                    bot.send_message(user['id'], 'Отсюда можно выйти только в холл.')
+            # Если Инга на месте и мы получили непонятное сообщение, показываем меню
+            reset_to_main_menu(bot, user)
         else:
             # Инги нет
             if message == "Чайку попить":
                 user['energy'] = min(100, user.get('energy', 0) + 10)
                 user['water'] = min(100, user.get('water', 0) + 20)
                 bot.send_message(user['id'], 'Вы попили чай. +10 энергии, +20 воды.')
+                reset_to_main_menu(bot, user)
+                return
 
             elif message == "Сушки взять":
                 user['food'] = min(100, user.get('food', 0) + 15)
                 bot.send_message(user['id'], 'Вы взяли сушки. +15 сытости.')
+                reset_to_main_menu(bot, user)
+                return
 
             elif message == "Просто посидеть":
                 user['energy'] = min(100, user.get('energy', 0) + 5)
                 bot.send_message(user['id'], 'Вы посидели в тишине. +5 энергии.')
+                reset_to_main_menu(bot, user)
+                return
 
-            elif message == "Выйти":
-                keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                keyboard.add(types.KeyboardButton(text="Переход: холл"))
-                bot.send_message(user['id'], 'Вы вышли из кабинета.', reply_markup=keyboard)
-
-    # Обработка написания объяснительной
-    elif ochota in [2, 3]:
-        if message in ["Очень добрый тон", "Добрый тон", "Нейтральный тон", "Злой тон", "Очень злой тон"]:
-            continue_explanation(bot, user, message)
-            return
-
-    # Обработка переходов
-    elif message.startswith('Переход: '):
-        if message == 'Переход: холл':
-            transfer_user(user, 'hall')
-        else:
-            bot.send_message(user['id'], 'Отсюда можно выйти только в холл.')
-
-    # Общая обработка
-    else:
-        # Если это не специальное сообщение, добавляем общее меню
-        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        keyboard.add(types.KeyboardButton(text="📋 Общее меню"))
-        bot.send_message(user['id'], 'Я вас не понял. Что вы хотите сделать?', reply_markup=keyboard)
+    # Если ни одно из условий не сработало, сбрасываем к главному меню
+    reset_to_main_menu(bot, user)
 
 
 def run_events(bot, location, all_users):

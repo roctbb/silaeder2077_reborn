@@ -36,6 +36,7 @@ def create_keyboard(buttons, rowsWidth=3):
 
 # methods.py (дополняем функцию register_user)
 
+# В функции register_user добавляем:
 def register_user(message):
     new_user = {
         'id': message.chat.id,
@@ -48,17 +49,19 @@ def register_user(message):
         'experience': 0,
         'dop_HP': 0,
         'оружие': 0,
-        'ochota': 1,  # Добавляем цель по умолчанию
+        'ochota': 1,
         'obiyasnitelinee': 0,
         'obiyasnitelnay': [],
-        'HP': 100,  # Добавляем HP
-        'silаedry': 0,  # Добавляем валюту Силаэдры
-        'unconscious_until': None,  # Время до выхода из бессознательного состояния
-        'last_activity': datetime.now().isoformat()  # Время последней активности
+        'HP': 100,
+        'silаedry': 0,
+        'unconscious_until': None,
+        'last_activity': datetime.now().isoformat(),
+        'last_explanation_time': None,  # Время последней объяснительной
+        'hall_exits_count': 0,  # Счетчик выходов из холла во время уроков
+        'hall_exits_reset_time': None,  # Время сброса счетчика
     }
 
     users.append(new_user)
-
     return new_user
 
 

@@ -5,6 +5,7 @@ import json
 modules = {}
 users = []
 
+# library.py - обновляем список locations
 locations = [
     {
         "id": "yard",
@@ -16,9 +17,27 @@ locations = [
         "inventory": []
     },
     {
-        "id": "hall",
-        "name": 'холл',
+        "id": "hall_1",
+        "name": 'холл 1 этажа',
         "inventory": []
+    },
+    {
+        "id": "hall_2",
+        "name": 'холл 2 этажа',
+        "inventory": []
+    },
+    {
+        "id": "hall_4",
+        "name": 'холл 4 этажа',
+        "inventory": []
+    },
+    {
+        "id": "stairs_1_2",
+        "name": 'лестница с 1 на 2 этаж',
+    },
+    {
+        "id": "stairs_2_4",
+        "name": 'лестница со 2 на 4 этаж',
     },
     {
         "id": "UnderTheCarpet",
@@ -35,8 +54,13 @@ locations = [
         "inventory": []
     },
     {
-        "id": "toilet",
-        "name": 'туалет',
+        "id": "toilet_1",
+        "name": 'туалет 1 этажа',
+        "inventory": []
+    },
+    {
+        "id": "toilet_2",
+        "name": 'туалет 2 этажа',
         "inventory": []
     },
     {
@@ -94,11 +118,16 @@ def load_modules():
     import locations.yard as yard
     import locations.gym as gym
     import locations.UnderTheCarpet as UnderTheCarpet
-    import locations.hall as hall
+    import locations.hall_1 as hall_1
+    import locations.hall_2 as hall_2
+    import locations.hall_4 as hall_4
+    import locations.stairs_1_2 as stairs_1_2
+    import locations.stairs_2_4 as stairs_2_4
     import locations.room116 as room116
     import locations.room105 as room105
     import locations.dining_room as dining_room
-    import locations.toilet as toilet
+    import locations.toilet_1 as toilet_1
+    import locations.toilet_2 as toilet_2
     import locations.math as math
     import locations.room_physics as room_physics
     import locations.back_yard as back_yard
@@ -109,18 +138,22 @@ def load_modules():
         'yard': yard,
         'gym': gym,
         'UnderTheCarpet': UnderTheCarpet,
-        'hall': hall,
+        'hall_1': hall_1,
+        'hall_2': hall_2,
+        'hall_4': hall_4,
+        'stairs_1_2': stairs_1_2,
+        'stairs_2_4': stairs_2_4,
         'room116': room116,
         'room105': room105,
         'dining_room': dining_room,
-        'toilet': toilet,
+        'toilet_1': toilet_1,
+        'toilet_2': toilet_2,
         'back_yard': back_yard,
         'math': math,
         'room_physics': room_physics,
         'home': home,
         'security': security
     })
-
 
 def load_state():
     try:
