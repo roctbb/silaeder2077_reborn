@@ -64,7 +64,7 @@ def user_message(bot, message, user, location, all_users):
             bot.send_message(user['id'], 'Вам очень повезло и вы нашли компьютер')
             keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
             keyboard.add(types.KeyboardButton(text="Поиграть в майнкрафт"))
-            keyboard.add(types.KeyboardButton(text="Переход: двор"))
+            keyboard.add(types.KeyboardButton(text="Переход: спортзал"))
             bot.send_message(user['id'], 'Там был запущен майнкрафт что будешь с этим делать?', reply_markup=keyboard)
         else:
                 bot.send_message(user['id'], 'Вам не повезло и вы не нашли ничего')
