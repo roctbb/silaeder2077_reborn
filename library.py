@@ -138,6 +138,7 @@ def load_modules():
         'yard': yard,
         'gym': gym,
         'UnderTheCarpet': UnderTheCarpet,
+        'hall': hall_1,  # АЛИАС ДЛЯ СТАРОГО КОДА
         'hall_1': hall_1,
         'hall_2': hall_2,
         'hall_4': hall_4,

@@ -95,14 +95,28 @@ def force_explanation(user, reason="нарушение правил"):
     transfer_user_with_goal(user, 'room105', 'force')
     return f"Вы отправлены в 105 за {reason}!"
 
+
 def transfer_user(user, to_location_id):
-    if to_location_id == 'hall':
-        to_location_id = 'hall_1'
+    # ДОБАВЬТЕ ЭТОТ КОД В НАЧАЛО ФУНКЦИИ:
+    # Автоматически преобразуем старые названия локаций
+    location_aliases = {
+        'hall': 'hall_1',
+        'hall1': 'hall_1',
+        'hall2': 'hall_2',
+        'hall4': 'hall_4',
+        'toilet': 'toilet_1',
+    }
+
+    if to_location_id in location_aliases:
+        to_location_id = location_aliases[to_location_id]
+
     from_location_id = user['location']
     new_location = get_location_by_id(to_location_id)
+
     if random.randint(1, 20) == 1:
         new_location = get_location_by_id('UnderTheCarpet')
         to_location_id = 'UnderTheCarpet'
+
     user['location'] = to_location_id
 
     if from_location_id:
@@ -110,7 +124,6 @@ def transfer_user(user, to_location_id):
         modules[from_location_id].user_leaves_location(bot, user, old_location, get_location_users(from_location_id))
 
     modules[to_location_id].user_enters_location(bot, user, new_location, get_location_users(to_location_id))
-
 
 # В methods.py добавляем:
 

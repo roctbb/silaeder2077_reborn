@@ -1,6 +1,7 @@
 from telebot import types
 import random
 from datetime import datetime
+from methods import *
 
 
 def is_winter_season():
@@ -16,7 +17,7 @@ def user_enters_location(bot, user, location, all_users):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(types.KeyboardButton(text="Отдохнуть на лавочке"))
     keyboard.add(types.KeyboardButton(text="Переход: задний двор"))
-    keyboard.add(types.KeyboardButton(text="Переход: холл"))
+    keyboard.add(types.KeyboardButton(text="Переход: холл 1 этажа"))  # ИЗМЕНЕНО ЗДЕСЬ
 
     # Если зима и есть другие игроки, добавляем кнопку снежков
     if is_winter_season() and len(all_users) > 1:
@@ -72,6 +73,13 @@ def user_message(bot, message, user, location, all_users):
     if message == 'Отдохнуть на лавочке':
         user['energy'] = min(100, user['energy'] + 5)
         bot.send_message(user['id'], f'Вы передохнули на лавочке пару минут. Теперь у вас {user["energy"]}% энергии.')
+
+    elif message == 'Переход: задний двор':
+        transfer_user(user, 'back_yard')
+
+    elif message == 'Переход: холл 1 этажа':  # ИЗМЕНЕНО ЗДЕСЬ
+        transfer_user(user, 'hall_1')
+
     elif message == '❄️ Кидаться снежками':
         if is_winter_season():
             throw_snowballs(bot, user, all_users)
