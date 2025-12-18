@@ -173,7 +173,7 @@ def user_message(bot, message, user, location, all_users):
                     bot.send_message(user['id'], 'Локация не найдена.')
 
         # Обработка других сообщений (из старого кода)
-        elif message == 'Пойти в потеряшки, может найду что нибудь интересное.':
+        elif message == 'Пойти в потеряшки, может найду что нибудь интересное':
             user['energy'] = max(0, user['energy'] - 5)
             if random.randint(1, 10) < 5:
                 user['food'] = min(100, user['food'] + random.randint(1, 15))
@@ -189,7 +189,7 @@ def user_message(bot, message, user, location, all_users):
                                  'Вы нашли бутылку воды и выпили её, но вы услышали шаги разгневанной Инги Александровны и решили сбежать')
             bot.send_message(user['id'], 'Куда вы убежите!', reply_markup=make_default_keyboard())
 
-        elif message == "Накричать на охранника.":
+        elif message == "Накричать на охранника":
             # Обновленная логика с уточнением
             keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
             keyboard.add(types.KeyboardButton(text="Пойти в 105"))
@@ -203,7 +203,7 @@ def user_message(bot, message, user, location, all_users):
 
     else:
         # Если нет карточки
-        if message == 'Попробовать убежать.':
+        if message == 'Попробовать убежать':
             if random.randint(1, 10) > 5:
                 bot.send_message(user['id'], 'Вас хватают и уводят в 105')
                 user['ochota'] = 2  # Пришел писать объяснительную
@@ -215,7 +215,7 @@ def user_message(bot, message, user, location, all_users):
                 bot.send_message(user['id'], 'Вы успешно сбежали и нашли потерянную карточку!',
                                  reply_markup=make_default_keyboard())
 
-        elif message == "Пойти в 105 взять карточку.":
+        elif message == "Пойти в 105 взять карточку":
             user['ochota'] = 0  # Цель: взять карточку
             bot.send_message(user['id'],
                              'Вы направляетесь в кабинет 105, чтобы получить карточку у Инги Александровны.')
