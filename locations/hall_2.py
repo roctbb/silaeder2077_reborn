@@ -14,6 +14,7 @@ def user_enters_location(bot, user, location, all_users):
     # Основные переходы из холла 2 этажа
     keyboard.add(types.KeyboardButton(text="Переход: туалет 2 этажа"))
     keyboard.add(types.KeyboardButton(text="Переход: каб. Математики"))
+    keyboard.add(types.KeyboardButton(text="Переход: каб. CTF"))
     keyboard.add(types.KeyboardButton(text="Переход: лестница с 1 на 2 этаж"))
     keyboard.add(types.KeyboardButton(text="Переход: лестница со 2 на 4 этаж"))
 

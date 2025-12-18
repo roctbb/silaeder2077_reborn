@@ -92,6 +92,10 @@ locations = [
         "id": "security",
         "name": 'комната охраны',
         "inventory": []
+    },
+    {
+        "id": "CTF",
+        "name": "каб. CTF"
     }
 ]
 
@@ -133,6 +137,7 @@ def load_modules():
     import locations.room_physics as room_physics
     import locations.home as home
     import locations.security as security
+    import locations.ctf as ctf
 
     modules.update({
         'yard': yard,
@@ -153,7 +158,8 @@ def load_modules():
         'math': math,
         'room_physics': room_physics,
         'home': home,
-        'security': security
+        'security': security,
+        'CTF': ctf
     })
 def load_state():
     try:
