@@ -17,7 +17,7 @@ def user_enters_location(bot, user, location, all_users):
     keyboard.add(types.KeyboardButton(text="Поговорить с Алексеем Генадьевичем"))
     keyboard.add(types.KeyboardButton(text="Посмотреть на мусор(может это не мусор, я не знаю) в коробке"))
     keyboard.add(types.KeyboardButton(text="Попросить конфетку"))
-    keyboard.add(types.KeyboardButton(text="Переход: холл 1 этажа"))
+    keyboard.add(types.KeyboardButton(text="Переход: холл 2 этажа"))
     bot.send_message(user['id'], 'Вы в каб. Физики', reply_markup=keyboard)
 
 
@@ -39,7 +39,7 @@ def user_message(bot, message, user, location, all_users):
             keyboard.add(types.KeyboardButton(text="1"))
             keyboard.add(types.KeyboardButton(text="2"))
             keyboard.add(types.KeyboardButton(text="3"))
-            keyboard.add(types.KeyboardButton(text="Переход: холл 1 этажа"))
+            keyboard.add(types.KeyboardButton(text="Переход: холл 2 этажа"))
             bot.send_message(user['id'], 'Какую выберете задачу?', reply_markup=keyboard)
 
     elif message == 'Посмотреть на мусор(может это не мусор, я не знаю) в коробке':
