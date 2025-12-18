@@ -1,5 +1,6 @@
 from telebot import types
 import random
+from methods import *
 
 
 def make_math_keyboard():
@@ -8,7 +9,7 @@ def make_math_keyboard():
     keyboard.add(types.KeyboardButton(text="Помочь соседу по парте"))
     keyboard.add(types.KeyboardButton(text="Списывать с доски"))
     keyboard.add(types.KeyboardButton(text="Сделать вид что решаешь"))
-    keyboard.add(types.KeyboardButton(text="Переход: холл"))
+    keyboard.add(types.KeyboardButton(text="Переход: холл 1 этажа"))
 
     return keyboard
 
@@ -77,8 +78,9 @@ def user_message(bot, message, user, location, all_users):
             bot.send_photo(user['id'], photo)
         x = random.randint(1, 4)
         if x == 1:
-            bot.send_message(user['id'], 'Вас поймали на списывании! Учитель забрал тетрадь.')
+            bot.send_message(user['id'], 'Вас поймали на списывании! Учитель отправил писать объяснительную!')
             user['energy'] = max(0, user['energy'] - 5)
+            transfer_user(user, 'room105')
         elif x == 2:
             user['experience'] = user['experience'] + 1
             bot.send_message(user['id'],

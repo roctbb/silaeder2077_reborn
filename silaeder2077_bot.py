@@ -3,6 +3,7 @@ from library import users, locations, bot, modules
 from methods import *
 from telebot import types
 from config import TOKEN
+import traceback
 import datetime
 
 
@@ -95,4 +96,14 @@ def process_text(message):
 if __name__ == '__main__':
     load_modules()
     load_state()
-    bot.polling(none_stop=True)
+    print("Started polling")
+    ex = None
+    while True:
+        try:
+            bot.polling(none_stop=True)
+        except KeyboardInterrupt:
+            break
+        except Exception as e:
+            if e != ex:
+                ex = e
+                traceback.print_exc()
