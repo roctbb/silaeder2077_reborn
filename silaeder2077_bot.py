@@ -19,12 +19,15 @@ def handle_start(message):
         show_start_menu_from_anywhere(bot, user)
 
 
+# В функции show_start_menu_from_anywhere добавим новые кнопки:
 def show_start_menu_from_anywhere(bot, user):
     """Показывает стартовое меню из любой локации"""
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(types.KeyboardButton(text="👤 Мой профиль"))
     keyboard.add(types.KeyboardButton(text="📊 Статистика игроков"))
     keyboard.add(types.KeyboardButton(text="📝 Мои объяснительные"))
+    keyboard.add(types.KeyboardButton(text="👥 Игроки в комнате"))
+    keyboard.add(types.KeyboardButton(text="💬 Написать игроку"))
     keyboard.add(types.KeyboardButton(text="🎮 Продолжить игру"))
     keyboard.add(types.KeyboardButton(text="❓ Помощь"))
 
