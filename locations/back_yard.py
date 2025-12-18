@@ -1,6 +1,7 @@
 from telebot import types
 import random
 from datetime import datetime
+from methods import *  # Добавляем импорт методов
 
 
 def is_winter_season():
@@ -63,17 +64,19 @@ def throw_snowballs(bot, user, all_users):
 
 def user_message(bot, message, user, location, all_users):
     if message == 'Отдохнуть':
-        user['energy'] = min(100, user['energy'] + 5)
+        user['energy'] = min(100, user.get('energy', 100) + 5)
         if random.randint(1, 10) == 1:
-            user['experience'] = min(100, user['experience'])
+            user['experience'] = min(100, user.get('experience', 0) + 1)
+            bot.send_message(user['id'],
+                             f'Вы отдохнули \nТеперь у вас {user["experience"]} опыта и {user["energy"]} энергии')
         else:
             bot.send_message(user['id'],
-                             f'Вы отдохнули \n Теперь у вас {user["experience"]} опыта и {user["energy"]} энергии')
+                             f'Вы отдохнули \nТеперь у вас {user["energy"]} энергии')
 
     elif message == 'Поиграть в футбол':
-        user['energy'] = min(100, user['energy'] - 5)
+        user['energy'] = max(0, user.get('energy', 100) - 5)
         if user['energy'] <= 0:
-            bot.send_message(user['id'], "у вас слишком мало энергии")
+            bot.send_message(user['id'], "У вас слишком мало энергии")
         else:
             bot.send_message(user['id'],
                              f'Вы поиграли в футбол\nУ вас теперь {user["energy"]} энергии, но у вас поднялось настроение')
@@ -84,7 +87,7 @@ def user_message(bot, message, user, location, all_users):
             keyboard.add(types.KeyboardButton(text="ничего не делать"))
             keyboard.add(types.KeyboardButton(text="Отжиматься"))
             keyboard.add(types.KeyboardButton(text="Переход: двор"))
-            keyboard.add(types.KeyboardButton(text="Переход: холл"))
+            keyboard.add(types.KeyboardButton(text="Переход: холл 1 этажа"))
 
             # Если зима, добавляем снежки
             if is_winter_season() and len(all_users) > 1:
@@ -99,16 +102,22 @@ def user_message(bot, message, user, location, all_users):
         bot.send_message(user['id'], f'Переход: каб. 105', reply_markup=keyboard)
 
     elif message == "Отжиматься":
-        user['experience'] = min(100, user['experience'] + 1)
-        user['energy'] = min(100, user['energy'] - 5)
+        user['experience'] = min(100, user.get('experience', 0) + 1)
+        user['energy'] = max(0, user.get('energy', 100) - 5)
         bot.send_message(user['id'], "Ок. Вы хороший ученик. Вас не отправят в 105 :)")
         bot.send_message(user['id'],
                          f'Вы отжались \n Теперь у вас {user["experience"]} опыта и {user["energy"]} энергии')
 
     elif message == "ничего не делать":
-        user['energy'] = min(100, user['energy'] + 5)
+        user['energy'] = min(100, user.get('energy', 100) + 5)
         bot.send_message(user['id'],
-                         f'Вы отдохнули \n Теперь у вас {user["experience"]} опыта и {user["energy"]} энергии')
+                         f'Вы отдохнули \n Теперь у вас {user["energy"]} энергии')
+
+    elif message == 'Переход: двор':
+        transfer_user(user, 'yard')
+
+    elif message == 'Переход: холл 1 этажа':
+        transfer_user(user, 'hall_1')
 
     elif message == '❄️ Кидаться снежками':
         if is_winter_season():

@@ -1,7 +1,7 @@
 from telebot import types
 import random
 from datetime import datetime
-from methods import *
+from methods import *  # Добавляем импорт методов
 
 
 def is_winter_season():
@@ -17,7 +17,7 @@ def user_enters_location(bot, user, location, all_users):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(types.KeyboardButton(text="Отдохнуть на лавочке"))
     keyboard.add(types.KeyboardButton(text="Переход: задний двор"))
-    keyboard.add(types.KeyboardButton(text="Переход: холл 1 этажа"))  # ИЗМЕНЕНО ЗДЕСЬ
+    keyboard.add(types.KeyboardButton(text="Переход: холл 1 этажа"))
 
     # Если зима и есть другие игроки, добавляем кнопку снежков
     if is_winter_season() and len(all_users) > 1:
@@ -44,10 +44,10 @@ def throw_snowballs(bot, user, all_users):
 
     # Определяем результат
     results = [
-        f"Вы попали снежком в {target['name']}! ❄️",
-        f"Снежок пролетел мимо {target['name']}...",
-        f"Вы попали снежком в {target['name']}, но он увернулся!",
-        f"Снежок попал точно в цель! {target['name']} смеется. ❄️😂"
+        f"Вы слепили огромный снежок и попали в {target['name']}! ☃️",
+        f"Снежок развалился в воздухе, не долетев до {target['name']}...",
+        f"Вы попали снежком в {target['name']} со всей силы! ❄️💥",
+        f"{target['name']} поймал ваш снежок и кинул обратно!"
     ]
 
     result = random.choice(results)
@@ -59,25 +59,25 @@ def throw_snowballs(bot, user, all_users):
     bot.send_message(user['id'],
                      f"{result}\nВы потратили 5% энергии. Осталось: {user['energy']}%")
 
-    # Уведомляем цель
-    if random.randint(1, 3) == 1:  # Шанс ответить
+    # Уведомляем цель (шанс 33%)
+    if random.randint(1, 3) == 1:
         responses = [
-            f"{user['name']} кинул в вас снежок! ❄️",
-            f"Вы получили снежком от {user['name']}!",
-            f"Вас засыпало снегом от {user['name']}!"
+            f"{user['name']} закидал вас снежками! ❄️",
+            f"Вас атаковали снежками от {user['name']}!",
+            f"Снежная битва с {user['name']} началась!"
         ]
         bot.send_message(target['id'], random.choice(responses))
 
 
 def user_message(bot, message, user, location, all_users):
     if message == 'Отдохнуть на лавочке':
-        user['energy'] = min(100, user['energy'] + 5)
+        user['energy'] = min(100, user.get('energy', 100) + 5)
         bot.send_message(user['id'], f'Вы передохнули на лавочке пару минут. Теперь у вас {user["energy"]}% энергии.')
 
     elif message == 'Переход: задний двор':
         transfer_user(user, 'back_yard')
 
-    elif message == 'Переход: холл 1 этажа':  # ИЗМЕНЕНО ЗДЕСЬ
+    elif message == 'Переход: холл 1 этажа':
         transfer_user(user, 'hall_1')
 
     elif message == '❄️ Кидаться снежками':
