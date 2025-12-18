@@ -1,6 +1,6 @@
 from telebot import types
 import random
-
+from methods import *
 def make_default_keyboard():
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(types.KeyboardButton(text="Поиграть в волейбол"))
@@ -18,7 +18,7 @@ def user_enters_location(bot, user, location, all_users):
         bot.send_photo(user['id'], photo)
 
 def user_leaves_location(bot, user, location, all_users):
-    bot.send_message(user['id'], 'Вы покинули спортзал Дениса')
+    bot.send_message(user['id'], 'Вы покинули спортзал')
 
 
 def user_message(bot, message, user, location, all_users):
@@ -50,9 +50,7 @@ def user_message(bot, message, user, location, all_users):
             x2=random.randint(1,2)
             if x2==1:
                 bot.send_message(user['id'], f'Похоже тебе не повезло в двойне и у учителя нет настроения! Иди пиши объяснительную!!!')
-                keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                keyboard.add(types.KeyboardButton(text="Переход: каб. 105"))
-                bot.send_message(user['id'], f'Переход: каб. 105', reply_markup=keyboard)
+                transfer_user(user, 'room105')
             else:
                 bot.send_message(user['id'], f'Похоже тебе повезло и у учителя хорошее настроение! На этот раз он тебя простил!')
         else:
@@ -72,6 +70,7 @@ def user_message(bot, message, user, location, all_users):
         x = random.randint(1, 2)
         if x == 1:
             bot.send_message(user['id'], 'Вам не повезло и вы идёте писать объяснительную! Потому-что вас застукали учителя!')
+            transfer_user(user, 'room105')
         else:
             user['experience'] = user['experience'] + 1
             bot.send_message(user['id'], f'Лови опыт теперь у тебя {user["experience"]} опыта!')
