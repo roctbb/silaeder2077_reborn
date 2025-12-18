@@ -9,7 +9,7 @@ def make_math_keyboard():
     keyboard.add(types.KeyboardButton(text="Помочь соседу по парте"))
     keyboard.add(types.KeyboardButton(text="Списывать с доски"))
     keyboard.add(types.KeyboardButton(text="Сделать вид что решаешь"))
-    keyboard.add(types.KeyboardButton(text="Переход: холл"))
+    keyboard.add(types.KeyboardButton(text="Переход: холл 1 этажа"))
 
     return keyboard
 

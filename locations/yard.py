@@ -1,20 +1,81 @@
 from telebot import types
+import random
+from datetime import datetime
+
+
+def is_winter_season():
+    """Проверяет, сейчас зима или нет"""
+    now = datetime.now()
+    month = now.month
+
+    # Зима: декабрь, январь, февраль
+    return month in [12, 1, 2]
 
 
 def user_enters_location(bot, user, location, all_users):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(types.KeyboardButton(text="Отдохнуть на лавочке"))
     keyboard.add(types.KeyboardButton(text="Переход: задний двор"))
-    keyboard.add(types.KeyboardButton(text="Переход: холл"))
+    keyboard.add(types.KeyboardButton(text="Переход: холл 1 этажа"))
+
+    # Если зима и есть другие игроки, добавляем кнопку снежков
+    if is_winter_season() and len(all_users) > 1:
+        keyboard.add(types.KeyboardButton(text="❄️ Кидаться снежками"))
+
     bot.send_message(user['id'], 'Вы во дворе', reply_markup=keyboard)
 
 
 def user_leaves_location(bot, user, location, all_users):
     bot.send_message(user['id'], 'Вы покидаете двор')
 
+
+def throw_snowballs(bot, user, all_users):
+    """Обработка кидания снежками"""
+    # Находим других игроков в локации
+    other_users = [u for u in all_users if u['id'] != user['id']]
+
+    if not other_users:
+        bot.send_message(user['id'], 'Не с кем кидаться снежками!')
+        return
+
+    # Выбираем случайную цель
+    target = random.choice(other_users)
+
+    # Определяем результат
+    results = [
+        f"Вы попали снежком в {target['name']}! ❄️",
+        f"Снежок пролетел мимо {target['name']}...",
+        f"Вы попали снежком в {target['name']}, но он увернулся!",
+        f"Снежок попал точно в цель! {target['name']} смеется. ❄️😂"
+    ]
+
+    result = random.choice(results)
+
+    # Расход энергии
+    user['energy'] = max(0, user.get('energy', 100) - 5)
+
+    # Отправляем результат
+    bot.send_message(user['id'],
+                     f"{result}\nВы потратили 5% энергии. Осталось: {user['energy']}%")
+
+    # Уведомляем цель
+    if random.randint(1, 3) == 1:  # Шанс ответить
+        responses = [
+            f"{user['name']} кинул в вас снежок! ❄️",
+            f"Вы получили снежком от {user['name']}!",
+            f"Вас засыпало снегом от {user['name']}!"
+        ]
+        bot.send_message(target['id'], random.choice(responses))
+
+
 def user_message(bot, message, user, location, all_users):
     if message == 'Отдохнуть на лавочке':
         user['energy'] = min(100, user['energy'] + 5)
-        bot.send_message(user['id'], f'Вы передохнули на лавочке, пару минут. Теперь у вас {user["energy"]}% энергии.')
+        bot.send_message(user['id'], f'Вы передохнули на лавочке пару минут. Теперь у вас {user["energy"]}% энергии.')
+    elif message == '❄️ Кидаться снежками':
+        if is_winter_season():
+            throw_snowballs(bot, user, all_users)
+        else:
+            bot.send_message(user['id'], 'Сейчас не зима, снежков нет!')
     else:
         bot.send_message(user['id'], 'Я вас не понял')

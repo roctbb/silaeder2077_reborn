@@ -6,13 +6,15 @@ def make_default_keyboard():
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(types.KeyboardButton(text="Поиграть на пианино"))
     keyboard.add(types.KeyboardButton(text="Потыкать по доске"))
-    keyboard.add(types.KeyboardButton(text="Переход: холл"))
-
+    keyboard.add(types.KeyboardButton(text="Переход: холл 1 этажа"))
     return keyboard
 
 
 def user_enters_location(bot, user, location, all_users):
+    with open('assets/images/116.jpg', 'rb') as photo:
+        bot.send_photo(user['id'], photo)
     bot.send_message(user['id'], 'Вы в каб. 116', reply_markup=make_default_keyboard())
+
 
 
 def user_leaves_location(bot, user, location, all_users):
@@ -21,6 +23,8 @@ def user_leaves_location(bot, user, location, all_users):
 
 def user_message(bot, message, user, location, all_users):
     if message == 'Поиграть на пианино':
+        with open('assets/images/пианина.jpg', 'rb') as photo:
+            bot.send_photo(user['id'], photo)
         user['energy'] = min(100, user['energy'] - 5)
         if random.randint(1, 10) == 1:
             user['experience'] = min(100, user['experience'] + 1)
@@ -30,12 +34,17 @@ def user_message(bot, message, user, location, all_users):
             bot.send_message(user['id'],
                              f'Вы поиграли на пианино \n Теперь у вас {user["experience"]} опыта и {user["energy"]} энергии')
     elif message == 'Потыкать по доске':
+        with open('assets/images/доска.jpg', 'rb') as photo:
+            bot.send_photo(user['id'], photo)
         user['energy'] = min(100, user['energy'] - 5)
         if user['energy'] <= 0:
             bot.send_message(user['id'], "ВЫ УМЕРЛИ!!!")
         else:
+            with open('assets/images/ноут.jpg', 'rb') as photo:
+                bot.send_photo(user['id'], photo)
             bot.send_message(user['id'], f'Вы потыкали по доске\n'
                                          f'У вас теперь {user["energy"]} энергии, но у вас поднялось настроение')
+
             bot.send_message(user['id'],
                              f"Вы заметили что на ноутбуке рядом открыт дневник. Можно изменить себе оценки")
             if random.randint(0, 3) == 1:
@@ -44,7 +53,7 @@ def user_message(bot, message, user, location, all_users):
             keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
             keyboard.add(types.KeyboardButton(text="Изменить оценки"))
             keyboard.add(types.KeyboardButton(text="Не менять оценки"))
-            keyboard.add(types.KeyboardButton(text="Переход: холл"))
+            keyboard.add(types.KeyboardButton(text="Переход: холл 1 этажа"))
             bot.send_message(user['id'], 'Что будете делать?', reply_markup=keyboard)
 
             if random.randint(0, 3) == 1:
