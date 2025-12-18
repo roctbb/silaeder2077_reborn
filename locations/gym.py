@@ -23,6 +23,8 @@ def user_leaves_location(bot, user, location, all_users):
 
 def user_message(bot, message, user, location, all_users):
     if message == 'Поиграть в волейбол':
+        with open('assets/images/voleubol.jpg', 'rb') as photo:
+            bot.send_photo(user['id'], photo)
         if user['energy']>=5 and  user['water']>=5:
             user['energy'] = user['energy'] - 5
             user['water'] = user['water'] - 5
