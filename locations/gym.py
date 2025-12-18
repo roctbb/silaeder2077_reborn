@@ -63,7 +63,9 @@ def user_message(bot, message, user, location, all_users):
             user['experience'] = user['experience'] + 1
             bot.send_message(user['id'], f'Похоже тебе повезло и учитель тебя не заметил! Лави опыт! Теперь у тебя {user["experience"]} опыта!')
     elif message == 'Поискать что-нибудь интересное':
-        x = random.randint(1, 2)
+        with open('assets/images/poisk_v_gym.jpg', 'rb') as photo:
+            bot.send_photo(user['id'], photo)
+        x = random.randint(1, 5)
         if x == 1:
             bot.send_message(user['id'], 'Вам очень повезло и вы нашли компьютер')
             keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -73,6 +75,8 @@ def user_message(bot, message, user, location, all_users):
         else:
                 bot.send_message(user['id'], 'Вам не повезло и вы не нашли ничего')
     elif message == 'Поиграть в майнкрафт':
+        with open('assets/images/Minecraft.jpg', 'rb') as photo:
+            bot.send_photo(user['id'], photo)
         x = random.randint(1, 2)
         if x == 1:
             bot.send_message(user['id'], 'Вам не повезло и вы идёте писать объяснительную! Потому-что вас застукали учителя!')
