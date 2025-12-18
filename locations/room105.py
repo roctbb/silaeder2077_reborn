@@ -608,7 +608,7 @@ def user_message(bot, message, user, location, all_users):
     check_inga_status()
 
     # Всегда обрабатываем выход первым
-    if message == "Выйти" or message == "Переход: холл":
+    if message == "Выйти" or message == "Переход: холл 1 этажа":
         transfer_user(user, 'hall')
         return
 

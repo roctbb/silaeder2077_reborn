@@ -84,7 +84,7 @@ def user_message(bot, message, user, location, all_users):
             keyboard.add(types.KeyboardButton(text="ничего не делать"))
             keyboard.add(types.KeyboardButton(text="Отжиматься"))
             keyboard.add(types.KeyboardButton(text="Переход: двор"))
-            keyboard.add(types.KeyboardButton(text="Переход: холл"))
+            keyboard.add(types.KeyboardButton(text="Переход: холл 1 этажа"))
 
             # Если зима, добавляем снежки
             if is_winter_season() and len(all_users) > 1:

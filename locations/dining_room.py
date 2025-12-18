@@ -13,7 +13,7 @@ def user_enters_location(bot, user, location, all_users):
     keyboard.add(types.KeyboardButton(text="Покушать пельмешки"))
     keyboard.add(types.KeyboardButton(text="Попить чай"))
     keyboard.add(types.KeyboardButton(text="Украсть ложку"))
-    keyboard.add(types.KeyboardButton(text="Переход: холл"))
+    keyboard.add(types.KeyboardButton(text="Переход: холл 1 этажа"))
     keyboard.add(types.KeyboardButton(text="Переход: каб. 105"))
 
     if c:
