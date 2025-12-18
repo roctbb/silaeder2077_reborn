@@ -1,7 +1,7 @@
 from config import TOKEN
 import telebot
 import json
-
+from datetime import datetime
 modules = {}
 users = []
 
@@ -128,9 +128,9 @@ def load_modules():
     import locations.dining_room as dining_room
     import locations.toilet_1 as toilet_1
     import locations.toilet_2 as toilet_2
+    import locations.back_yard as back_yard
     import locations.math as math
     import locations.room_physics as room_physics
-    import locations.back_yard as back_yard
     import locations.home as home
     import locations.security as security
 
@@ -154,7 +154,6 @@ def load_modules():
         'home': home,
         'security': security
     })
-
 def load_state():
     try:
         saved_users, saved_locations = load_state_from_file()

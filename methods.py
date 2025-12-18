@@ -96,9 +96,11 @@ def force_explanation(user, reason="нарушение правил"):
     return f"Вы отправлены в 105 за {reason}!"
 
 def transfer_user(user, to_location_id):
+    if to_location_id == 'hall':
+        to_location_id = 'hall_1'
     from_location_id = user['location']
     new_location = get_location_by_id(to_location_id)
-    if random.randint(1, 10) == 1:
+    if random.randint(1, 20) == 1:
         new_location = get_location_by_id('UnderTheCarpet')
         to_location_id = 'UnderTheCarpet'
     user['location'] = to_location_id

@@ -15,7 +15,7 @@ def user_enters_location(bot, user, location, all_users):
     keyboard.add(types.KeyboardButton(text="Отдохнуть"))
     keyboard.add(types.KeyboardButton(text="Поиграть в футбол"))
     keyboard.add(types.KeyboardButton(text="Переход: двор"))
-    keyboard.add(types.KeyboardButton(text="Переход: холл"))
+    keyboard.add(types.KeyboardButton(text="Переход: холл 1 этажа"))
 
     # Если зима и есть другие игроки, добавляем кнопку снежков
     if is_winter_season() and len(all_users) > 1:
