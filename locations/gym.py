@@ -43,9 +43,13 @@ def user_message(bot, message, user, location, all_users):
             else:
                 bot.send_message(user['id'], f'У вас не хватает воды! Сейчас у вас {user["water"]}% воды. А нужно всего 5% воды!')
     elif message == 'Попить водички':
+        with open('assets/images/culer.jpg', 'rb') as photo:
+            bot.send_photo(user['id'], photo)
         user['water'] = min(100,user['water'] + 5)
         bot.send_message(user['id'], f'Вы попили воду теперь у вас {user["water"]}% воды.')
     elif message == 'Попинать мячик пока учитель не видет':
+        with open('assets/images/penat_mach.jpg', 'rb') as photo:
+            bot.send_photo(user['id'], photo)
         x=random.randint(1,2)
         if x==1:
             bot.send_message(user['id'], f'Вы начали пинать мячик и вас спалил учитель!')
