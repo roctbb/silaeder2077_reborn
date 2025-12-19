@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Найди флаг!</title>
+    <script>
+      window.alert = (n) => {
+        if (n == '1') {
+          prompt("Флаг: s2077r{x33_se@rch}");
+        } else {
+          prompt(n);
+        }
+      };
+    </script>
+  </head>
+  <body id="body">
+    <p>
+      Теперь нельзя смотреть в исходный код
+      <br>
+      Запусти alert(1)
+    </p>
+    <input placeholder="Поиск..." id="query">
+    <button onclick="document.getElementById('results').innerHTML = document.getElementById('query').value;">Искать</button>
+    <p id="results">
+    </p>
+  </body>
+</html>

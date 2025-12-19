@@ -2,7 +2,8 @@ from telebot import types
 import os
 
 FLAGS = {
-    "Web 1": "s2077r{y0u_f0und_m3_1n_D0M}"
+    "Web 1": "s2077r{y0u_f0und_m3_1n_D0M}",
+    "XSS 1": "s2077r{x33_se@rch}"
 }
 curr_tasks = {}
 
@@ -30,7 +31,7 @@ def user_message(bot, message, user, location, all_users):
         bot.send_document(user["id"], types.InputFile(filename), caption=f"Пришлите флаг к заданию \"{message}\" "
                                                                          "(формат s2077r{})")
     elif message in FLAGS.values() and user["id"] in curr_tasks and FLAGS[curr_tasks[user["id"]]] == message:
-        user["experience"] = min(100, user["experience"] + 2)
+        user["experience"] += 2
         curr_tasks.pop(user["id"])
         bot.send_message(user["id"], "Правильный флаг!\nВы получили 2 единицы опыта")
     elif user["id"] in curr_tasks and message.startswith("s2077r{") and message.endswith("}"):
