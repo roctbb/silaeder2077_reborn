@@ -105,24 +105,6 @@ def user_enters_location(bot, user, location, all_users):
 def user_leaves_location(bot, user, location, all_users):
     bot.send_message(user['id'], 'Вы уходите из холла 1 этажа')
 
-    # Если сейчас урок, увеличиваем счетчик выходов
-    if is_lesson_time():
-        user['hall_exits_count'] = user.get('hall_exits_count', 0) + 1
-
-        # Если вышли 3 или более раз за урок
-        if user['hall_exits_count'] >= 3:
-            # Шанс быть пойманным Ингой
-            if random.randint(1, 3) == 1:  # 33% шанс
-                bot.send_message(user['id'],
-                                 'Инга Александровна поймала вас! "Слишком часто выходишь! Быстро в 105 писать объяснительную!"')
-                user['ochota'] = 2
-                transfer_user(user, 'room105')
-                user['hall_exits_count'] = 0
-
-        # Устанавливаем время сброса если еще не установлено
-        if not user.get('hall_exits_reset_time'):
-            user['hall_exits_reset_time'] = datetime.now().isoformat()
-
 
 def drink_water(bot, user):
     """Попить воды из кулера"""

@@ -31,17 +31,6 @@ def user_enters_location(bot, user, location, all_users):
 def user_leaves_location(bot, user, location, all_users):
     bot.send_message(user['id'], 'Вы уходите из холла 4 этажа')
 
-    if is_lesson_time():
-        user['hall_exits_count'] = user.get('hall_exits_count', 0) + 1
-
-        if user['hall_exits_count'] >= 3:
-            if random.randint(1, 3) == 1:
-                bot.send_message(user['id'],
-                                 'Инга Александровна поймала вас! "Слишком часто выходишь! Быстро в 105!"')
-                user['ochota'] = 2
-                transfer_user(user, 'room105')
-                user['hall_exits_count'] = 0
-
 
 def start_checkers_game(bot, user, all_users):
     """Начинает игру в шашки"""
