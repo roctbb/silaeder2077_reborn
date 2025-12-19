@@ -6,7 +6,7 @@ def make_default_keyboard():
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(types.KeyboardButton(text="Поиграть на пианино"))
     keyboard.add(types.KeyboardButton(text="Потыкать по доске"))
-    keyboard.add(types.KeyboardButton(text="Переход: холл"))
+    keyboard.add(types.KeyboardButton(text="Переход: холл 1 этажа"))
     return keyboard
 
 
@@ -53,7 +53,7 @@ def user_message(bot, message, user, location, all_users):
             keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
             keyboard.add(types.KeyboardButton(text="Изменить оценки"))
             keyboard.add(types.KeyboardButton(text="Не менять оценки"))
-            keyboard.add(types.KeyboardButton(text="Переход: холл"))
+            keyboard.add(types.KeyboardButton(text="Переход: холл 1 этажа"))
             bot.send_message(user['id'], 'Что будете делать?', reply_markup=keyboard)
 
             if random.randint(0, 3) == 1:
