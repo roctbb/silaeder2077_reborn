@@ -74,6 +74,9 @@ def process_text(message):
             show_start_menu_from_anywhere(bot, user)
             return
 
+        if message_text == "👤 Мой профиль":
+            bot.send_message(user['id'], F"Имя: {user["name"]}")
+
         # Обработка переходов
         if message_text.startswith('Переход: '):
             location = get_location_by_name(message_text.replace('Переход: ', ''))
