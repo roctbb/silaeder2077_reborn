@@ -1,7 +1,7 @@
 from telebot import types
 import random
 
-num_task = 0
+num_task = {}
 
 tasks = {
     "Велосипедист проехал 36 км за 2 часа. Найдите среднюю скорость велосипедиста.": 18,
@@ -36,9 +36,9 @@ def user_message(bot, message, user, location, all_users):
             bot.send_message(user['id'],
                              'Дастиш вери гуд, что ты пришел. А теперь атеншен на доску. У вас будет несколько задачек.')
             keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-            keyboard.add(types.KeyboardButton(text="1"))
-            keyboard.add(types.KeyboardButton(text="2"))
-            keyboard.add(types.KeyboardButton(text="3"))
+            keyboard.add(types.KeyboardButton(text=f"1{' (Решено)' if 'phys_1' in user['tasks_done'] else ''}"))
+            keyboard.add(types.KeyboardButton(text=f"2{' (Решено)' if 'phys_2' in user['tasks_done'] else ''}"))
+            keyboard.add(types.KeyboardButton(text=f"3{' (Решено)' if 'phys_3' in user['tasks_done'] else ''}"))
             keyboard.add(types.KeyboardButton(text="Переход: холл 4 этажа"))
             bot.send_message(user['id'], 'Какую выберете задачу?', reply_markup=keyboard)
 
@@ -52,24 +52,33 @@ def user_message(bot, message, user, location, all_users):
     elif message == "Попросить конфетку":
         bot.send_message(user['id'], '0о\n -')
 
-    elif message == '1' or message == "2" or message == "3":
-        num_task = int(message)
-        task_text = list(tasks.keys())[num_task - 1]
+    elif message in ("1", "1 (Решено)", "2", "2 (Решено)", "3", "3 (Решено)"):
+        if message.endswith(" (Решено)"):
+            message = message[:-9]
+        if f"phys_{message}" in user["tasks_done"]:
+            bot.send_message(user["id"], "Вы уже решили это задание")
+            return
+        num_task[user["id"]] = int(message)
+        task_text = list(tasks.keys())[num_task[user["id"]] - 1]
         bot.send_message(user['id'], task_text)
         bot.send_message(user['id'], "Напишите ответ на задачу\nПишите нецелые числа через точку")
 
-    elif num_task != 0:
-        correct_answer = list(tasks.values())[num_task - 1]
+    elif num_task[user["id"]] != 0:
+        if f"phys_{num_task[user["id"]]}" in user["tasks_done"]:
+            bot.send_message(user["id"], "Вы уже решили это задание")
+            return
+        correct_answer = list(tasks.values())[num_task[user["id"]] - 1]
 
         try:
             user_answer = float(message)
             if abs(user_answer - correct_answer) < 0.01:
                 bot.send_message(user['id'], "Дастиш вери гуд!!!")
                 user['experience'] += 5
-                num_task = 0
+                user["tasks_done"].append(f"phys_{num_task[user["id"]]}")
+                num_task[user["id"]] = 0
             else:
                 bot.send_message(user['id'], "Оууу, оууу. Это фигня какая-то")
-                num_task = 0
+                num_task[user["id"]] = 0
         except ValueError:
             bot.send_message(user['id'], "Пожалуйста, введите число в правильном формате")
 

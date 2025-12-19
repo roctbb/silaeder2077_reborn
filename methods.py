@@ -59,6 +59,7 @@ def register_user(message):
         'last_explanation_time': None,  # Время последней объяснительной
         'hall_exits_count': 0,  # Счетчик выходов из холла во время уроков
         'hall_exits_reset_time': None,  # Время сброса счетчика
+        'tasks_done': [],
     }
 
     users.append(new_user)
