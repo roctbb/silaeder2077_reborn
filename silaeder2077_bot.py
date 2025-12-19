@@ -75,7 +75,7 @@ def process_text(message):
             return
 
         if message_text == "👤 Мой профиль":
-            bot.send_message(user['id'], F"Имя: {user["name"]}")
+            bot.send_message(user['id'], F"Имя: {user['name']}")
             return
 
         # Обработка переходов
