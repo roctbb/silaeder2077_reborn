@@ -23,6 +23,8 @@ locations = [
     {
         "id": "UnderTheCarpet",
         "name": 'комната под ковром',
+        "inventory": [], 
+        "data": {}, 
     },
     {
         "id": "room116",
@@ -85,7 +87,7 @@ def save_state_to_file(users, locations):
         state = json.dumps({
             'users': users,
             'locations': locations
-        })
+        }, ensure_ascii=False, indent=4, separators=(',', ':'))
 
         file.write(state)
 

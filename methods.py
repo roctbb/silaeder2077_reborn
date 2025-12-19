@@ -15,7 +15,7 @@ def getLocList():
 
 def get_user(message):
     for user in users:
-        if user['id'] == message.chat.id:
+        if user['id'] == str(message.chat.id):
             return user
     return None
 
@@ -35,7 +35,7 @@ def create_keyboard(buttons, rowsWidth=3):
 
 def register_user(message):
     new_user = {
-        'id': message.chat.id,
+        'id': str(message.chat.id),
         'name': message.chat.first_name,
         'inventory': [],
         'location': None,
@@ -57,7 +57,6 @@ def get_location_by_id(location_id):
         if location['id'] == location_id:
             return location
     return None
-
 
 def get_location_by_name(location_name):
     for location in locations:
