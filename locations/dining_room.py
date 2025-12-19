@@ -70,6 +70,7 @@ def user_message(bot, message, user, location, all_users):
                 user['inventory'].append('spoon')
             else:
                 bot.send_message(user['id'], 'Повариха заметила пропажу ложки и вас отправили в 105 кабинет')
+                user["ochota"] = 2
                 transfer_user(user, 'room105')
         else:
             bot.send_message(user['id'], 'Вас выгнали из столовой, ведь сейчас не время кушать')

@@ -1,4 +1,5 @@
 from telebot import types
+from methods import transfer_user
 import random
 
 
@@ -25,9 +26,9 @@ def user_message(bot, message, user, location, all_users):
     if message == 'Поиграть на пианино':
         with open('assets/images/пианина.jpg', 'rb') as photo:
             bot.send_photo(user['id'], photo)
-        user['energy'] = min(100, user['energy'] - 5)
+        user['energy'] = max(0, user['energy'] - 5)
         if random.randint(1, 10) == 1:
-            user['experience'] = min(100, user['experience'] + 1)
+            user['experience'] += 1
         if user['energy'] <= 0:
             bot.send_message(user['id'], "ВЫ УМЕРЛИ!!!")
         else:
@@ -36,7 +37,7 @@ def user_message(bot, message, user, location, all_users):
     elif message == 'Потыкать по доске':
         with open('assets/images/доска.jpg', 'rb') as photo:
             bot.send_photo(user['id'], photo)
-        user['energy'] = min(100, user['energy'] - 5)
+        user['energy'] = max(0, user['energy'] - 5)
         if user['energy'] <= 0:
             bot.send_message(user['id'], "ВЫ УМЕРЛИ!!!")
         else:
@@ -50,24 +51,22 @@ def user_message(bot, message, user, location, all_users):
             if random.randint(0, 3) == 1:
                 bot.send_message(user['id'], f'Вас спалил учитель!!!'
                                              f'И отвели в 105...')
+                user["ochota"] = 2
+                transfer_user(user, "room105")
+                return
             keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
             keyboard.add(types.KeyboardButton(text="Изменить оценки"))
             keyboard.add(types.KeyboardButton(text="Не менять оценки"))
             keyboard.add(types.KeyboardButton(text="Переход: холл 1 этажа"))
             bot.send_message(user['id'], 'Что будете делать?', reply_markup=keyboard)
-
-            if random.randint(0, 3) == 1:
-                bot.send_message(user['id'], f'Вас спалил учитель!!!'
-                                             f'И отвели в 105...')
-                # bot.send_message(user['id'], f'Перейти в каб. 105')
     elif message == "Изменить оценки":
+        user["ochota"] = 2
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.add(types.KeyboardButton(text="Переход: каб. 105"))
         bot.send_message(user['id'], 'Что у вас за мысли?\nВ 105!!!!!!', reply_markup=keyboard)
     elif message == "Не менять оценки":
         bot.send_message(user['id'], "Ок. Вы хороший ученик. Вас не отправят в 105 :)")
         bot.send_message(user['id'], 'Вы в каб. 116', reply_markup=make_default_keyboard())
-
 
     else:
         bot.send_message(user['id'], 'Я вас не понял :(\nНапишите еще раз')

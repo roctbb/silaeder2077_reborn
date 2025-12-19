@@ -117,11 +117,6 @@ def drink_water(bot, user):
 
 
 def user_message(bot, message, user, location, all_users):
-    # Всегда обрабатываем команду start
-    if message.lower() == 'start' or message == '/start':
-        show_start_menu_from_anywhere(bot, user)
-        return
-
     # Обработка питья воды
     if message == '💧 Попить воды из кулера':
         drink_water(bot, user)

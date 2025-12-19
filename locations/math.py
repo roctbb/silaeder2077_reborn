@@ -80,7 +80,9 @@ def user_message(bot, message, user, location, all_users):
         if x == 1:
             bot.send_message(user['id'], 'Вас поймали на списывании! Учитель отправил писать объяснительную!')
             user['energy'] = max(0, user['energy'] - 5)
+            user["ochota"] = 2
             transfer_user(user, 'room105')
+            return
         elif x == 2:
             user['experience'] = user['experience'] + 1
             bot.send_message(user['id'],
@@ -99,8 +101,6 @@ def user_message(bot, message, user, location, all_users):
             bot.send_message(user['id'],
                              f'Вам удалось отдохнуть! Восстановили 2% энергии. Теперь у вас {user["energy"]}% энергии.')
 
-    elif message == 'Перейти во двор':
-        bot.send_message(user['id'], 'Вы вышли во двор')
     else:
         bot.send_message(user['id'], 'Я вас не понял')
 

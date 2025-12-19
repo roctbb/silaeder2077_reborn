@@ -10,98 +10,120 @@ locations = [
     {
         "id": "yard",
         "name": 'двор',
+        "locations": ["задний двор", "холл 1 этажа", "дом"],
     },
     {
         "id": "gym",
         "name": 'спортзал',
-        "inventory": []
+        "inventory": [],
+        "locations": ["холл 1 этажа", "спортзал"],
     },
     {
         "id": "hall_1",
         "name": 'холл 1 этажа',
-        "inventory": []
+        "inventory": [],
+        "locations": ["лестница с 1 на 2 этаж", "каб. 105", "каб. 116", "комната охраны", "двор", "задний двор",
+                      "столовая", "спортзал"],
     },
     {
         "id": "hall_2",
         "name": 'холл 2 этажа',
-        "inventory": []
+        "inventory": [],
+        "locations": ["туалет 2 этажа", "каб. Математики", "каб. CTF", "теннисный стол", "лестница с 1 на 2 этаж",
+                      "лестница со 2 на 4 этаж"],
     },
     {
         "id": "hall_4",
         "name": 'холл 4 этажа',
-        "inventory": []
+        "inventory": [],
+        "locations": ["каб. Физики", "лестница со 2 на 4 этаж"],
     },
     {
         "id": "stairs_1_2",
         "name": 'лестница с 1 на 2 этаж',
+        "locations": ["холл 1 этажа", "холл 2 этажа"],
     },
     {
         "id": "stairs_2_4",
         "name": 'лестница со 2 на 4 этаж',
+        "locations": ["холл 2 этажа", "холл 4 этажа"],
     },
     {
         "id": "UnderTheCarpet",
         "name": 'комната под ковром',
         "inventory": [], 
-        "data": {}, 
+        "data": {},
+        "locations": [],
     },
     {
         "id": "room116",
         "name": 'каб. 116',
-        "inventory": []
+        "inventory": [],
+        "locations": ["холл 1 этажа", "каб. 105"],
     },
     {
         "id": "room105",
         "name": 'каб. 105',
-        "inventory": []
+        "inventory": [],
+        "locations": [],
     },
     {
         "id": "toilet_1",
         "name": 'туалет 1 этажа',
-        "inventory": []
+        "inventory": [],
+        "locations": ["холл 1 этажа"],
     },
     {
         "id": "toilet_2",
         "name": 'туалет 2 этажа',
-        "inventory": []
+        "inventory": [],
+        "locations": ["холл 2 этажа"],
     },
     {
         "id": "dining_room",
         "name": 'столовая',
-        "inventory": []
+        "inventory": [],
+        "locations": ["холл 1 этажа", "каб. 105"],
     },
     {
         "id": "back_yard",
         "name": 'задний двор',
-        "inventory": []
+        "inventory": [],
+        "locations": ["двор", "холл 1 этажа"],
     },
     {
         "id": "math",
         "name": 'каб. Математики',
-        "inventory": []
+        "inventory": [],
+        "locations": ["холл 2 этажа"],
     },
     {
         "id": "room_physics",
         "name": 'каб. Физики',
-        "inventory": []
+        "inventory": [],
+        "locations": ["холл 4 этажа"],
     },
     {
         "id": "home",
         "name": 'дом',
-        "inventory": []
+        "inventory": [],
+        "locations": [],
     },
     {
         "id": "security",
         "name": 'комната охраны',
-        "inventory": []
+        "inventory": [],
+        "locations": ["холл 1 этажа"],
     },
     {
         "id": "CTF",
-        "name": "каб. CTF"
+        "name": "каб. CTF",
+        "locations": ["холл 2 этажа"],
     },
     {
         "id": "tennis",
-        "name": "теннисный стол"
+        "name": "теннисный стол",
+        "locations": ["холл 2 этажа"],
     }
 ]
 

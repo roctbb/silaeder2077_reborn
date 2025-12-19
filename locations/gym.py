@@ -57,6 +57,7 @@ def user_message(bot, message, user, location, all_users):
             if x2==1:
                 bot.send_message(user['id'], f'Похоже тебе не повезло в двойне и у учителя нет настроения! Иди пиши объяснительную!!!')
                 transfer_user(user, 'room105')
+                return
             else:
                 bot.send_message(user['id'], f'Похоже тебе повезло и у учителя хорошее настроение! На этот раз он тебя простил!')
         else:
@@ -81,6 +82,7 @@ def user_message(bot, message, user, location, all_users):
         if x == 1:
             bot.send_message(user['id'], 'Вам не повезло и вы идёте писать объяснительную! Потому-что вас застукали учителя!')
             transfer_user(user, 'room105')
+            return
         else:
             user['experience'] = user['experience'] + 1
             bot.send_message(user['id'], f'Лови опыт теперь у тебя {user["experience"]} опыта!')

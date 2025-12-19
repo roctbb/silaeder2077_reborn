@@ -97,9 +97,9 @@ def user_message(bot, message, user, location, all_users):
 
     elif message == "Пнуть мяч в окно":
         bot.send_message(user['id'], "Что у вас за мысли?\nВ 105!")
-        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        keyboard.add(types.KeyboardButton(text="Переход: каб. 105"))
-        bot.send_message(user['id'], f'Переход: каб. 105', reply_markup=keyboard)
+        user["ochota"] = 2
+        transfer_user(user, "room105")
+        return
 
     elif message == "Отжиматься":
         user['experience'] = min(100, user.get('experience', 0) + 1)

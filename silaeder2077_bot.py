@@ -171,7 +171,11 @@ def process_text(message):
 
         # Обработка переходов
         if message_text.startswith('Переход: '):
-            location = get_location_by_name(message_text.replace('Переход: ', ''))
+            loc = message_text.replace('Переход: ', '')
+            if loc not in get_location_by_id(user["location"])["locations"]:
+                bot.send_message(user['id'], f'Из текущей локации нельзя перейти в {loc}')
+                return
+            location = get_location_by_name(loc)
             if location:
                 transfer_user(user, location['id'])
             else:
