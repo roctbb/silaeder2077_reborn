@@ -78,6 +78,10 @@ def process_text(message):
             bot.send_message(user['id'], F"Имя: {user['name']}")
             return
 
+        if message.text == "🎮 Продолжить игру":
+            transfer_user(user, user["location"])
+            return
+
         # Обработка переходов
         if message_text.startswith('Переход: '):
             location = get_location_by_name(message_text.replace('Переход: ', ''))
