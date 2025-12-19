@@ -13,7 +13,8 @@ def user_enters_location(bot, user, location, all_users):
     for task in FLAGS.keys():
         keyboard.add(types.KeyboardButton(f"{task}{' (Решено)' if f'ctf_{task}' in user['tasks_done'] else ''}"))
     keyboard.add(types.KeyboardButton("Переход: холл 2 этажа"))
-    bot.send_message(user["id"], "Вы зашли на кружок по CTF\nВыберите задание:", reply_markup=keyboard)
+    bot.send_photo(user["id"], types.InputFile("assets/images/ctf.png"),
+                   "Вы зашли на кружок по CTF\nВыберите задание:", reply_markup=keyboard)
 
 
 def user_leaves_location(bot, user, location, all_users):

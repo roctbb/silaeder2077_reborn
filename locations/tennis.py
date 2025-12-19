@@ -10,8 +10,8 @@ def user_enters_location(bot, user, location, all_users):
     keyboard.add(types.KeyboardButton("Просто отбить"))
     keyboard.add(types.KeyboardButton("Переход: холл 2 этажа"))
     points[user["id"]] = [0, 0]
-    bot.send_message(user["id"], "Вы подошли к теннисному столу\nСоперник уже ждёт вас\nЧто вы будете делать?",
-                     reply_markup=keyboard)
+    bot.send_photo(user["id"], types.InputFile("assets/images/tennis.jpg"),
+                   "Вы подошли к теннисному столу\nСоперник уже ждёт вас\nЧто вы будете делать?", reply_markup=keyboard)
 
 
 def user_leaves_location(bot, user, location, all_users):

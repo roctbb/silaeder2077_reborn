@@ -12,10 +12,8 @@ def make_default_keyboard():
     return keyboard
 
 def user_enters_location(bot, user, location, all_users):
-
-    bot.send_message(user['id'], 'Вы в спортзале', reply_markup=make_default_keyboard())
-    with open('assets/images/zal.jpg', 'rb') as photo:
-        bot.send_photo(user['id'], photo)
+    bot.send_photo(user['id'], types.InputFile("assets/images/zal.jpg"), 'Вы в спортзале',
+                   reply_markup=make_default_keyboard())
 
 def user_leaves_location(bot, user, location, all_users):
     bot.send_message(user['id'], 'Вы покинули спортзал')

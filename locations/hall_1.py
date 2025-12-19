@@ -88,7 +88,8 @@ def user_enters_location(bot, user, location, all_users):
     # Проверяем наличие карточки
     if 'card' in user['inventory']:
         # Если есть карточка, стандартное меню
-        bot.send_message(user['id'], 'Вы входите в холл 1 этажа. У вас есть карточка, охрана вас пропускает.')
+        bot.send_photo(user['id'], types.InputFile("assets/images/hall_1.jpg"),
+                       'Вы входите в холл 1 этажа. У вас есть карточка, охрана вас пропускает.')
         bot.send_message(user['id'], 'Куда хотите пойти?', reply_markup=make_default_keyboard())
     else:
         # Нет карточки - общение с охраной
@@ -97,9 +98,9 @@ def user_enters_location(bot, user, location, all_users):
         keyboard.add(types.KeyboardButton(text="Пойти в 105 взять карточку"))
         keyboard.add(types.KeyboardButton(text="Объясниться с охраной"))
 
-        bot.send_message(user['id'],
-                         'У вас нет карточки. Охранник останавливает вас: "Эй, студент! Где твоя карточка?"',
-                         reply_markup=keyboard)
+        bot.send_photo(user['id'], types.InputFile("assets/images/hall_1.jpg"),
+                       'У вас нет карточки. Охранник останавливает вас: "Эй, студент! Где твоя карточка?"',
+                       reply_markup=keyboard)
 
 
 def user_leaves_location(bot, user, location, all_users):
@@ -111,9 +112,9 @@ def drink_water(bot, user):
     user['water'] = min(100, user.get('water', 0) + 15)
     user['energy'] = min(100, user.get('energy', 0) + 5)
 
-    bot.send_message(user['id'],
-                     f'Вы попили воды из кулера. +15% воды, +5% энергии.\n'
-                     f'Теперь у вас {user["water"]}% воды и {user["energy"]}% энергии.')
+    bot.send_photo(user['id'], types.InputFile("assets/images/culer.jpg"),
+                   f'Вы попили воды из кулера. +15% воды, +5% энергии.\n'
+                   f'Теперь у вас {user["water"]}% воды и {user["energy"]}% энергии.')
 
 
 def user_message(bot, message, user, location, all_users):

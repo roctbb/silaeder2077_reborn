@@ -15,9 +15,8 @@ def make_math_keyboard():
 
 
 def user_enters_location(bot, user, location, all_users):
-    bot.send_message(user['id'], 'Вы в кабинете математики', reply_markup=make_math_keyboard())
-    with open('assets/images/math_kab.jpg', 'rb') as photo:
-        bot.send_photo(user['id'], photo)
+    bot.send_photo(user['id'], types.InputFile("assets/images/math_kab.jpg"), 'Вы в кабинете математики',
+                   reply_markup=make_math_keyboard())
 
 
 def user_leaves_location(bot, user, location, all_users):
