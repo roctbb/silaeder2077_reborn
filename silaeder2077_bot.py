@@ -75,18 +75,41 @@ def process_text(message):
             return
 
         if message_text == "👤 Мой профиль":
-            bot.send_message(user['id'], f"Имя: {user['name']}")
+            bot.send_message(user['id'], f'{user["name"]}:\n'
+                                         f'Энергия: {user["energy"]}\n'
+                                         f'Еда: {user["food"]}\n'
+                                         f'Вода: {user["water"]}\n'
+                                         f'Опыт: {user["experience"]}\n'
+                                         f'Здоровье: {user["HP"]}\n'
+                                         f'Объяснительных: {user["obiyasnitelinee"]}\n'
+                                         f'Силаэдры: {user["silаedry"]}')
+            return
+
+        if message_text == "📊 Статистика игроков":
+            bot.send_message(user["id"], "Статистика:\n\n" + "\n\n".join([f'{i["name"]}:\n'
+                                                                          f'Энергия: {i["energy"]}\n'
+                                                                          f'Еда: {i["food"]}\n'
+                                                                          f'Вода: {i["water"]}\n'
+                                                                          f'Опыт: {i["experience"]}\n'
+                                                                          f'Здоровье: {i["HP"]}\n'
+                                                                          f'Объяснительных: {i["obiyasnitelinee"]}\n'
+                                                                          f'Силаэдры: {i["silаedry"]}' for i in users]))
             return
 
         if message_text == "📝 Мои объяснительные":
-            bot.send_message(user["id"], "\n".join([i["text"] for i in user['obiyasnitelnay']]))
+            all_explanations = [i["text"] for i in user['obiyasnitelnay']]
+            if len(all_explanations) == 0:
+                bot.send_message(user["id"], "У вас пока нет объяснительных")
+            else:
+                bot.send_message(user["id"], "Объяснительные:\n" + "\n\n".join(all_explanations))
             return
 
         if message_text == "👥 Игроки в комнате":
-            bot.send_message(user["id"],
-                             "Игроки в комнате:\n" + ", ".join([
-                                 i["name"] for i in users
-                                 if i["location"] == user["location"] and i["id"] != user["id"]]))
+            other_users = [i["name"] for i in users if i["location"] == user["location"] and i["id"] != user["id"]]
+            if len(other_users) == 0:
+                bot.send_message(user["id"], "Других игроков в текущей комнате нет")
+            else:
+                bot.send_message(user["id"], "Игроки в комнате:\n" + ", ".join(other_users))
             return
 
         if message_text == "💬 Написать игроку":
@@ -165,8 +188,12 @@ def process_text(message):
                 show_start_menu_from_anywhere(bot, user)
             return
 
-        if message.text == "🎮 Продолжить игру":
+        if message_text == "🎮 Продолжить игру":
             transfer_user(user, user["location"])
+            return
+
+        if message_text == "❓ Помощь":
+            bot.send_message(user["id"], "Нажимайте на выпадающие кнопки в каждой комнате")
             return
 
         # Обработка переходов

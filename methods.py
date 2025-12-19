@@ -3,6 +3,7 @@ from library import *
 import random
 from datetime import datetime
 
+
 def send_welcome(user):
     bot.send_message(user['id'], 'Добро пожаловать в игру!')
 
@@ -72,6 +73,7 @@ def get_location_by_id(location_id):
             return location
     return None
 
+
 def get_location_by_name(location_name):
     for location in locations:
         if location['name'] == location_name:
@@ -88,12 +90,6 @@ def get_locations_list():
     for i in locations:
         keys.append(i['id'])
     return keys
-def force_explanation(user, reason="нарушение правил"):
-    """Принудительно отправляет игрока писать объяснительную"""
-    user['ochota'] = 3  # Принудительная объяснительная
-    user['explanation_reason'] = reason
-    transfer_user_with_goal(user, 'room105', 'force')
-    return f"Вы отправлены в 105 за {reason}!"
 
 
 def transfer_user(user, to_location_id):
@@ -113,7 +109,7 @@ def transfer_user(user, to_location_id):
     from_location_id = user['location']
     new_location = get_location_by_id(to_location_id)
 
-    if random.randint(1, 20) == 1:
+    if random.randint(1, 100) == 1:
         new_location = get_location_by_id('UnderTheCarpet')
         to_location_id = 'UnderTheCarpet'
 
