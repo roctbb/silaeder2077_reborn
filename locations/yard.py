@@ -24,7 +24,7 @@ def user_enters_location(bot, user, location, all_users):
     if is_winter_season() and len(all_users) > 1:
         keyboard.add(types.KeyboardButton(text="❄️ Кидаться снежками"))
 
-    bot.send_photo(user['id'], types.InputFile("assets/images/yard.jpg"), 'Вы во дворе', reply_markup=keyboard)
+    send_photo(bot, user['id'], "assets/images/yard.jpg", 'Вы во дворе', reply_markup=keyboard)
 
 
 def user_leaves_location(bot, user, location, all_users):

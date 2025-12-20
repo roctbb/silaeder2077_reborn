@@ -15,8 +15,8 @@ def make_math_keyboard():
 
 
 def user_enters_location(bot, user, location, all_users):
-    bot.send_photo(user['id'], types.InputFile("assets/images/math_kab.jpg"), 'Вы в кабинете математики',
-                   reply_markup=make_math_keyboard())
+    send_photo(bot, user['id'], "assets/images/math_kab.jpg", 'Вы в кабинете математики',
+               reply_markup=make_math_keyboard())
 
 
 def user_leaves_location(bot, user, location, all_users):
@@ -29,8 +29,6 @@ def user_message(bot, message, user, location, all_users):
         return
 
     if message == 'Решить пример':
-        with open('assets/images/Primer.jpg', 'rb') as photo:
-            bot.send_photo(user['id'], photo)
         if user['energy'] >= 3:
             user['energy'] = user['energy'] - 3
 
@@ -49,56 +47,52 @@ def user_message(bot, message, user, location, all_users):
             user['current_math_problem'] = example  # Сохраняем текущий пример
             user['waiting_for_answer'] = True  # Флаг ожидания ответа
 
-            bot.send_message(user['id'], f'Решите пример: {example["question"]}')
+            send_photo(bot, user['id'], 'assets/images/Primer.jpg', f'Решите пример: {example["question"]}')
             bot.send_message(user['id'], f'Вы потратили 3% энергии. Теперь у вас {user["energy"]}% энергии.')
         else:
             bot.send_message(user['id'],
                              f'У вас не хватает энергии! Сейчас у вас {user["energy"]}% энергии. Нужно 3% энергии!')
 
     elif message == 'Помочь соседу по парте':
-        with open('assets/images/help.jpg', 'rb') as photo:
-            bot.send_photo(user['id'], photo)
         if user['experience'] >= 2:
             x = random.randint(1, 2)
             if x == 1:
                 user['experience'] = user['experience'] + 2
-                bot.send_message(user['id'],
-                                 f'Вы хорошо объяснили тему! Получили 4 опыта! Теперь у вас {user["experience"]} опыта!')
+                send_photo(bot, user['id'], 'assets/images/help.jpg',
+                           f'Вы хорошо объяснили тему! Получили 4 опыта! Теперь у вас {user["experience"]} опыта!')
             elif x == 2:
                 user['energy'] = max(0, user['energy'] - 5)
-                bot.send_message(user['id'],
-                                 f'Сосед не понял объяснение, пришлось потратить больше времени. Потеряли 5% энергии и 2 опыта. Теперь у вас {user["energy"]}% энергии и {user["experience"]} опыта.')
+                send_photo(bot, user['id'], 'assets/images/help.jpg',
+                           f'Сосед не понял объяснение, пришлось потратить больше времени. Потеряли 5% энергии и 2 опыта. Теперь у вас {user["energy"]}% энергии и {user["experience"]} опыта.')
         else:
-            bot.send_message(user['id'],
-                             f'У вас недостаточно опыта чтобы помогать другим! Нужно 2 опыта, а у вас {user["experience"]}.')
+            bot.send_message(bot, user['id'], f'У вас недостаточно опыта чтобы помогать другим! '
+                                              f'Нужно 2 опыта, а у вас {user["experience"]}.')
 
     elif message == 'Списывать с доски':
-        with open('assets/images/doska.jpg', 'rb') as photo:
-            bot.send_photo(user['id'], photo)
         x = random.randint(1, 4)
         if x == 1:
-            bot.send_message(user['id'], 'Вас поймали на списывании! Учитель отправил писать объяснительную!')
+            send_photo(bot, user['id'], 'assets/images/doska.jpg',
+                       'Вас поймали на списывании! Учитель отправил писать объяснительную!')
             user['energy'] = max(0, user['energy'] - 5)
             user["ochota"] = 2
             transfer_user(user, 'room105')
             return
         elif x == 2:
             user['experience'] = user['experience'] + 1
-            bot.send_message(user['id'],
-                             f'Вы успешно списали и поняли тему! Получили 1 опыт! Теперь у вас {user["experience"]} опыта!')
+            send_photo(bot, user['id'], 'assets/images/doska.jpg',
+                       f'Вы успешно списали и поняли тему! Получили 1 опыт! Теперь у вас {user["experience"]} опыта!')
         else:
-            bot.send_message(user['id'], 'Вы успешно списали решение!')
+            send_photo(bot, user['id'], 'assets/images/doska.jpg', 'Вы успешно списали решение!')
 
     elif message == 'Сделать вид что решаешь':
-        with open('assets/images/tipo_reshaet.jpg', 'rb') as photo:
-            bot.send_photo(user['id'], photo)
         x = random.randint(1, 3)
         if x == 1:
-            bot.send_message(user['id'], 'Учитель заметил, что вы не решаете, и вызвал к доске!')
+            send_photo(bot, user['id'], 'assets/images/tipo_reshaet.jpg',
+                       'Учитель заметил, что вы не решаете, и вызвал к доске!')
         else:
             user['energy'] = min(100, user['energy'] + 2)
-            bot.send_message(user['id'],
-                             f'Вам удалось отдохнуть! Восстановили 2% энергии. Теперь у вас {user["energy"]}% энергии.')
+            send_photo(bot, user['id'], 'assets/images/tipo_reshaet.jpg',
+                       f'Вам удалось отдохнуть! Восстановили 2% энергии. Теперь у вас {user["energy"]}% энергии.')
 
     else:
         bot.send_message(user['id'], 'Я вас не понял')

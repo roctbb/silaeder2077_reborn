@@ -27,9 +27,9 @@ def user_enters_location(bot, user, location, all_users):
     # Кнопка попить воды
     keyboard.add(types.KeyboardButton(text="💧 Попить воды из кулера"))
 
-    bot.send_photo(user['id'], types.InputFile("assets/images/hall_2.jpg"),
-                   'Вы в холле 2 этажа.',
-                   reply_markup=keyboard)
+    send_photo(bot, user['id'], "assets/images/hall_2.jpg",
+               'Вы в холле 2 этажа.',
+               reply_markup=keyboard)
 
 
 def user_leaves_location(bot, user, location, all_users):
@@ -51,8 +51,7 @@ def start_chess_game(bot, user, all_users):
     keyboard.add(types.KeyboardButton(text="↩️ Отмена"))
 
     user['awaiting_chess_opponent'] = True
-    bot.send_photo(user['id'], types.InputFile("assets/images/chess.jpg"), 'Выберите противника:',
-                   reply_markup=keyboard)
+    send_photo(bot, user['id'], "assets/images/chess.jpg", 'Выберите противника:', reply_markup=keyboard)
 
 
 def process_chess_move(bot, user, move):

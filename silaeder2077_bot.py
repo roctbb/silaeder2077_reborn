@@ -4,7 +4,7 @@ from methods import *
 from telebot import types
 from config import TOKEN
 import traceback
-import datetime
+from datetime import datetime
 
 
 @bot.message_handler(commands=['start'])
@@ -131,12 +131,12 @@ def process_text(message):
             return
 
         if user.get('awaiting_private_message'):
-            if message == '↩️ Назад':
+            if message_text == '↩️ Назад':
                 del user['awaiting_private_message']
                 show_start_menu_from_anywhere(bot, user)
-            elif message.startswith('💬 '):
+            elif message_text.startswith('💬 '):
                 # Извлекаем имя игрока
-                target_name = message[2:].split(' (')[0]
+                target_name = message_text[2:].split(' (')[0]
                 target_user = next((u for u in users if u['name'] == target_name and u['id'] != user['id']), None)
 
                 if target_user:
@@ -155,7 +155,7 @@ def process_text(message):
             return
 
         if user.get('awaiting_message_text'):
-            if message == '↩️ Отмена':
+            if message_text == '↩️ Отмена':
                 keys_to_remove = ['awaiting_private_message', 'awaiting_message_text',
                                   'private_message_target', 'private_message_target_name']
                 for key in keys_to_remove:
@@ -163,7 +163,7 @@ def process_text(message):
                         del user[key]
                 show_start_menu_from_anywhere(bot, user)
             else:
-                if len(message) > 200:
+                if len(message_text) > 200:
                     bot.send_message(user['id'], 'Сообщение слишком длинное! Максимум 200 символов.')
                     return
 
@@ -172,13 +172,14 @@ def process_text(message):
 
                 if target_id:
                     bot.send_message(target_id,
-                                     f'📨 Сообщение от {user["name"]} (комната охраны):\n\n{message}')
+                                     f'📨 Сообщение от {user["name"]} ({get_location_by_id(user["location"])["name"]}):'
+                                     f'\n\n{message_text}')
                     bot.send_message(user['id'],
                                      f'✅ Сообщение отправлено игроку {target_name}!')
 
                     # Сохраняем в историю переписки
-                    save_message_to_history(user['id'], target_id, message, user['name'], 'отправлено')
-                    save_message_to_history(target_id, user['id'], message, user['name'], 'получено')
+                    save_message_to_history(user['id'], target_id, message_text, user['name'], 'отправлено')
+                    save_message_to_history(target_id, user['id'], message_text, user['name'], 'получено')
 
                 keys_to_remove = ['awaiting_private_message', 'awaiting_message_text',
                                   'private_message_target', 'private_message_target_name']
@@ -252,4 +253,5 @@ if __name__ == '__main__':
         except Exception as e:
             if e != ex:
                 ex = e
-                traceback.print_exc()
+                print(traceback.format_exc().replace(TOKEN, "<TOKEN>"))
+                print("Restarting")

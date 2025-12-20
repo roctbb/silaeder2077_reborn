@@ -1,3 +1,4 @@
+import traceback
 from telebot import types
 from library import *
 import random
@@ -33,6 +34,15 @@ def create_keyboard(buttons, rowsWidth=3):
             keyboard.add(types.KeyboardButton(button))
 
     return keyboard
+
+
+def send_photo(bot, user_id, path, text, *args, **kwargs):
+    try:
+        bot.send_photo(user_id, types.InputFile(path), text, *args, **kwargs)
+    except Exception as e:
+        bot.send_message(user_id, "<Photo not loaded>\n\n" + text, *args, **kwargs)
+        print(traceback.format_exc().replace(TOKEN, "<TOKEN>"))
+        print("Exception while sending image ^")
 
 
 # methods.py (дополняем функцию register_user)

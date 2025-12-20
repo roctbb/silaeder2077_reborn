@@ -1,4 +1,5 @@
 from telebot import types
+from methods import send_photo
 import random
 
 num_task = {}
@@ -11,14 +12,12 @@ tasks = {
 
 
 def user_enters_location(bot, user, location, all_users):
-    with open('assets/images/физика.jpg', 'rb') as photo:
-        bot.send_photo(user['id'], photo)
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(types.KeyboardButton(text="Поговорить с Алексеем Генадьевичем"))
     keyboard.add(types.KeyboardButton(text="Посмотреть на мусор(может это не мусор, я не знаю) в коробке"))
     keyboard.add(types.KeyboardButton(text="Попросить конфетку"))
     keyboard.add(types.KeyboardButton(text="Переход: холл 4 этажа"))
-    bot.send_message(user['id'], 'Вы в каб. Физики', reply_markup=keyboard)
+    send_photo(bot, user['id'], 'assets/images/физика.jpg', 'Вы в каб. Физики', reply_markup=keyboard)
 
 
 def user_leaves_location(bot, user, location, all_users):
@@ -43,11 +42,10 @@ def user_message(bot, message, user, location, all_users):
             bot.send_message(user['id'], 'Какую выберете задачу?', reply_markup=keyboard)
 
     elif message == 'Посмотреть на мусор(может это не мусор, я не знаю) в коробке':
-        with open('assets/images/коробка.jpg', 'rb') as photo:
-            bot.send_photo(user['id'], photo)
         user['energy'] -= 5
-        bot.send_message(user['id'], f'Вы порылись в коробке и нашли несколько интересных вещей\n'
-                                     f'У вас теперь {user["energy"]} энергии, но у вас поднялось настроение')
+        send_photo(bot, user['id'], 'assets/images/коробка.jpg',
+                   f'Вы порылись в коробке и нашли несколько интересных вещей\n'
+                   f'У вас теперь {user["energy"]} энергии, но у вас поднялось настроение')
 
     elif message == "Попросить конфетку":
         bot.send_message(user['id'], '0о\n -')

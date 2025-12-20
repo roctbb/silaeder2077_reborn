@@ -22,8 +22,7 @@ def user_enters_location(bot, user, location, all_users):
     if is_winter_season() and len(all_users) > 1:
         keyboard.add(types.KeyboardButton(text="❄️ Кидаться снежками"))
 
-    bot.send_photo(user['id'], types.InputFile("assets/images/back_yard.jpg"), caption='Вы на заднем дворе',
-                   reply_markup=keyboard)
+    send_photo(bot, user['id'], "assets/images/back_yard.jpg", 'Вы на заднем дворе', reply_markup=keyboard)
 
 
 def user_leaves_location(bot, user, location, all_users):
@@ -68,20 +67,19 @@ def user_message(bot, message, user, location, all_users):
         user['energy'] = min(100, user.get('energy', 100) + 5)
         if random.randint(1, 10) == 1:
             user['experience'] = min(100, user.get('experience', 0) + 1)
-            bot.send_photo(user['id'], types.InputFile("assets/images/отдых.png"),
-                           f'Вы отдохнули \nТеперь у вас {user["experience"]} опыта и {user["energy"]} энергии')
+            send_photo(bot, user['id'], "assets/images/отдых.png",
+                       f'Вы отдохнули \nТеперь у вас {user["experience"]} опыта и {user["energy"]} энергии')
         else:
-            bot.send_photo(user['id'], types.InputFile("assets/images/отдых.png"),
-                           f'Вы отдохнули \nТеперь у вас {user["energy"]} энергии')
+            send_photo(bot, user['id'], "assets/images/отдых.png",
+                       f'Вы отдохнули \nТеперь у вас {user["energy"]} энергии')
 
     elif message == 'Поиграть в футбол':
         user['energy'] = max(0, user.get('energy', 100) - 5)
         if user['energy'] <= 0:
             bot.send_message(user['id'], "У вас слишком мало энергии")
         else:
-            bot.send_photo(user['id'], types.InputFile("assets/images/soccer.jpg"),
-                           caption=f'Вы поиграли в футбол\nУ вас теперь {user["energy"]} энергии,'
-                                   f' но у вас поднялось настроение')
+            send_photo(bot, user['id'], "assets/images/soccer.jpg",
+                       f'Вы поиграли в футбол\nУ вас теперь {user["energy"]} энергии, но у вас поднялось настроение')
             bot.send_message(user['id'], f"Вы заметили что на улице никого нет")
 
             keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -98,7 +96,7 @@ def user_message(bot, message, user, location, all_users):
             bot.send_message(user['id'], 'Что будете делать?', reply_markup=keyboard)
 
     elif message == "Пнуть мяч в окно":
-        bot.send_photo(user['id'], types.InputFile("assets/images/мяч_окно.png"), "Что у вас за мысли?\nВ 105!")
+        send_photo(bot, user['id'], "assets/images/мяч_окно.png", "Что у вас за мысли?\nВ 105!")
         user["ochota"] = 2
         transfer_user(user, "room105")
         return
@@ -107,13 +105,13 @@ def user_message(bot, message, user, location, all_users):
         user['experience'] = min(100, user.get('experience', 0) + 1)
         user['energy'] = max(0, user.get('energy', 100) - 5)
         bot.send_message(user['id'], "Ок. Вы хороший ученик. Вас не отправят в 105 :)")
-        bot.send_photo(user['id'], types.InputFile("assets/images/img.png"),
-                       f'Вы отжались \n Теперь у вас {user["experience"]} опыта и {user["energy"]} энергии')
+        send_photo(bot, user['id'], "assets/images/img.png",
+                   f'Вы отжались \n Теперь у вас {user["experience"]} опыта и {user["energy"]} энергии')
 
     elif message == "ничего не делать":
         user['energy'] = min(100, user.get('energy', 100) + 5)
-        bot.send_photo(user['id'], types.InputFile("assets/images/отдых.png"),
-                       f'Вы отдохнули \n Теперь у вас {user["energy"]} энергии')
+        send_photo(bot, user['id'], "assets/images/отдых.png",
+                   f'Вы отдохнули \n Теперь у вас {user["energy"]} энергии')
 
     elif message == 'Переход: двор':
         transfer_user(user, 'yard')

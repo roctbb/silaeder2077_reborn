@@ -17,13 +17,10 @@ def user_enters_location(bot, user, location, all_users):
     keyboard.add(types.KeyboardButton(text="Переход: каб. 105"))
 
     if c:
-        bot.send_message(user['id'], 'Вы в столовой', reply_markup=keyboard)
-        with open('assets/images/stolovka.jpg', 'rb') as photo:
-            bot.send_photo(user['id'], photo)
+        send_photo(bot, user['id'], 'assets/images/stolovka.jpg', 'Вы в столовой', reply_markup=keyboard)
     else:
-        bot.send_message(user['id'], 'Вас выгнали, ведь сейчас не время кушать', reply_markup=keyboard)
-        with open('assets/images/stolovka.jpg', 'rb') as photo:
-            bot.send_photo(user['id'], photo)
+        send_photo(bot, user['id'], 'assets/images/stolovka.jpg', 'Вас выгнали, ведь сейчас не время кушать',
+                   reply_markup=keyboard)
         transfer_user(user, 'hall')
 
 

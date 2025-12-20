@@ -1,5 +1,5 @@
 from telebot import types
-from methods import transfer_user
+from methods import transfer_user, send_photo
 import random
 
 
@@ -12,9 +12,7 @@ def make_default_keyboard():
 
 
 def user_enters_location(bot, user, location, all_users):
-    with open('assets/images/116.jpg', 'rb') as photo:
-        bot.send_photo(user['id'], photo)
-    bot.send_message(user['id'], 'Вы в каб. 116', reply_markup=make_default_keyboard())
+    send_photo(bot, user['id'], 'assets/images/116.jpg', 'Вы в каб. 116', reply_markup=make_default_keyboard())
 
 
 
@@ -24,46 +22,27 @@ def user_leaves_location(bot, user, location, all_users):
 
 def user_message(bot, message, user, location, all_users):
     if message == 'Поиграть на пианино':
-        with open('assets/images/пианина.jpg', 'rb') as photo:
-            bot.send_photo(user['id'], photo)
         user['energy'] = max(0, user['energy'] - 5)
         if random.randint(1, 10) == 1:
             user['experience'] += 1
-        if user['energy'] <= 0:
-            bot.send_message(user['id'], "ВЫ УМЕРЛИ!!!")
-        else:
-            bot.send_message(user['id'],
-                             f'Вы поиграли на пианино \n Теперь у вас {user["experience"]} опыта и {user["energy"]} энергии')
+        send_photo(bot, user['id'], 'assets/images/пианина.jpg',
+                   f'Вы поиграли на пианино \n Теперь у вас {user["experience"]} опыта и {user["energy"]} энергии')
     elif message == 'Потыкать по доске':
-        with open('assets/images/доска.jpg', 'rb') as photo:
-            bot.send_photo(user['id'], photo)
         user['energy'] = max(0, user['energy'] - 5)
-        if user['energy'] <= 0:
-            bot.send_message(user['id'], "ВЫ УМЕРЛИ!!!")
-        else:
-            with open('assets/images/ноут.jpg', 'rb') as photo:
-                bot.send_photo(user['id'], photo)
-            bot.send_message(user['id'], f'Вы потыкали по доске\n'
-                                         f'У вас теперь {user["energy"]} энергии, но у вас поднялось настроение')
+        send_photo(bot, user['id'], 'assets/images/доска.jpg', f'Вы потыкали по доске\n'
+                   f'У вас теперь {user["energy"]} энергии, но у вас поднялось настроение')
 
-            bot.send_message(user['id'],
-                             f"Вы заметили что на ноутбуке рядом открыт дневник. Можно изменить себе оценки")
-            if random.randint(0, 3) == 1:
-                bot.send_message(user['id'], f'Вас спалил учитель!!!'
-                                             f'И отвели в 105...')
-                user["ochota"] = 2
-                transfer_user(user, "room105")
-                return
-            keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-            keyboard.add(types.KeyboardButton(text="Изменить оценки"))
-            keyboard.add(types.KeyboardButton(text="Не менять оценки"))
-            keyboard.add(types.KeyboardButton(text="Переход: холл 1 этажа"))
-            bot.send_message(user['id'], 'Что будете делать?', reply_markup=keyboard)
+        send_photo(bot, user['id'], 'assets/images/ноут.jpg',
+                   f"Вы заметили что на ноутбуке рядом открыт дневник. Можно изменить себе оценки")
+        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        keyboard.add(types.KeyboardButton(text="Изменить оценки"))
+        keyboard.add(types.KeyboardButton(text="Не менять оценки"))
+        keyboard.add(types.KeyboardButton(text="Переход: холл 1 этажа"))
+        bot.send_message(user['id'], 'Что будете делать?', reply_markup=keyboard)
     elif message == "Изменить оценки":
         user["ochota"] = 2
-        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        keyboard.add(types.KeyboardButton(text="Переход: каб. 105"))
-        bot.send_message(user['id'], 'Что у вас за мысли?\nВ 105!!!!!!', reply_markup=keyboard)
+        bot.send_message(user['id'], 'Что у вас за мысли?\nВ 105!!!!!!')
+        transfer_user(user, "room105")
     elif message == "Не менять оценки":
         bot.send_message(user['id'], "Ок. Вы хороший ученик. Вас не отправят в 105 :)")
         bot.send_message(user['id'], 'Вы в каб. 116', reply_markup=make_default_keyboard())
