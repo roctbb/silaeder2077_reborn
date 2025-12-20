@@ -222,4 +222,4 @@ def load_state():
         print(e)
 
 
-bot = telebot.TeleBot(TOKEN)
+bot = telebot.TeleBot(TOKEN, num_threads=10)
