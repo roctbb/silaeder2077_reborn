@@ -66,7 +66,7 @@ def user_message(bot, message, user, location, all_users):
     if message == 'Отдохнуть':
         user['energy'] = min(100, user.get('energy', 100) + 5)
         if random.randint(1, 10) == 1:
-            user['experience'] = min(100, user.get('experience', 0) + 1)
+            user['experience'] += 1
             send_photo(bot, user['id'], "assets/images/отдых.png",
                        f'Вы отдохнули \nТеперь у вас {user["experience"]} опыта и {user["energy"]} энергии')
         else:
@@ -102,7 +102,7 @@ def user_message(bot, message, user, location, all_users):
         return
 
     elif message == "Отжиматься":
-        user['experience'] = min(100, user.get('experience', 0) + 1)
+        user['experience'] += 1
         user['energy'] = max(0, user.get('energy', 100) - 5)
         bot.send_message(user['id'], "Ок. Вы хороший ученик. Вас не отправят в 105 :)")
         send_photo(bot, user['id'], "assets/images/img.png",

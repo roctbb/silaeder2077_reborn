@@ -29,7 +29,7 @@ def user_message(bot, message, user, location, all_users):
 
     if message == 'Поговорить с Алексеем Генадьевичем':
         if random.randint(1, 10) == 1:
-            user['experience'] = min(100, user['experience'] + 1)
+            user['experience'] += 1
             bot.send_message(user['id'], 'Вы получили 1 единицу опыта!')
         else:
             bot.send_message(user['id'],
